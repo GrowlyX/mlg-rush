@@ -1,0 +1,15 @@
+kits:
+  blue-team:
+    uuid: ""
+    inventory: ""
+  red-team:
+    uuid: ""
+    inventory: ""
+arenas:
+  arena-dev-1:
+    uuid: ""
+    name: "Dev Arena 1"
+    team-size: 1
+    max-players: 2
+    cuboid: ""
+
