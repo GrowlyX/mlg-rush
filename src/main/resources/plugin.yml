@@ -1,3 +1,6 @@
 name: MLGRush
 version: ${project.version}
 main: com.solexgames.mlg.CorePlugin
+
+commands:
+  arena:

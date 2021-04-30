@@ -12,8 +12,8 @@ import java.util.List;
 
 public final class Color {
 
-    public static ChatColor PRIMARY = ChatColor.YELLOW;
-    public static ChatColor SECONDARY = ChatColor.AQUA;
+    public static ChatColor PRIMARY = ChatColor.AQUA;
+    public static ChatColor SECONDARY = ChatColor.YELLOW;
 
     public static String SB_LINE = ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + "-------------------------";
 

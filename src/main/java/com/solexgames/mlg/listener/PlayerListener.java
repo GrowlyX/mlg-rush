@@ -1,6 +1,6 @@
 package com.solexgames.mlg.listener;
 
-import com.solexgames.mlg.CoreConstants;
+import com.solexgames.mlg.util.CoreConstants;
 import com.solexgames.mlg.CorePlugin;
 import com.solexgames.mlg.player.GamePlayer;
 import io.github.nosequel.scoreboard.ScoreboardAdapter;

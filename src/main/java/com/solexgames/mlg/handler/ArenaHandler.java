@@ -22,10 +22,6 @@ public class ArenaHandler {
     private void loadArenas() {
         final ConfigurationSection configurationSection = CorePlugin.getInstance().getConfig().getConfigurationSection("arenas");
 
-        if (configurationSection.getKeys(true) == null) {
-            return;
-        }
-
         try {
             configurationSection.getKeys(true).forEach(path -> {
                 final Arena arena = new Arena(UUID.fromString(configurationSection.getString(path + ".uuid")), configurationSection.getString(path + ".name"));

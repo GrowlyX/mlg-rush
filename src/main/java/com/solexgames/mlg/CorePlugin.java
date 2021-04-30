@@ -6,15 +6,18 @@ import com.solexgames.mlg.adapter.DateTypeAdapter;
 import com.solexgames.mlg.adapter.LocationTypeAdapter;
 import com.solexgames.mlg.adapter.PotionEffectTypeAdapter;
 import com.solexgames.mlg.adapter.ScoreboardAdapter;
+import com.solexgames.mlg.command.ArenaCommand;
 import com.solexgames.mlg.handler.ArenaHandler;
 import com.solexgames.mlg.handler.KitHandler;
 import com.solexgames.mlg.handler.MongoHandler;
 import com.solexgames.mlg.handler.PlayerHandler;
+import com.solexgames.mlg.listener.PlayerListener;
 import com.solexgames.mlg.model.Arena;
 import com.solexgames.mlg.model.Kit;
 import io.github.nosequel.scoreboard.ScoreboardHandler;
 import lombok.Getter;
 import org.bukkit.Location;
+import org.bukkit.conversations.ConversationFactory;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 
@@ -33,6 +36,8 @@ public final class CorePlugin extends JavaPlugin {
     private MongoHandler mongoHandler;
     private PlayerHandler playerHandler;
 
+    private final ConversationFactory conversationFactory = new ConversationFactory(this);
+
     @Override
     public void onEnable() {
         instance = this;
@@ -50,6 +55,10 @@ public final class CorePlugin extends JavaPlugin {
         this.arenaHandler = new ArenaHandler();
         this.mongoHandler = new MongoHandler();
         this.playerHandler = new PlayerHandler();
+
+        this.getCommand("arena").setExecutor(new ArenaCommand());
+
+        this.getServer().getPluginManager().registerEvents(new PlayerListener(), this);
 
         new ScoreboardHandler(this, new ScoreboardAdapter(), 20L);
     }

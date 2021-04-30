@@ -1,4 +1,4 @@
-package com.solexgames.mlg;
+package com.solexgames.mlg.util;
 
 import org.bukkit.ChatColor;
 
