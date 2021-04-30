@@ -20,9 +20,6 @@ public class Kit {
 
     private String name;
     private ItemStack[] itemStacks;
-    private Material icon;
-
-    private String permission;
 
     /**
      * Creates a new instance of {@link Kit}

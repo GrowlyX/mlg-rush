@@ -7,10 +7,12 @@ import com.solexgames.mlg.adapter.LocationTypeAdapter;
 import com.solexgames.mlg.adapter.PotionEffectTypeAdapter;
 import com.solexgames.mlg.adapter.ScoreboardAdapter;
 import com.solexgames.mlg.command.ArenaCommand;
+import com.solexgames.mlg.command.TestCommand;
 import com.solexgames.mlg.handler.ArenaHandler;
 import com.solexgames.mlg.handler.KitHandler;
 import com.solexgames.mlg.handler.MongoHandler;
 import com.solexgames.mlg.handler.PlayerHandler;
+import com.solexgames.mlg.listener.PaginationListener;
 import com.solexgames.mlg.listener.PlayerListener;
 import com.solexgames.mlg.model.Arena;
 import com.solexgames.mlg.model.Kit;
@@ -57,8 +59,10 @@ public final class CorePlugin extends JavaPlugin {
         this.playerHandler = new PlayerHandler();
 
         this.getCommand("arena").setExecutor(new ArenaCommand());
+        this.getCommand("test").setExecutor(new TestCommand());
 
         this.getServer().getPluginManager().registerEvents(new PlayerListener(), this);
+        this.getServer().getPluginManager().registerEvents(new PaginationListener(), this);
 
         new ScoreboardHandler(this, new ScoreboardAdapter(), 20L);
     }

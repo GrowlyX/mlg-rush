@@ -2,6 +2,7 @@ package com.solexgames.mlg.model;
 
 import com.google.gson.annotations.SerializedName;
 import com.solexgames.mlg.CorePlugin;
+import com.solexgames.mlg.enums.ArenaState;
 import com.solexgames.mlg.util.LocationUtil;
 import com.solexgames.mlg.util.cuboid.Cuboid;
 import lombok.Getter;
@@ -9,11 +10,15 @@ import lombok.Setter;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
 @Setter
 public class Arena {
+
+    private final List<Location> blockLocationList = new ArrayList<>();
 
     @SerializedName("_id")
     private final UUID uuid;
@@ -27,6 +32,8 @@ public class Arena {
 
     private Location spawnOne;
     private Location spawnTwo;
+
+    private ArenaState arenaState = ArenaState.AVAILABLE;
 
     /**
      * Creates a new instance of {@link Arena}

@@ -4,3 +4,4 @@ main: com.solexgames.mlg.CorePlugin
 
 commands:
   arena:
+  test:
