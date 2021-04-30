@@ -11,13 +11,12 @@ public class ArenaCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (sender instanceof Player) {
-            CorePlugin.getInstance().getConversationFactory()
-                    .withFirstPrompt(new ArenaNamePrompt((Player) sender))
-                    .withLocalEcho(false)
-                    .buildConversation((Player) sender)
-                    .begin();
+        if (!(sender instanceof Player)) {
+            sender.sendMessage("die");
+            return false;
         }
+
+        final Player player = (Player) sender;
 
         return false;
     }

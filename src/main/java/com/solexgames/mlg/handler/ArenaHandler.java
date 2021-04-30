@@ -10,6 +10,7 @@ import com.solexgames.mlg.util.Color;
 import com.solexgames.mlg.util.LocationUtil;
 import com.solexgames.mlg.util.cuboid.Cuboid;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -62,6 +63,7 @@ public class ArenaHandler {
                 return;
             }
 
+            arena.getAllPlayerList().add(player);
             arena.getGamePlayerList().add(new ArenaPlayer(arena, (arena.getGamePlayerList().size() == 0 ? ArenaTeam.BLUE : (arena.getGamePlayerList().get(0).getArenaTeam() == ArenaTeam.BLUE ? ArenaTeam.RED : ArenaTeam.BLUE)), player));
             arena.broadcastMessage(Color.PRIMARY + player.getName() + Color.SECONDARY + " has joined the arena. " + ChatColor.GRAY + "(" + arena.getGamePlayerList().size() + "/" + arena.getMaxPlayers() + ")");
 
@@ -78,32 +80,27 @@ public class ArenaHandler {
     }
 
     public void leaveGame(Player player, Arena arena) {
+        if (arena.getState().equals(ArenaState.IN_GAME)) {
+            player.sendMessage(ChatColor.RED + "You cannot leave this arena at the moment.");
+            return;
+        }
 
+        arena.broadcastMessage(Color.PRIMARY + player.getName() + Color.SECONDARY + " has left the arena. " + ChatColor.GRAY + "(" + arena.getGamePlayerList().size() + "/" + arena.getMaxPlayers() + ")");
+        arena.getAllPlayerList().remove(player);
+        arena.getGamePlayerList().remove(arena.getByPlayer(player));
+
+        player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
+
+        CorePlugin.getInstance().getHotbarHandler().setupLobbyHotbar(player);
     }
 
-    /**
-     * Filters through all available kits and finds a kit with the same name as {@param name}
-     *
-     * @param name Name parameter
-     * @return A kit with the name {@param name}
-     */
-    public Arena getByName(String name) {
-        return this.allArenas.stream()
-                .filter(kit -> kit.getName().equalsIgnoreCase(name))
-                .findFirst()
-                .orElse(null);
+    public boolean isInArena(Player player) {
+        return this.getByPlayer(player) != null;
     }
 
-    /**
-     * Filters through all available kits and finds a kit with the same {@link UUID} as {@param uuid}
-     *
-     * @param uuid UUID parameter
-     * @return A kit with the uuid {@param uuid}
-     */
-    public Arena getByUuid(UUID uuid) {
+    public Arena getByPlayer(Player player) {
         return this.allArenas.stream()
-                .filter(kit -> kit.getUuid().equals(uuid))
-                .findFirst()
-                .orElse(null);
+                .filter(kit -> kit.getAllPlayerList().contains(player))
+                .findFirst().orElse(null);
     }
 }

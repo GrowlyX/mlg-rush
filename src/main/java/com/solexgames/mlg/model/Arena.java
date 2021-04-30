@@ -25,6 +25,7 @@ public class Arena extends StateBasedModel<ArenaState> {
 
     private final List<Location> blockLocationList = new ArrayList<>();
     private final List<ArenaPlayer> gamePlayerList = new ArrayList<>();
+    private final List<Player> allPlayerList = new ArrayList<>();
 
     @SerializedName("_id")
     private final UUID uuid;
@@ -77,6 +78,12 @@ public class Arena extends StateBasedModel<ArenaState> {
         return this.getGamePlayerList().stream()
                 .filter(arenaPlayer1 -> arenaPlayer1.getPlayer().equals(player))
                 .map(ArenaPlayer::getArenaTeam)
+                .findFirst().orElse(null);
+    }
+
+    public ArenaPlayer getByPlayer(Player player) {
+        return this.getGamePlayerList().stream()
+                .filter(arenaPlayer1 -> arenaPlayer1.getPlayer().equals(player))
                 .findFirst().orElse(null);
     }
 

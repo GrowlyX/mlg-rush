@@ -15,4 +15,7 @@ public class ArenaPlayer {
 
     private final Player player;
 
+    private int kills;
+    private int deaths;
+
 }
