@@ -5,9 +5,14 @@ import com.google.gson.GsonBuilder;
 import com.solexgames.mlg.adapter.DateTypeAdapter;
 import com.solexgames.mlg.adapter.LocationTypeAdapter;
 import com.solexgames.mlg.adapter.PotionEffectTypeAdapter;
+import com.solexgames.mlg.adapter.ScoreboardAdapter;
+import com.solexgames.mlg.handler.ArenaHandler;
 import com.solexgames.mlg.handler.KitHandler;
 import com.solexgames.mlg.handler.MongoHandler;
 import com.solexgames.mlg.handler.PlayerHandler;
+import com.solexgames.mlg.model.Arena;
+import com.solexgames.mlg.model.Kit;
+import io.github.nosequel.scoreboard.ScoreboardHandler;
 import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -24,6 +29,7 @@ public final class CorePlugin extends JavaPlugin {
     private static CorePlugin instance;
 
     private KitHandler kitHandler;
+    private ArenaHandler arenaHandler;
     private MongoHandler mongoHandler;
     private PlayerHandler playerHandler;
 
@@ -41,12 +47,16 @@ public final class CorePlugin extends JavaPlugin {
         this.saveDefaultConfig();
 
         this.kitHandler = new KitHandler();
+        this.arenaHandler = new ArenaHandler();
         this.mongoHandler = new MongoHandler();
         this.playerHandler = new PlayerHandler();
+
+        new ScoreboardHandler(this, new ScoreboardAdapter(), 20L);
     }
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        this.kitHandler.getAllKits().forEach(Kit::saveKitData);
+        this.arenaHandler.getAllArenas().forEach(Arena::saveArenaData);
     }
 }

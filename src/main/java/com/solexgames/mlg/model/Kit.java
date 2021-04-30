@@ -2,9 +2,11 @@ package com.solexgames.mlg.model;
 
 import com.google.gson.annotations.SerializedName;
 import com.solexgames.mlg.CorePlugin;
+import com.solexgames.mlg.util.InventoryUtil;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
@@ -37,6 +39,15 @@ public class Kit {
     }
 
     public void saveKitData() {
+        final ConfigurationSection configurationSection = CorePlugin.getInstance().getConfig().getConfigurationSection("kits");
 
+        try {
+            configurationSection.set(this.name + ".uuid", this.uuid.toString());
+            configurationSection.set(this.name + ".inventory", InventoryUtil.itemStackArrayToBase64(this.itemStacks));
+        } catch (Exception exception) {
+            CorePlugin.getInstance().getLogger().severe("[Kit] Couldn't save the kit " + this.name + ": " + exception.getMessage());
+        }
+
+        CorePlugin.getInstance().saveConfig();
     }
 }

@@ -52,7 +52,7 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onConnect(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
-        final Location spawn = Bukkit.getWorld("lobby-world").getSpawnLocation();
+        final Location spawn = Bukkit.getWorlds().get(0).getSpawnLocation();
         final GamePlayer gamePlayer = CorePlugin.getInstance().getPlayerHandler().getByUuid(event.getPlayer().getUniqueId());
 
         if (gamePlayer != null) {

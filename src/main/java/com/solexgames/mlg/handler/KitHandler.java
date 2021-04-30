@@ -28,16 +28,23 @@ public class KitHandler {
     private void loadKits() {
         final ConfigurationSection configurationSection = CorePlugin.getInstance().getConfig().getConfigurationSection("kits");
 
-        configurationSection.getKeys(true).forEach(s -> {
-            final Kit kit = new Kit(UUID.fromString(configurationSection.getString(s + ".uuid")), configurationSection.getString(s));
-            final ItemStack[] itemStacks = InventoryUtil.itemStackArrayFromBase64(configurationSection.getString(s + ".inventory"));
 
-            if (itemStacks != null) {
-                kit.setItemStacks(itemStacks);
-            } else {
-                kit.setItemStacks(new ItemStack[]{});
-            }
-        });
+        try {
+            configurationSection.getKeys(true).forEach(path -> {
+                final Kit kit = new Kit(UUID.fromString(configurationSection.getString(path + ".uuid")), configurationSection.getString(path));
+                final ItemStack[] itemStacks = InventoryUtil.itemStackArrayFromBase64(configurationSection.getString(path + ".inventory"));
+
+                if (itemStacks != null) {
+                    kit.setItemStacks(itemStacks);
+                } else {
+                    kit.setItemStacks(new ItemStack[]{});
+                }
+
+                CorePlugin.getInstance().getLogger().info("[Kit] Loaded kit " + path + "!");
+            });
+        } catch (Exception ignored) {
+            CorePlugin.getInstance().getLogger().info("There aren't any kits.");
+        }
     }
 
     /**
