@@ -2,6 +2,7 @@ package com.solexgames.mlg.handler;
 
 import com.solexgames.mlg.CorePlugin;
 import com.solexgames.mlg.model.Arena;
+import com.solexgames.mlg.util.LocationUtil;
 import com.solexgames.mlg.util.cuboid.Cuboid;
 import lombok.Getter;
 import org.bukkit.configuration.ConfigurationSection;
@@ -30,6 +31,9 @@ public class ArenaHandler {
                 arena.setCuboid(cuboid);
                 arena.setTeamSize(configurationSection.getInt(path + ".team-size"));
                 arena.setMaxPlayers(configurationSection.getInt(path + ".max-players"));
+
+                arena.setSpawnOne(LocationUtil.getLocationFromString(configurationSection.getString(path + ".spawn-one")).orElse(null));
+                arena.setSpawnTwo(LocationUtil.getLocationFromString(configurationSection.getString(path + ".spawn-two")).orElse(null));
 
                 CorePlugin.getInstance().getLogger().info("[Arena] Loaded arena " + arena.getName() + "!");
             });

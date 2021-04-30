@@ -1,6 +1,7 @@
 package com.solexgames.mlg.util.prompt;
 
 import com.solexgames.mlg.util.Color;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.conversations.ConversationContext;

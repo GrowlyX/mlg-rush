@@ -2,9 +2,11 @@ package com.solexgames.mlg.model;
 
 import com.google.gson.annotations.SerializedName;
 import com.solexgames.mlg.CorePlugin;
+import com.solexgames.mlg.util.LocationUtil;
 import com.solexgames.mlg.util.cuboid.Cuboid;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.UUID;
@@ -22,6 +24,9 @@ public class Arena {
 
     private int teamSize;
     private int maxPlayers;
+
+    private Location spawnOne;
+    private Location spawnTwo;
 
     /**
      * Creates a new instance of {@link Arena}
@@ -46,6 +51,8 @@ public class Arena {
             configurationSection.set(this.name + ".team-size", this.teamSize);
             configurationSection.set(this.name + ".max-players", this.maxPlayers);
             configurationSection.set(this.name + ".cuboid", this.cuboid.getSerialized());
+            configurationSection.set(this.name + ".spawn-one", LocationUtil.getStringFromLocation(this.spawnOne).orElse(null));
+            configurationSection.set(this.name + ".spawn-two", LocationUtil.getStringFromLocation(this.spawnTwo).orElse(null));
         } catch (Exception exception) {
             CorePlugin.getInstance().getLogger().severe("[Arena] Couldn't save the arena " + this.name + ": " + exception.getMessage());
         }
