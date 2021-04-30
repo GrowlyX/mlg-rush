@@ -8,10 +8,7 @@ import com.solexgames.mlg.adapter.PotionEffectTypeAdapter;
 import com.solexgames.mlg.adapter.ScoreboardAdapter;
 import com.solexgames.mlg.command.ArenaCommand;
 import com.solexgames.mlg.command.TestCommand;
-import com.solexgames.mlg.handler.ArenaHandler;
-import com.solexgames.mlg.handler.KitHandler;
-import com.solexgames.mlg.handler.MongoHandler;
-import com.solexgames.mlg.handler.PlayerHandler;
+import com.solexgames.mlg.handler.*;
 import com.solexgames.mlg.listener.PaginationListener;
 import com.solexgames.mlg.listener.PlayerListener;
 import com.solexgames.mlg.model.Arena;
@@ -37,6 +34,7 @@ public final class CorePlugin extends JavaPlugin {
     private ArenaHandler arenaHandler;
     private MongoHandler mongoHandler;
     private PlayerHandler playerHandler;
+    private HotbarHandler hotbarHandler;
 
     private final ConversationFactory conversationFactory = new ConversationFactory(this);
 
@@ -57,6 +55,7 @@ public final class CorePlugin extends JavaPlugin {
         this.arenaHandler = new ArenaHandler();
         this.mongoHandler = new MongoHandler();
         this.playerHandler = new PlayerHandler();
+        this.hotbarHandler = new HotbarHandler();
 
         this.getCommand("arena").setExecutor(new ArenaCommand());
         this.getCommand("test").setExecutor(new TestCommand());

@@ -44,8 +44,9 @@ public class ArenaHandler {
 
                 CorePlugin.getInstance().getLogger().info("[Arena] Loaded arena " + arena.getName() + "!");
             });
-        } catch (Exception ignored) {
+        } catch (Exception exception) {
             CorePlugin.getInstance().getLogger().info("There aren't any arenas.");
+            exception.printStackTrace();
         }
     }
 
@@ -66,12 +67,18 @@ public class ArenaHandler {
 
             player.teleport((arena.getByArenaPlayer(player) == ArenaTeam.BLUE) ? arena.getSpawnOne() : arena.getSpawnTwo());
 
+            CorePlugin.getInstance().getHotbarHandler().setupArenaWaitingHotbar(player);
+
             if (arena.getGamePlayerList().size() >= arena.getMaxPlayers()) {
                 new GameStartTask(20, arena);
             }
         } else {
             player.sendMessage(ChatColor.RED + "MLG Rush Teams mode is currently in development!");
         }
+    }
+
+    public void leaveGame(Player player, Arena arena) {
+
     }
 
     /**

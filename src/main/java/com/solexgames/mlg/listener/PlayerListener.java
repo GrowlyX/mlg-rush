@@ -60,7 +60,7 @@ public class PlayerListener implements Listener {
                 player.teleport(spawn);
             }
 
-            new ScoreboardAdapter();
+            CorePlugin.getInstance().getHotbarHandler().setupLobbyHotbar(player);
         } else {
             event.getPlayer().kickPlayer(CoreConstants.PLAYER_DATA_LOAD);
         }

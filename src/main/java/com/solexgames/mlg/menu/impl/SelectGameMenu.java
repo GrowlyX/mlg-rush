@@ -57,6 +57,7 @@ public class SelectGameMenu extends AbstractPaginatedMenu {
                     .setDisplayName(Color.PRIMARY + ChatColor.BOLD.toString() + this.arena.getName())
                     .addLore(
                             ChatColor.GRAY + "State: " + this.getStateString(),
+                            ChatColor.GRAY + "Players: " + Color.PRIMARY + this.arena.getGamePlayerList().size() + "/" + this.arena.getMaxPlayers(),
                             "",
                             this.getJoinabilityString()
                     )
