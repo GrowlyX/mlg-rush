@@ -30,7 +30,7 @@ public class PaginationListener implements Listener {
 
             if (openMenu.getButtons().containsKey(event.getSlot())) {
                 final Button button = openMenu.getButtons().get(event.getSlot());
-                boolean cancel = button.shouldCancel(player, event.getClick());
+                final boolean cancel = button.shouldCancel(player, event.getClick());
 
                 if (!cancel && (event.getClick() == ClickType.SHIFT_LEFT || event.getClick() == ClickType.SHIFT_RIGHT)) {
                     event.setCancelled(true);

@@ -34,6 +34,8 @@ public class GamePlayer {
     private int wins;
     private int losses;
 
+    private boolean inGame = false;
+
     /**
      * Creates a new instance of {@link GamePlayer}
      * <p>

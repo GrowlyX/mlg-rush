@@ -1,7 +1,7 @@
 package com.solexgames.mlg.menu.impl;
 
 import com.solexgames.mlg.CorePlugin;
-import com.solexgames.mlg.enums.ArenaState;
+import com.solexgames.mlg.state.impl.ArenaState;
 import com.solexgames.mlg.menu.button.Button;
 import com.solexgames.mlg.menu.paginated.AbstractPaginatedMenu;
 import com.solexgames.mlg.model.Arena;
@@ -65,7 +65,8 @@ public class SelectGameMenu extends AbstractPaginatedMenu {
 
         @Override
         public void clicked(Player player, ClickType clickType) {
-            // cba
+            CorePlugin.getInstance().getArenaHandler().addToGame(player, this.arena);
+            player.closeInventory();
         }
 
         private int getDurability() {

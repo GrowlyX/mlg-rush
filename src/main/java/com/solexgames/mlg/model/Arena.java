@@ -2,13 +2,18 @@ package com.solexgames.mlg.model;
 
 import com.google.gson.annotations.SerializedName;
 import com.solexgames.mlg.CorePlugin;
-import com.solexgames.mlg.enums.ArenaState;
+import com.solexgames.mlg.enums.ArenaTeam;
+import com.solexgames.mlg.player.ArenaPlayer;
+import com.solexgames.mlg.state.StateBasedModel;
+import com.solexgames.mlg.state.impl.ArenaState;
+import com.solexgames.mlg.util.Color;
 import com.solexgames.mlg.util.LocationUtil;
 import com.solexgames.mlg.util.cuboid.Cuboid;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,9 +21,10 @@ import java.util.UUID;
 
 @Getter
 @Setter
-public class Arena {
+public class Arena extends StateBasedModel<ArenaState> {
 
     private final List<Location> blockLocationList = new ArrayList<>();
+    private final List<ArenaPlayer> gamePlayerList = new ArrayList<>();
 
     @SerializedName("_id")
     private final UUID uuid;
@@ -65,5 +71,36 @@ public class Arena {
         }
 
         CorePlugin.getInstance().saveConfig();
+    }
+
+    public ArenaTeam getByArenaPlayer(Player player) {
+        return this.getGamePlayerList().stream()
+                .filter(arenaPlayer1 -> arenaPlayer1.getPlayer().equals(player))
+                .map(ArenaPlayer::getArenaTeam)
+                .findFirst().orElse(null);
+    }
+
+    public void broadcastMessage(String message) {
+        this.getGamePlayerList().forEach(arenaPlayer -> arenaPlayer.getPlayer().sendMessage(Color.translate(message)));
+    }
+
+    @Override
+    public void start() {
+
+    }
+
+    @Override
+    public void end() {
+
+    }
+
+    @Override
+    public ArenaState getState() {
+        return this.arenaState;
+    }
+
+    @Override
+    public void cleanup() {
+
     }
 }

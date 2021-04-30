@@ -1,4 +1,4 @@
-package com.solexgames.mlg.enums;
+package com.solexgames.mlg.state.impl;
 
 public enum ArenaState {
 

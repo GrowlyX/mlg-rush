@@ -15,7 +15,7 @@ public final class Color {
     public static ChatColor PRIMARY = ChatColor.AQUA;
     public static ChatColor SECONDARY = ChatColor.YELLOW;
 
-    public static String SB_LINE = ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + "-------------------------";
+    public static String SB_LINE = ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + "--------------------";
 
     public static String translate(String text) {
         return ChatColor.translateAlternateColorCodes('&', text);
