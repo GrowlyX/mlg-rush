@@ -79,14 +79,15 @@ public class PlayerListener implements Listener {
         final Player player = event.getPlayer();
 
         if (player.hasMetadata("frozen")) {
-            player.teleport(event.getFrom().subtract(0.5, 0, 0.5));
+            player.teleport(event.getFrom());
+            return;
         }
 
         if (this.isInArena(player)) {
             final Arena arena = this.getArena(player);
 
             if (!arena.getCuboid().isInWithMarge(player.getLocation(), 0.2)) {
-                player.teleport(event.getFrom().subtract(0.5, 0, 0.5));
+                player.teleport(event.getFrom());
             }
         }
     }

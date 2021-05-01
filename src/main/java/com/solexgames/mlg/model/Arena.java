@@ -14,6 +14,7 @@ import com.solexgames.mlg.util.builder.ItemBuilder;
 import com.solexgames.mlg.util.cuboid.Cuboid;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -114,11 +115,13 @@ public class Arena extends StateBasedModel<ArenaState, ArenaPlayer> {
     @Override
     public void start() {
         this.arenaState = ArenaState.IN_GAME;
+
+        this.resetAndSetupGameSystem();
     }
 
     @Override
     public void end(ArenaPlayer profile) {
-
+        this.resetAndStop();
     }
 
     public void incrementPointAndStartRound(Player player) {
@@ -159,6 +162,20 @@ public class Arena extends StateBasedModel<ArenaState, ArenaPlayer> {
         });
 
         new RoundStartTask(5, this);
+    }
+
+    public void resetAndStop() {
+        this.arenaState = ArenaState.REGENERATING;
+
+        this.cleanup();
+        this.getGamePlayerList().forEach(arenaPlayer -> {
+            PlayerUtil.resetPlayer(arenaPlayer.getPlayer());
+            CorePlugin.getInstance().getHotbarHandler().setupLobbyHotbar(arenaPlayer.getPlayer());
+
+            Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> arenaPlayer.getPlayer().teleport(Bukkit.getWorlds().get(0).getSpawnLocation()), 50L);
+        });
+
+        this.arenaState = ArenaState.AVAILABLE;
     }
 
     @Override
