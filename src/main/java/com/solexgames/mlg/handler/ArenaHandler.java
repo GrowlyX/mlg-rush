@@ -33,7 +33,7 @@ public class ArenaHandler {
 
         try {
             configurationSection.getKeys(true).forEach(path -> {
-                final Arena arena = new Arena(UUID.fromString(configurationSection.getString(path + ".uuid")), configurationSection.getString(path + ".name"));
+                final Arena arena = new Arena(UUID.randomUUID(), configurationSection.getString(path + ".name"));
                 final Cuboid cuboid = Cuboid.getCuboidFromJson(configurationSection.getString(path + ".cuboid"));
 
                 arena.setCuboid(cuboid);
@@ -85,9 +85,10 @@ public class ArenaHandler {
             return;
         }
 
-        arena.broadcastMessage(Color.PRIMARY + player.getName() + Color.SECONDARY + " has left the arena. " + ChatColor.GRAY + "(" + arena.getGamePlayerList().size() + "/" + arena.getMaxPlayers() + ")");
         arena.getAllPlayerList().remove(player);
         arena.getGamePlayerList().remove(arena.getByPlayer(player));
+
+        arena.broadcastMessage(Color.PRIMARY + player.getName() + Color.SECONDARY + " has left the arena. " + ChatColor.GRAY + "(" + arena.getGamePlayerList().size() + "/" + arena.getMaxPlayers() + ")");
 
         player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
 

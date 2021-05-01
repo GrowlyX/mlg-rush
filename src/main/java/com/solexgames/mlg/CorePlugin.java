@@ -68,6 +68,8 @@ public final class CorePlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        this.arenaHandler.getAllArenas().forEach(Arena::cleanup);
+
         this.kitHandler.getAllKits().forEach(Kit::saveKitData);
         this.arenaHandler.getAllArenas().forEach(Arena::saveArenaData);
     }

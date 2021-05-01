@@ -4,9 +4,11 @@ import com.solexgames.mlg.enums.ArenaTeam;
 import com.solexgames.mlg.model.Arena;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.bukkit.entity.Player;
 
 @Getter
+@Setter
 @RequiredArgsConstructor
 public class ArenaPlayer {
 
@@ -15,6 +17,7 @@ public class ArenaPlayer {
 
     private final Player player;
 
+    private int points;
     private int kills;
     private int deaths;
 

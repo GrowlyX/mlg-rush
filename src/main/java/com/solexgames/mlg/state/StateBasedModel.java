@@ -4,11 +4,12 @@ package com.solexgames.mlg.state;
  * State based modelling
  *
  * @param <T> type parameter for the model's state enum
+ * @param <V> type parameter for the model's player profile object
  */
-public abstract class StateBasedModel<T> {
+public abstract class StateBasedModel<T, V> {
 
     public abstract void start();
-    public abstract void end();
+    public abstract void end(V profile);
 
     public abstract T getState();
 

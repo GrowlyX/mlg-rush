@@ -6,14 +6,22 @@ import com.solexgames.mlg.enums.ArenaTeam;
 import com.solexgames.mlg.player.ArenaPlayer;
 import com.solexgames.mlg.state.StateBasedModel;
 import com.solexgames.mlg.state.impl.ArenaState;
+import com.solexgames.mlg.task.RoundStartTask;
 import com.solexgames.mlg.util.Color;
 import com.solexgames.mlg.util.LocationUtil;
+import com.solexgames.mlg.util.PlayerUtil;
+import com.solexgames.mlg.util.builder.ItemBuilder;
 import com.solexgames.mlg.util.cuboid.Cuboid;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +29,19 @@ import java.util.UUID;
 
 @Getter
 @Setter
-public class Arena extends StateBasedModel<ArenaState> {
+public class Arena extends StateBasedModel<ArenaState, ArenaPlayer> {
+
+    private static final ItemStack[] RED_ITEM_STACK_ARRAY = new ItemStack[]{new ItemBuilder(Material.LEATHER_BOOTS).setColor(org.bukkit.Color.RED).create(),
+            new ItemBuilder(Material.LEATHER_LEGGINGS).setColor(org.bukkit.Color.RED).create(),
+            new ItemBuilder(Material.LEATHER_CHESTPLATE).setColor(org.bukkit.Color.RED).create(),
+            new ItemBuilder(Material.LEATHER_HELMET).setColor(org.bukkit.Color.RED).create()};
+
+    private static final ItemStack[] BLUE_ITEM_STACK_ARRAY = new ItemStack[]{new ItemBuilder(Material.LEATHER_BOOTS).setColor(org.bukkit.Color.BLUE).create(),
+            new ItemBuilder(Material.LEATHER_LEGGINGS).setColor(org.bukkit.Color.BLUE).create(),
+            new ItemBuilder(Material.LEATHER_CHESTPLATE).setColor(org.bukkit.Color.BLUE).create(),
+            new ItemBuilder(Material.LEATHER_HELMET).setColor(org.bukkit.Color.BLUE).create()};
+
+    public static final int WINNER_POINT_AMOUNT = 5;
 
     private final List<Location> blockLocationList = new ArrayList<>();
     private final List<ArenaPlayer> gamePlayerList = new ArrayList<>();
@@ -93,12 +113,52 @@ public class Arena extends StateBasedModel<ArenaState> {
 
     @Override
     public void start() {
-
+        this.arenaState = ArenaState.IN_GAME;
     }
 
     @Override
-    public void end() {
+    public void end(ArenaPlayer profile) {
 
+    }
+
+    public void incrementPointAndStartRound(Player player) {
+        final ArenaPlayer arenaPlayer = this.getByPlayer(player);
+
+        if (arenaPlayer.getPoints() == Arena.WINNER_POINT_AMOUNT) {
+            this.end(this.getByPlayer(player));
+            return;
+        }
+
+        arenaPlayer.setPoints(arenaPlayer.getPoints() + 1);
+
+        this.broadcastMessage(Color.PRIMARY + player.getName() + Color.SECONDARY + " has scored a point! " + ChatColor.GRAY + "(" + ChatColor.BLUE + this.getPoints(ArenaTeam.BLUE) + ChatColor.GRAY + "/" + ChatColor.RED + this.getPoints(ArenaTeam.RED) + ChatColor.GRAY + ")");
+        this.resetAndSetupGameSystem();
+    }
+
+    public int getPoints(ArenaTeam arenaTeam) {
+        return this.getGamePlayerList().stream()
+                .filter(arenaPlayer -> arenaPlayer.getArenaTeam().equals(arenaTeam))
+                .mapToInt(ArenaPlayer::getPoints).sum();
+    }
+
+    public void resetAndSetupGameSystem() {
+        this.cleanup();
+
+        this.getGamePlayerList().forEach(arenaPlayer -> {
+            PlayerUtil.resetPlayer(arenaPlayer.getPlayer());
+
+            if (arenaPlayer.getArenaTeam().equals(ArenaTeam.BLUE)) {
+                arenaPlayer.getPlayer().teleport(this.spawnOne);
+                arenaPlayer.getPlayer().getInventory().setArmorContents(Arena.BLUE_ITEM_STACK_ARRAY);
+            } else {
+                arenaPlayer.getPlayer().teleport(this.spawnTwo);
+                arenaPlayer.getPlayer().getInventory().setArmorContents(Arena.RED_ITEM_STACK_ARRAY);
+            }
+
+            arenaPlayer.getPlayer().setMetadata("frozen", new FixedMetadataValue(CorePlugin.getInstance(), true));
+        });
+
+        new RoundStartTask(5, this);
     }
 
     @Override
@@ -108,6 +168,12 @@ public class Arena extends StateBasedModel<ArenaState> {
 
     @Override
     public void cleanup() {
+        for (Location location : this.getBlockLocationList()) {
+            final Block block = location.getBlock();
 
+            if (block != null) {
+                block.setType(Material.AIR);
+            }
+        }
     }
 }

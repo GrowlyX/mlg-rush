@@ -3,6 +3,8 @@ package com.solexgames.mlg.listener;
 import com.solexgames.mlg.handler.ArenaHandler;
 import com.solexgames.mlg.menu.impl.SelectGameMenu;
 import com.solexgames.mlg.model.Arena;
+import com.solexgames.mlg.state.impl.ArenaState;
+import com.solexgames.mlg.util.Color;
 import com.solexgames.mlg.util.CoreConstants;
 import com.solexgames.mlg.CorePlugin;
 import com.solexgames.mlg.player.GamePlayer;
@@ -53,7 +55,7 @@ public class PlayerListener implements Listener {
         final ItemStack itemStack = event.getItem();
         final ArenaHandler arenaHandler = CorePlugin.getInstance().getArenaHandler();
 
-        if (event.getAction().name().contains("RIGHT")) {
+        if (event.getAction().name().contains("RIGHT") && itemStack != null) {
             switch (itemStack.getType()) {
                 case EMERALD:
                     player.sendMessage(ChatColor.RED + "not implemented but item working");
@@ -76,13 +78,15 @@ public class PlayerListener implements Listener {
     public void onMove(PlayerMoveEvent event) {
         final Player player = event.getPlayer();
 
+        if (player.hasMetadata("frozen")) {
+            player.teleport(event.getFrom().subtract(0.5, 0, 0.5));
+        }
+
         if (this.isInArena(player)) {
             final Arena arena = this.getArena(player);
 
-            if (!arena.getCuboid().isIn(player)) {
-                player.sendMessage(ChatColor.RED + "You cannot leave the arena boundaries!");
-
-                event.setCancelled(true);
+            if (!arena.getCuboid().isInWithMarge(player.getLocation(), 0.2)) {
+                player.teleport(event.getFrom().subtract(0.5, 0, 0.5));
             }
         }
     }
@@ -100,6 +104,10 @@ public class PlayerListener implements Listener {
                 player.sendMessage(ChatColor.RED + "You cannot place blocks past the arena boundaries!");
 
                 event.setCancelled(true);
+            } else if (arena.getState().equals(ArenaState.IN_GAME)) {
+                arena.getBlockLocationList().add(event.getBlock().getLocation());
+
+                event.setCancelled(false);
             }
         }
     }
@@ -117,9 +125,15 @@ public class PlayerListener implements Listener {
     public void onBlockBreak(BlockBreakEvent event) {
         final Player player = event.getPlayer();
 
-        if (!player.isOp()) {
-            event.setCancelled(true);
+        if (this.isInArena(player)) {
+            final Arena arena = this.getArena(player);
+
+            if (event.getBlock().getType().equals(Material.BED_BLOCK) && arena.getState().equals(ArenaState.IN_GAME)) {
+                arena.incrementPointAndStartRound(player);
+            }
         }
+
+        event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.LOW)
@@ -129,6 +143,12 @@ public class PlayerListener implements Listener {
 
         if (gamePlayer != null) {
             gamePlayer.savePlayerData();
+        }
+
+        final Arena arena = this.getArena(player);
+
+        if (arena != null) {
+            arena.end(arena.getByPlayer(player));
         }
     }
 
