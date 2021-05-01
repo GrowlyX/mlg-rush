@@ -134,7 +134,7 @@ public class ItemBuilder {
         }
 
         if (!this.enchantments.isEmpty()) {
-            this.itemStack.addEnchantments(this.enchantments);
+            this.itemStack.addUnsafeEnchantments(this.enchantments);
         }
 
         return this.itemStack;
