@@ -10,6 +10,7 @@ import com.solexgames.mlg.util.Color;
 import com.solexgames.mlg.util.LocationUtil;
 import com.solexgames.mlg.util.cuboid.Cuboid;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
@@ -25,18 +26,15 @@ import java.util.UUID;
  */
 
 @Getter
+@NoArgsConstructor
 public class ArenaHandler {
 
     private final List<Arena> allArenas = new ArrayList<>();
 
-    public ArenaHandler() {
-        this.loadArenas();
-    }
-
     /**
      * Loads all arenas from the config.yml
      */
-    private void loadArenas() {
+    public void loadArenas() {
         final ConfigurationSection configurationSection = CorePlugin.getInstance().getConfig().getConfigurationSection("arenas");
 
         try {
@@ -54,6 +52,9 @@ public class ArenaHandler {
                 CorePlugin.getInstance().getLogger().info("[Arena] Loaded arena " + arena.getName() + "!");
             });
         } catch (Exception exception) {
+            System.out.println(exception.getMessage());
+            System.out.println(exception.getLocalizedMessage());
+
             exception.printStackTrace();
         }
     }

@@ -1,5 +1,6 @@
 package com.solexgames.mlg;
 
+import co.aikar.commands.MessageType;
 import co.aikar.commands.PaperCommandManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -52,6 +53,8 @@ public final class CorePlugin extends JavaPlugin {
         this.saveDefaultConfig();
 
         this.arenaHandler = new ArenaHandler();
+        this.arenaHandler.loadArenas();
+
         this.mongoHandler = new MongoHandler();
         this.playerHandler = new PlayerHandler();
         this.hotbarHandler = new HotbarHandler();
