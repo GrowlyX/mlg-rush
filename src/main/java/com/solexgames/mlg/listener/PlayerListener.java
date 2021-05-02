@@ -1,16 +1,15 @@
 package com.solexgames.mlg.listener;
 
+import com.solexgames.mlg.CorePlugin;
 import com.solexgames.mlg.enums.ArenaTeam;
 import com.solexgames.mlg.handler.ArenaHandler;
 import com.solexgames.mlg.menu.impl.SelectGameMenu;
 import com.solexgames.mlg.model.Arena;
 import com.solexgames.mlg.player.ArenaPlayer;
+import com.solexgames.mlg.player.GamePlayer;
 import com.solexgames.mlg.state.impl.ArenaState;
 import com.solexgames.mlg.util.Color;
 import com.solexgames.mlg.util.CoreConstants;
-import com.solexgames.mlg.CorePlugin;
-import com.solexgames.mlg.player.GamePlayer;
-import io.github.nosequel.scoreboard.ScoreboardAdapter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -24,13 +23,10 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.ArrayList;
 
 public class PlayerListener implements Listener {
 
@@ -85,8 +81,6 @@ public class PlayerListener implements Listener {
                     break;
             }
         }
-
-        event.setCancelled(true);
     }
 
     @EventHandler
