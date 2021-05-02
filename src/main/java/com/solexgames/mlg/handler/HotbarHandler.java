@@ -45,7 +45,7 @@ public class HotbarHandler {
                 .setEnchant(Enchantment.KNOCKBACK, 2)
                 .setUnbreakable(true)
                 .create();
-        this.pickaxe = new ItemBuilder(Material.WOOD_PICKAXE)
+        this.pickaxe = new ItemBuilder(Material.GOLD_PICKAXE)
                 .setDisplayName(Color.PRIMARY + ChatColor.BOLD.toString() + "Pickaxe" + ChatColor.GRAY + " (Right-click)")
                 .setUnbreakable(true)
                 .create();
@@ -70,7 +70,7 @@ public class HotbarHandler {
 
     public void setupArenaInGameHotbar(Player player) {
         player.getInventory().setItem(0, this.knockbackStick);
-        player.getInventory().setItem(1, this.sandStoneStack);
+        player.getInventory().setItem(4, this.sandStoneStack);
         player.getInventory().setItem(8, this.pickaxe);
 
         player.updateInventory();

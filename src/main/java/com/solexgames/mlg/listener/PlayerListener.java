@@ -117,20 +117,8 @@ public class PlayerListener implements Listener {
         if (this.isInArena(player)) {
             final Arena arena = this.getArena(player);
 
-            if (arena.getState().equals(ArenaState.AVAILABLE)) {
-                if ((int) player.getLocation().getY() <= arena.getCuboid().getYMin()) {
-                    player.teleport(arena.getSpawnFromTeam(arena.getByPlayer(player).getArenaTeam()));
-                }
-
-                if (!arena.getCuboid().isInWithMarge(player.getLocation(), 0.2)) {
-                    player.teleport(arena.getSpawnFromTeam(arena.getByPlayer(player).getArenaTeam()));
-                }
-
-                return;
-            }
-
             if ((int) player.getLocation().getY() <= arena.getCuboid().getYMin()) {
-                return;
+                player.teleport(arena.getSpawnFromTeam(arena.getByPlayer(player).getArenaTeam()));
             }
 
             if (!arena.getCuboid().isInWithMarge(player.getLocation(), 0.2)) {
@@ -235,7 +223,9 @@ public class PlayerListener implements Listener {
                 arena.incrementPointAndStartRound(player);
             }
 
-            event.setCancelled(true);
+            if (!arena.getBlockLocationList().contains(event.getBlock().getLocation())) {
+                event.setCancelled(true);
+            }
         } else {
             if (!player.isOp()) {
                 event.setCancelled(true);
