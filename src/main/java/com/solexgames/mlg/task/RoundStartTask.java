@@ -36,7 +36,7 @@ public class RoundStartTask extends BukkitRunnable {
                 break;
             case 1:
                 this.arena.getAllPlayerList().forEach(player -> {
-                    player.setMetadata("frozen", new FixedMetadataValue(CorePlugin.getInstance(), false));
+                    player.removeMetadata("frozen", CorePlugin.getInstance());
                     CorePlugin.getInstance().getHotbarHandler().setupArenaInGameHotbar(player);
                 });
                 this.arena.broadcastMessage(Color.PRIMARY + "The round has started! " + ChatColor.GREEN + "Good luck and have fun!");

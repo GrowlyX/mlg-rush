@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName;
 import com.solexgames.mlg.CorePlugin;
 import com.solexgames.mlg.enums.ArenaTeam;
 import com.solexgames.mlg.player.ArenaPlayer;
+import com.solexgames.mlg.player.GamePlayer;
 import com.solexgames.mlg.state.StateBasedModel;
 import com.solexgames.mlg.state.impl.ArenaState;
 import com.solexgames.mlg.task.RoundStartTask;
@@ -32,12 +33,12 @@ import java.util.UUID;
 @Setter
 public class Arena extends StateBasedModel<ArenaState, ArenaPlayer> {
 
-    private static final ItemStack[] RED_ITEM_STACK_ARRAY = new ItemStack[]{new ItemBuilder(Material.LEATHER_BOOTS).setColor(org.bukkit.Color.RED).create(),
+    public static final ItemStack[] RED_ITEM_STACK_ARRAY = new ItemStack[]{new ItemBuilder(Material.LEATHER_BOOTS).setColor(org.bukkit.Color.RED).create(),
             new ItemBuilder(Material.LEATHER_LEGGINGS).setColor(org.bukkit.Color.RED).create(),
             new ItemBuilder(Material.LEATHER_CHESTPLATE).setColor(org.bukkit.Color.RED).create(),
             new ItemBuilder(Material.LEATHER_HELMET).setColor(org.bukkit.Color.RED).create()};
 
-    private static final ItemStack[] BLUE_ITEM_STACK_ARRAY = new ItemStack[]{new ItemBuilder(Material.LEATHER_BOOTS).setColor(org.bukkit.Color.BLUE).create(),
+    public static final ItemStack[] BLUE_ITEM_STACK_ARRAY = new ItemStack[]{new ItemBuilder(Material.LEATHER_BOOTS).setColor(org.bukkit.Color.BLUE).create(),
             new ItemBuilder(Material.LEATHER_LEGGINGS).setColor(org.bukkit.Color.BLUE).create(),
             new ItemBuilder(Material.LEATHER_CHESTPLATE).setColor(org.bukkit.Color.BLUE).create(),
             new ItemBuilder(Material.LEATHER_HELMET).setColor(org.bukkit.Color.BLUE).create()};
@@ -121,6 +122,14 @@ public class Arena extends StateBasedModel<ArenaState, ArenaPlayer> {
 
     @Override
     public void end(ArenaPlayer profile) {
+        final GamePlayer gamePlayer = CorePlugin.getInstance().getPlayerHandler().getByName(profile.getPlayer().getName());
+
+        if (gamePlayer != null) {
+            gamePlayer.setWins(gamePlayer.getWins() + 1);
+
+            this.broadcastMessage(Color.PRIMARY + profile.getPlayer().getName() + Color.SECONDARY + " has won the game!");
+        }
+
         this.resetAndStop();
     }
 
@@ -147,18 +156,20 @@ public class Arena extends StateBasedModel<ArenaState, ArenaPlayer> {
     public void resetAndSetupGameSystem() {
         this.cleanup();
 
-        this.getGamePlayerList().forEach(arenaPlayer -> {
-            PlayerUtil.resetPlayer(arenaPlayer.getPlayer());
+        Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () -> {
+            this.getGamePlayerList().forEach(arenaPlayer -> {
+                PlayerUtil.resetPlayer(arenaPlayer.getPlayer());
 
-            if (arenaPlayer.getArenaTeam().equals(ArenaTeam.BLUE)) {
-                arenaPlayer.getPlayer().teleport(this.spawnOne);
-                arenaPlayer.getPlayer().getInventory().setArmorContents(Arena.BLUE_ITEM_STACK_ARRAY);
-            } else {
-                arenaPlayer.getPlayer().teleport(this.spawnTwo);
-                arenaPlayer.getPlayer().getInventory().setArmorContents(Arena.RED_ITEM_STACK_ARRAY);
-            }
+                if (arenaPlayer.getArenaTeam().equals(ArenaTeam.BLUE)) {
+                    arenaPlayer.getPlayer().teleport(this.spawnOne);
+                    arenaPlayer.getPlayer().getInventory().setArmorContents(Arena.BLUE_ITEM_STACK_ARRAY);
+                } else {
+                    arenaPlayer.getPlayer().teleport(this.spawnTwo);
+                    arenaPlayer.getPlayer().getInventory().setArmorContents(Arena.RED_ITEM_STACK_ARRAY);
+                }
 
-            arenaPlayer.getPlayer().setMetadata("frozen", new FixedMetadataValue(CorePlugin.getInstance(), true));
+                arenaPlayer.getPlayer().setMetadata("frozen", new FixedMetadataValue(CorePlugin.getInstance(), true));
+            });
         });
 
         new RoundStartTask(5, this);
@@ -168,6 +179,7 @@ public class Arena extends StateBasedModel<ArenaState, ArenaPlayer> {
         this.arenaState = ArenaState.REGENERATING;
 
         this.cleanup();
+
         this.getGamePlayerList().forEach(arenaPlayer -> {
             PlayerUtil.resetPlayer(arenaPlayer.getPlayer());
             CorePlugin.getInstance().getHotbarHandler().setupLobbyHotbar(arenaPlayer.getPlayer());
@@ -175,7 +187,16 @@ public class Arena extends StateBasedModel<ArenaState, ArenaPlayer> {
             Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> arenaPlayer.getPlayer().teleport(Bukkit.getWorlds().get(0).getSpawnLocation()), 50L);
         });
 
+        this.gamePlayerList.clear();
+        this.allPlayerList.clear();
+
         this.arenaState = ArenaState.AVAILABLE;
+    }
+
+    public boolean isTeamsBed(Location location, ArenaTeam arenaTeam) {
+        final Location spawn = arenaTeam == ArenaTeam.BLUE ? this.spawnOne : this.spawnTwo;
+
+        return location.getBlock().getLocation().distance(spawn) <= 3.0;
     }
 
     @Override

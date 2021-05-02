@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 public final class PlayerUtil {
 
     public static void resetPlayer(Player player) {
+
         player.getActivePotionEffects().clear();
 
         player.setHealth(20.0D);

@@ -40,7 +40,6 @@ public class ArenaCommand implements CommandExecutor {
             }
         }
 
-
         return false;
     }
 }
