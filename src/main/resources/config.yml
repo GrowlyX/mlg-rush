@@ -1,4 +1,6 @@
+# MongoDB URL
 mongodb:
   url: ""
-kits: []
-arenas: []
+# List of all arenas
+arenas:
+  test: ""

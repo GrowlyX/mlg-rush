@@ -32,7 +32,7 @@ public class ArenaHandler {
         final ConfigurationSection configurationSection = CorePlugin.getInstance().getConfig().getConfigurationSection("arenas");
 
         try {
-            configurationSection.getKeys(true).forEach(path -> {
+            configurationSection.getKeys(false).stream().filter(s -> s.equalsIgnoreCase("test")).forEach(path -> {
                 final Arena arena = new Arena(UUID.randomUUID(), configurationSection.getString(path + ".name"));
                 final Cuboid cuboid = Cuboid.getCuboidFromJson(configurationSection.getString(path + ".cuboid"));
 
@@ -46,7 +46,6 @@ public class ArenaHandler {
                 CorePlugin.getInstance().getLogger().info("[Arena] Loaded arena " + arena.getName() + "!");
             });
         } catch (Exception exception) {
-            CorePlugin.getInstance().getLogger().info("There aren't any arenas.");
             exception.printStackTrace();
         }
     }
