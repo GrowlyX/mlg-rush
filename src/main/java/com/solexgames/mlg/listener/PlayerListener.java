@@ -63,7 +63,7 @@ public class PlayerListener implements Listener {
         final ItemStack itemStack = event.getItem();
         final ArenaHandler arenaHandler = CorePlugin.getInstance().getArenaHandler();
 
-        if (event.getClickedBlock().getType().equals(Material.BED_BLOCK)) {
+        if (event.getClickedBlock() != null && event.getClickedBlock().getType() != null && event.getClickedBlock().getType().equals(Material.BED_BLOCK) && event.getAction().name().contains("RIGHT")) {
             event.setCancelled(true);
             return;
         }
