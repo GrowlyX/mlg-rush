@@ -34,8 +34,6 @@ public class GamePlayer {
     private int wins;
     private int losses;
 
-    private boolean inGame = false;
-
     /**
      * Creates a new instance of {@link GamePlayer}
      * <p></p>
@@ -74,11 +72,10 @@ public class GamePlayer {
     }
 
     private void loadPlayerData() {
-        CompletableFuture.supplyAsync(() -> CorePlugin.getInstance().getMongoHandler().getPlayerCollection().find(Filters.eq("_id", this.uuid)).first())
+        CompletableFuture.supplyAsync(() -> CorePlugin.getInstance().getMongoHandler().getPlayerCollection().find(Filters.eq("uuid", this.uuid.toString())).first())
                 .thenAccept(document -> {
                     if (document == null) {
-                        CorePlugin.getInstance().getServer().getScheduler()
-                                .runTaskLaterAsynchronously(CorePlugin.getInstance(), this::savePlayerData, 20L);
+                        CorePlugin.getInstance().getServer().getScheduler().runTaskLaterAsynchronously(CorePlugin.getInstance(), this::savePlayerData, 20L);
                         return;
                     }
 

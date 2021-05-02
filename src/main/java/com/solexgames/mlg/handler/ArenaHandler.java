@@ -72,6 +72,16 @@ public class ArenaHandler {
             return;
         }
 
+        if (this.isInArena(player)) {
+            player.sendMessage(ChatColor.RED + "You're already in an arena!");
+            return;
+        }
+
+        if (arena.getAllPlayerList().contains(player)) {
+            player.sendMessage(ChatColor.RED + "You're already in an arena!");
+            return;
+        }
+
         if (arena.getTeamSize() == 1) {
             if (arena.getGamePlayerList().size() == 2) {
                 player.sendMessage(ChatColor.RED + "This arena is currently at max capacity!");
