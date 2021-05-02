@@ -1,6 +1,5 @@
 package com.solexgames.mlg.menu.paginated;
 
-import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.mlg.menu.button.Button;
 import com.solexgames.mlg.menu.AbstractMenu;
 import com.solexgames.mlg.menu.button.impl.ViewPageButton;
@@ -9,6 +8,7 @@ import com.solexgames.mlg.util.builder.ItemBuilder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -79,7 +79,7 @@ public abstract class AbstractPaginatedMenu extends AbstractMenu {
             buttons.put(i, new Button() {
                 @Override
                 public ItemStack getButtonItem(Player player) {
-                    return new ItemBuilder(XMaterial.GRAY_STAINED_GLASS_PANE.parseMaterial())
+                    return new ItemBuilder(Material.STAINED_GLASS_PANE)
                             .setDurability(7)
                             .setDisplayName(" ")
                             .create();

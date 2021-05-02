@@ -1,11 +1,11 @@
 package com.solexgames.mlg.menu.button.impl;
 
-import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.mlg.menu.button.Button;
 import com.solexgames.mlg.menu.paginated.AbstractPaginatedMenu;
 import com.solexgames.mlg.util.builder.ItemBuilder;
 import lombok.AllArgsConstructor;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
@@ -31,7 +31,7 @@ public class SelectPageButton extends Button {
             stringList.add(ChatColor.GREEN + "This is the current page.");
         }
 
-        return new ItemBuilder(this.current ? XMaterial.ENCHANTED_BOOK.parseMaterial() : XMaterial.BOOK.parseMaterial())
+        return new ItemBuilder(this.current ? Material.ENCHANTED_BOOK : Material.BOOK)
                 .addLore(stringList)
                 .setDisplayName(ChatColor.YELLOW + "Page " + this.page)
                 .create();

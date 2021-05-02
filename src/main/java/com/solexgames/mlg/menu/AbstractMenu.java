@@ -1,17 +1,16 @@
 package com.solexgames.mlg.menu;
 
-import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.mlg.CorePlugin;
 import com.solexgames.mlg.menu.button.Button;
 import com.solexgames.mlg.util.Color;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +23,7 @@ public abstract class AbstractMenu {
     public static Map<String, AbstractMenu> currentlyOpenedMenus = new HashMap<>();
 
     @Getter
-    protected final CorePlugin plugin = JavaPlugin.getPlugin(CorePlugin.class);
+    protected final CorePlugin plugin = CorePlugin.getInstance();
 
     private Map<Integer, Button> buttons = new HashMap<>();
 
@@ -33,12 +32,12 @@ public abstract class AbstractMenu {
     private boolean closedByMenu = false;
     private boolean placeholder = false;
 
-    private Button placeholderButton = Button.placeholder(XMaterial.GLASS_PANE.parseMaterial(), (byte) 15, " ");
+    private Button placeholderButton = Button.placeholder(Material.STAINED_GLASS_PANE, (byte) 15, " ");
 
     private ItemStack createItemStack(Player player, Button button) {
         final ItemStack item = button.getButtonItem(player);
 
-        if (item.getType() != XMaterial.SKELETON_SKULL.parseMaterial()) {
+        if (item.getType() != Material.SKULL_ITEM) {
             final ItemMeta meta = item.getItemMeta();
 
             if (meta != null && meta.hasDisplayName()) {

@@ -1,6 +1,5 @@
 package com.solexgames.mlg.util.builder;
 
-import com.cryptomorin.xseries.XMaterial;
 import com.solexgames.mlg.util.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -56,7 +55,7 @@ public class ItemBuilder {
     public ItemBuilder setOwner(String name) {
         final SkullMeta skullMeta = (SkullMeta) this.itemMeta;
 
-        if (this.itemStack.getType().equals(XMaterial.SKELETON_SKULL.parseMaterial())) {
+        if (this.itemStack.getType().equals(Material.SKULL_ITEM)) {
             skullMeta.setOwner(name);
         } else {
             return this;
