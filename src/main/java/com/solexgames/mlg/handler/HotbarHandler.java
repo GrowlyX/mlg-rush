@@ -18,6 +18,7 @@ public class HotbarHandler {
 
     private final ItemStack knockbackStick;
     private final ItemStack sandStoneStack;
+    private final ItemStack pickaxe;
 
     public HotbarHandler() {
         this.joinGameItem = new ItemBuilder(Material.COMPASS)
@@ -36,6 +37,10 @@ public class HotbarHandler {
         this.knockbackStick = new ItemBuilder(Material.STICK)
                 .setDisplayName(Color.PRIMARY + ChatColor.BOLD.toString() + "Knockback Stick" + ChatColor.GRAY + " (Right-click)")
                 .setEnchant(Enchantment.KNOCKBACK, 2)
+                .setUnbreakable(true)
+                .create();
+        this.pickaxe = new ItemBuilder(Material.WOOD_PICKAXE)
+                .setDisplayName(Color.PRIMARY + ChatColor.BOLD.toString() + "Pickaxe" + ChatColor.GRAY + " (Right-click)")
                 .setUnbreakable(true)
                 .create();
     }
@@ -60,6 +65,7 @@ public class HotbarHandler {
     public void setupArenaInGameHotbar(Player player) {
         player.getInventory().setItem(0, this.knockbackStick);
         player.getInventory().setItem(1, this.sandStoneStack);
+        player.getInventory().setItem(8, this.pickaxe);
 
         player.updateInventory();
     }

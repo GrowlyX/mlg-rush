@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+
 @Getter
 @Setter
 public class Arena extends StateBasedModel<ArenaState, ArenaPlayer> {
@@ -68,8 +69,8 @@ public class Arena extends StateBasedModel<ArenaState, ArenaPlayer> {
      * Creates a new instance of {@link Arena}
      * <p>
      *
-     * @param uuid Arena specified UUID
-     * @param name Arena specified Name
+     * @param uuid Arena UUID
+     * @param name Arena Name
      */
     public Arena(UUID uuid, String name) {
         this.uuid = uuid;
@@ -78,6 +79,9 @@ public class Arena extends StateBasedModel<ArenaState, ArenaPlayer> {
         CorePlugin.getInstance().getArenaHandler().getAllArenas().add(this);
     }
 
+    /**
+     * Saves the arena's data to the main config
+     */
     public void saveArenaData() {
         final ConfigurationSection configurationSection = CorePlugin.getInstance().getConfig().getConfigurationSection("arenas");
 
@@ -96,13 +100,13 @@ public class Arena extends StateBasedModel<ArenaState, ArenaPlayer> {
         CorePlugin.getInstance().saveConfig();
     }
 
-    public ArenaTeam getByArenaPlayer(Player player) {
-        return this.getGamePlayerList().stream()
-                .filter(arenaPlayer1 -> arenaPlayer1.getPlayer().equals(player))
-                .map(ArenaPlayer::getArenaTeam)
-                .findFirst().orElse(null);
-    }
-
+    /**
+     * Get's an {@link ArenaPlayer} instance from a player
+     * <p></p>
+     *
+     * @param player Player to find an ArenaPlayer from
+     * @return an ArenaPlayer
+     */
     public ArenaPlayer getByPlayer(Player player) {
         return this.getGamePlayerList().stream()
                 .filter(arenaPlayer1 -> arenaPlayer1.getPlayer().equals(player))
@@ -207,6 +211,10 @@ public class Arena extends StateBasedModel<ArenaState, ArenaPlayer> {
 
     public ArenaTeam getOpposingTeam(ArenaPlayer arenaPlayer) {
         return arenaPlayer.getArenaTeam() == ArenaTeam.BLUE ? ArenaTeam.RED : ArenaTeam.BLUE;
+    }
+
+    public Location getSpawnFromTeam(ArenaTeam arenaTeam) {
+        return arenaTeam == ArenaTeam.BLUE ? this.spawnOne : spawnTwo;
     }
 
     @Override

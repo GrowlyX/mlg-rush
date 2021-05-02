@@ -1,13 +1,12 @@
 package com.solexgames.mlg;
 
+import co.aikar.commands.PaperCommandManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.solexgames.mlg.adapter.DateTypeAdapter;
-import com.solexgames.mlg.adapter.LocationTypeAdapter;
-import com.solexgames.mlg.adapter.PotionEffectTypeAdapter;
+import com.solexgames.mlg.adapter.type.LocationTypeAdapter;
 import com.solexgames.mlg.adapter.ScoreboardAdapter;
 import com.solexgames.mlg.command.ArenaCommand;
-import com.solexgames.mlg.command.TestCommand;
+import com.solexgames.mlg.command.JoinGameCommand;
 import com.solexgames.mlg.handler.*;
 import com.solexgames.mlg.listener.PaginationListener;
 import com.solexgames.mlg.listener.PlayerListener;
@@ -41,9 +40,7 @@ public final class CorePlugin extends JavaPlugin {
         instance = this;
 
         GSON = new GsonBuilder()
-                .registerTypeAdapter(PotionEffect.class, new PotionEffectTypeAdapter())
                 .registerTypeAdapter(Location.class, new LocationTypeAdapter())
-                .registerTypeAdapter(Date.class, new DateTypeAdapter())
                 .disableHtmlEscaping()
                 .create();
 
@@ -54,8 +51,12 @@ public final class CorePlugin extends JavaPlugin {
         this.playerHandler = new PlayerHandler();
         this.hotbarHandler = new HotbarHandler();
 
-        this.getCommand("arena").setExecutor(new ArenaCommand());
-        this.getCommand("test").setExecutor(new TestCommand());
+        final PaperCommandManager manager = new PaperCommandManager(this);
+
+        manager.registerCommand(new ArenaCommand());
+        manager.registerCommand(new JoinGameCommand());
+
+        manager.enableUnstableAPI("help");
 
         this.getServer().getPluginManager().registerEvents(new PlayerListener(), this);
         this.getServer().getPluginManager().registerEvents(new PaginationListener(), this);

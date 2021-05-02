@@ -1,7 +1,3 @@
 name: MLGRush
-version: ${project.version}
+version: ${git.commit.id.abbrev}
 main: com.solexgames.mlg.CorePlugin
-
-commands:
-  arena:
-  test:

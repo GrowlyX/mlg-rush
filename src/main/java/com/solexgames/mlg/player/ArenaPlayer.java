@@ -7,6 +7,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.bukkit.entity.Player;
 
+/**
+ * Temporary memory stored player profile object with game details
+ */
+
 @Getter
 @Setter
 @RequiredArgsConstructor

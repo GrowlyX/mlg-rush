@@ -32,8 +32,12 @@ public class ScoreboardAdapter implements ScoreboardElementHandler {
 
             switch (arena.getState()) {
                 case AVAILABLE:
-                    element.add(Color.SECONDARY + "Waiting for players...");
-                    element.add(Color.PRIMARY + "" + (arena.getMaxPlayers() - arena.getAllPlayerList().size()) + Color.SECONDARY + " players.");
+                    if ((arena.getMaxPlayers() - arena.getAllPlayerList().size() == 0)) {
+                        element.add(Color.SECONDARY + "Starting match...");
+                    } else {
+                        element.add(Color.SECONDARY + "Waiting for players...");
+                        element.add(Color.PRIMARY + "" + (arena.getMaxPlayers() - arena.getAllPlayerList().size()) + Color.SECONDARY + " players.");
+                    }
                     break;
                 case IN_GAME:
                     element.add(Color.SECONDARY + "Points: " + Color.PRIMARY + arena.getByPlayer(player).getPoints());

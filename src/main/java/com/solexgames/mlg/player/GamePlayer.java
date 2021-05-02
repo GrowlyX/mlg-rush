@@ -13,7 +13,7 @@ import java.util.concurrent.CompletableFuture;
 
 /**
  * Player profile where statistics are saved.
- * <p>
+ * <p></p>
  *
  * @author GrowlyX
  * @since 3/25/2021
@@ -38,7 +38,7 @@ public class GamePlayer {
 
     /**
      * Creates a new instance of {@link GamePlayer}
-     * <p>
+     * <p></p>
      *
      * @param uuid Player UUID
      * @param name Player Name

@@ -1,5 +1,8 @@
 package com.solexgames.mlg.command;
 
+import co.aikar.commands.BaseCommand;
+import co.aikar.commands.CommandHelp;
+import co.aikar.commands.annotation.*;
 import com.solexgames.mlg.CorePlugin;
 import com.solexgames.mlg.util.Color;
 import com.solexgames.mlg.util.prompt.ArenaNamePrompt;
@@ -10,36 +13,36 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class ArenaCommand implements CommandExecutor {
+@CommandAlias("arena")
+@CommandPermission("mlgrush.command.arena")
+public class ArenaCommand extends BaseCommand {
 
-    @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!(sender instanceof Player)) {
-            sender.sendMessage("die");
-            return false;
-        }
+    @Default
+    public void onDefault(CommandSender sender) {
+        sender.sendMessage(ChatColor.RED + "Usage: /arena <create|delete>");
+    }
 
-        final Player player = (Player) sender;
+    @Subcommand("create|arenabot")
+    @CommandPermission("mlgrush.command.arena.subcommand.create")
+    public void arenaCreate(Player player) {
+        player.sendMessage(Color.SECONDARY + "Starting " + Color.PRIMARY + "ArenaBot v1.0" + Color.SECONDARY + "...");
 
-        if (args.length == 0) {
-            player.sendMessage(Color.SECONDARY + "Usage: " + Color.PRIMARY + "/arena " + ChatColor.WHITE + "<create|delete>");
-        }
-        if (args.length == 1) {
-            switch (args[0].toLowerCase()) {
-                case "create":
-                    player.sendMessage(Color.SECONDARY + "Starting " + Color.PRIMARY + "ArenaBot v1.0" + Color.SECONDARY + "...");
+        CorePlugin.getInstance().getConversationFactory()
+                .withFirstPrompt(new ArenaNamePrompt(player))
+                .withLocalEcho(false)
+                .buildConversation(player)
+                .begin();
+    }
 
-                    Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> CorePlugin.getInstance().getConversationFactory()
-                            .withFirstPrompt(new ArenaNamePrompt(player))
-                            .withLocalEcho(false)
-                            .buildConversation(player)
-                            .begin(), 40L);
-                    break;
-                case "delete":
-                    break;
-            }
-        }
+    @Subcommand("delete|remove")
+    @CommandPermission("mlgrush.command.arena.subcommand.delete")
+    public void arenaDelete(Player player) {
+        player.sendMessage(Color.SECONDARY + "Starting " + Color.PRIMARY + "ArenaBot v1.0" + Color.SECONDARY + "...");
 
-        return false;
+        Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> CorePlugin.getInstance().getConversationFactory()
+                .withFirstPrompt(new ArenaNamePrompt(player))
+                .withLocalEcho(false)
+                .buildConversation(player)
+                .begin(), 40L);
     }
 }

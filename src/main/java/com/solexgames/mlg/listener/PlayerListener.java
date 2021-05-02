@@ -70,7 +70,7 @@ public class PlayerListener implements Listener {
 
             switch (itemStack.getType()) {
                 case EMERALD:
-                    player.sendMessage(ChatColor.RED + "not implemented but item working");
+                    player.sendMessage(ChatColor.RED + "Profiles are coming soon!");
                     break;
                 case COMPASS:
                     new SelectGameMenu().openMenu(player);

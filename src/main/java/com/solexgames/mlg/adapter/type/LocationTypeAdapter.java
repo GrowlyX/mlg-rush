@@ -1,4 +1,4 @@
-package com.solexgames.mlg.adapter;
+package com.solexgames.mlg.adapter.type;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.reflect.TypeToken;
