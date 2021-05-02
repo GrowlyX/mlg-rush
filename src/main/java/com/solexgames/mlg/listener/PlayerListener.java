@@ -27,6 +27,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.player.*;
+import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -62,12 +63,12 @@ public class PlayerListener implements Listener {
         final ItemStack itemStack = event.getItem();
         final ArenaHandler arenaHandler = CorePlugin.getInstance().getArenaHandler();
 
-        if (event.getAction().name().contains("RIGHT") && itemStack != null) {
-            if (itemStack.getType().equals(Material.BED_BLOCK)) {
-                event.setCancelled(true);
-                return;
-            }
+        if (event.getClickedBlock().getType().equals(Material.BED_BLOCK)) {
+            event.setCancelled(true);
+            return;
+        }
 
+        if (event.getAction().name().contains("RIGHT") && itemStack != null) {
             switch (itemStack.getType()) {
                 case EMERALD:
                     player.sendMessage(ChatColor.RED + "Profiles are coming soon!");
@@ -84,6 +85,25 @@ public class PlayerListener implements Listener {
                     break;
             }
         }
+
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onDrop(PlayerDropItemEvent event) {
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onMove(InventoryMoveItemEvent event) {
+        if (!this.isInArena((Player) event.getDestination().getViewers().get(0))) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onWeather(WeatherChangeEvent event) {
+        event.setCancelled(true);
     }
 
     @EventHandler
@@ -99,13 +119,11 @@ public class PlayerListener implements Listener {
             final Arena arena = this.getArena(player);
 
             if ((int) player.getLocation().getY() <= arena.getCuboid().getYMin()) {
-                final PlayerDeathEvent playerDeathEvent = new PlayerDeathEvent(player, new ArrayList<>(), 0, "");
-                Bukkit.getPluginManager().callEvent(playerDeathEvent);
                 return;
             }
 
             if (!arena.getCuboid().isInWithMarge(player.getLocation(), 0.2)) {
-                player.teleport(event.getFrom());
+                player.teleport(arena.getSpawnFromTeam(arena.getByPlayer(player).getArenaTeam()));
             }
         }
     }
