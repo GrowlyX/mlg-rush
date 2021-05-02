@@ -19,6 +19,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * @author GrowlyX
+ * @since 4/30/2021
+ */
+
 @Getter
 public class ArenaHandler {
 

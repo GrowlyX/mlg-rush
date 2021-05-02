@@ -8,6 +8,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+/**
+ * @author GrowlyX
+ * @since 5/1/2021
+ */
+
 public class JoinGameCommand extends BaseCommand {
 
     @CommandAlias("joingame|join")

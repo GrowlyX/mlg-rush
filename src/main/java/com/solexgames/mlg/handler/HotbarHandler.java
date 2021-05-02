@@ -9,6 +9,11 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * @author GrowlyX
+ * @since 4/30/2021
+ */
+
 @Getter
 public class HotbarHandler {
 

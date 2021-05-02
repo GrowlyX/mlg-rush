@@ -15,6 +15,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * From Zoot by Joelioli
+ */
+
 @Getter
 @Setter
 public abstract class AbstractMenu {

@@ -20,6 +20,11 @@ import org.bukkit.potion.PotionEffect;
 
 import java.util.Date;
 
+/**
+ * @author GrowlyX
+ * @since 4/30/2021
+ */
+
 @Getter
 public final class CorePlugin extends JavaPlugin {
 

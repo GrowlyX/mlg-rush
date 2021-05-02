@@ -28,6 +28,11 @@ import org.bukkit.event.player.*;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * @author GrowlyX
+ * @since 4/30/2021
+ */
+
 public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)

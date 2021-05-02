@@ -13,6 +13,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+/**
+ * @author GrowlyX
+ * @since 5/1/2021
+ */
+
 @CommandAlias("arena")
 @CommandPermission("mlgrush.command.arena")
 public class ArenaCommand extends BaseCommand {
