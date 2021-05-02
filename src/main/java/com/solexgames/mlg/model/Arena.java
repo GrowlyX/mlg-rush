@@ -105,10 +105,11 @@ public class Arena extends StateBasedModel<ArenaState, ArenaPlayer> {
     }
 
     /**
-     * Get's an {@link ArenaPlayer} instance from a player
+     * Gets an ArenaPlayer from a Player instance
      * <p></p>
      *
      * @param player Player to find an ArenaPlayer from
+     *
      * @return an ArenaPlayer
      */
     public ArenaPlayer getByPlayer(Player player) {
@@ -117,30 +118,22 @@ public class Arena extends StateBasedModel<ArenaState, ArenaPlayer> {
                 .findFirst().orElse(null);
     }
 
+    /**
+     * Broadcasts a message to the whole arena
+     * <p></p>
+     *
+     * @param message Message to broadcast
+     */
     public void broadcastMessage(String message) {
         this.getGamePlayerList().forEach(arenaPlayer -> arenaPlayer.getPlayer().sendMessage(Color.translate(message)));
     }
 
-    @Override
-    public void start() {
-        this.arenaState = ArenaState.IN_GAME;
-
-        this.resetAndSetupGameSystem();
-    }
-
-    @Override
-    public void end(ArenaPlayer profile) {
-        final GamePlayer gamePlayer = CorePlugin.getInstance().getPlayerHandler().getByName(profile.getPlayer().getName());
-
-        if (gamePlayer != null) {
-            gamePlayer.setWins(gamePlayer.getWins() + 1);
-
-            this.broadcastMessage(Color.PRIMARY + profile.getPlayer().getName() + Color.SECONDARY + " has won the game!");
-        }
-
-        this.resetAndStop();
-    }
-
+    /**
+     * Adds a point to the {@param player} parameter and starts a new round
+     * <p></p>
+     *
+     * @param player Player to add a point to
+     */
     public void incrementPointAndStartRound(Player player) {
         final ArenaPlayer arenaPlayer = this.getByPlayer(player);
 
@@ -155,34 +148,47 @@ public class Arena extends StateBasedModel<ArenaState, ArenaPlayer> {
         this.resetAndSetupGameSystem();
     }
 
+    /**
+     * Gets the total sum of points a team has
+     * <p></p>
+     *
+     * @param arenaTeam Arena team to get points of
+     *
+     * @return the amount of total points a team has
+     */
     public int getPoints(ArenaTeam arenaTeam) {
         return this.getGamePlayerList().stream()
                 .filter(arenaPlayer -> arenaPlayer.getArenaTeam().equals(arenaTeam))
                 .mapToInt(ArenaPlayer::getPoints).sum();
     }
 
+    /**
+     * Cleans up arena, resets players, and schedules a new round
+     */
     public void resetAndSetupGameSystem() {
         this.cleanup();
 
-        Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () -> {
-            this.getGamePlayerList().forEach(arenaPlayer -> {
-                PlayerUtil.resetPlayer(arenaPlayer.getPlayer());
+        // running on the main thread because bukkit thinks this is ran async for some reason
+        Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () -> this.getGamePlayerList().forEach(arenaPlayer -> {
+            PlayerUtil.resetPlayer(arenaPlayer.getPlayer());
 
-                if (arenaPlayer.getArenaTeam().equals(ArenaTeam.BLUE)) {
-                    arenaPlayer.getPlayer().teleport(this.spawnOne);
-                    arenaPlayer.getPlayer().getInventory().setArmorContents(Arena.BLUE_ITEM_STACK_ARRAY);
-                } else {
-                    arenaPlayer.getPlayer().teleport(this.spawnTwo);
-                    arenaPlayer.getPlayer().getInventory().setArmorContents(Arena.RED_ITEM_STACK_ARRAY);
-                }
+            if (arenaPlayer.getArenaTeam().equals(ArenaTeam.BLUE)) {
+                arenaPlayer.getPlayer().teleport(this.spawnOne);
+                arenaPlayer.getPlayer().getInventory().setArmorContents(Arena.BLUE_ITEM_STACK_ARRAY);
+            } else {
+                arenaPlayer.getPlayer().teleport(this.spawnTwo);
+                arenaPlayer.getPlayer().getInventory().setArmorContents(Arena.RED_ITEM_STACK_ARRAY);
+            }
 
-                arenaPlayer.getPlayer().setMetadata("frozen", new FixedMetadataValue(CorePlugin.getInstance(), true));
-            });
-        });
+            arenaPlayer.getPlayer().setMetadata("frozen", new FixedMetadataValue(CorePlugin.getInstance(), true));
+        }));
 
         new RoundStartTask(5, this);
     }
 
+    /**
+     * Resets the arena & its players
+     */
     public void resetAndStop() {
         this.arenaState = ArenaState.REGENERATING;
 
@@ -198,7 +204,7 @@ public class Arena extends StateBasedModel<ArenaState, ArenaPlayer> {
         this.gamePlayerList.clear();
         this.allPlayerList.clear();
 
-        this.arenaState = ArenaState.AVAILABLE;
+        Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), ()-> this.arenaState = ArenaState.AVAILABLE, 60L);
     }
 
     public boolean isTeamsBed(Location location, ArenaTeam arenaTeam) {
@@ -225,6 +231,26 @@ public class Arena extends StateBasedModel<ArenaState, ArenaPlayer> {
         return this.gamePlayerList.stream()
                 .filter(arenaPlayer -> !arenaPlayer.getArenaTeam().equals(this.getByPlayer(player).getArenaTeam()))
                 .findFirst().orElse(null);
+    }
+
+    @Override
+    public void start() {
+        this.arenaState = ArenaState.IN_GAME;
+
+        this.resetAndSetupGameSystem();
+    }
+
+    @Override
+    public void end(ArenaPlayer profile) {
+        final GamePlayer gamePlayer = CorePlugin.getInstance().getPlayerHandler().getByName(profile.getPlayer().getName());
+
+        if (gamePlayer != null) {
+            gamePlayer.setWins(gamePlayer.getWins() + 1);
+
+            this.broadcastMessage(Color.PRIMARY + profile.getPlayer().getName() + Color.SECONDARY + " has won the game!");
+        }
+
+        this.resetAndStop();
     }
 
     @Override

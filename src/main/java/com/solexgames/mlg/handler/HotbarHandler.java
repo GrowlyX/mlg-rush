@@ -25,6 +25,7 @@ public class HotbarHandler {
     private final ItemStack sandStoneStack;
     private final ItemStack pickaxe;
 
+    // TODO: Recode or move to config
     public HotbarHandler() {
         this.joinGameItem = new ItemBuilder(Material.COMPASS)
                 .setDisplayName(Color.PRIMARY + ChatColor.BOLD.toString() + "Join an Arena" + ChatColor.GRAY + " (Right-click)")

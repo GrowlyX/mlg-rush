@@ -33,6 +33,9 @@ public class ArenaHandler {
         this.loadArenas();
     }
 
+    /**
+     * Loads all arenas from the config.yml
+     */
     private void loadArenas() {
         final ConfigurationSection configurationSection = CorePlugin.getInstance().getConfig().getConfigurationSection("arenas");
 
@@ -55,6 +58,13 @@ public class ArenaHandler {
         }
     }
 
+    /**
+     * Adds a player to a specific arena
+     * <p></p>
+     *
+     * @param player Player to add to the arena
+     * @param arena  Arena to add the player to
+     */
     public void addToGame(Player player, Arena arena) {
         if (arena.getState().equals(ArenaState.IN_GAME) || arena.getState().equals(ArenaState.REGENERATING)) {
             player.sendMessage(ChatColor.RED + "You cannot join this arena at the moment.");
@@ -83,6 +93,13 @@ public class ArenaHandler {
         }
     }
 
+    /**
+     * Removes a player from an arena and sends them to spawn
+     * <p></p>
+     *
+     * @param player Player to remove from the arena
+     * @param arena  Arena to remove the player from
+     */
     public void leaveGame(Player player, Arena arena) {
         if (arena.getState().equals(ArenaState.IN_GAME)) {
             player.sendMessage(ChatColor.RED + "You cannot leave this arena at the moment.");
@@ -91,7 +108,6 @@ public class ArenaHandler {
 
         arena.getAllPlayerList().remove(player);
         arena.getGamePlayerList().remove(arena.getByPlayer(player));
-
         arena.broadcastMessage(Color.PRIMARY + player.getName() + Color.SECONDARY + " has left the arena. " + ChatColor.GRAY + "(" + arena.getGamePlayerList().size() + "/" + arena.getMaxPlayers() + ")");
 
         player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
@@ -99,6 +115,13 @@ public class ArenaHandler {
         CorePlugin.getInstance().getHotbarHandler().setupLobbyHotbar(player);
     }
 
+    /**
+     * Checks if a player is in an arena or not
+     * <p></p>
+     *
+     * @param player Player to check the status of
+     * @return if the player is in the arena or not
+     */
     public boolean isInArena(Player player) {
         return this.getByPlayer(player) != null;
     }
