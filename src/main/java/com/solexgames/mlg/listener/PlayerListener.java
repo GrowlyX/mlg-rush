@@ -255,7 +255,11 @@ public class PlayerListener implements Listener {
         final Arena arena = this.getArena(player);
 
         if (arena != null) {
-            arena.end(arena.getOpponentPlayer(player));
+            if (arena.getState().equals(ArenaState.IN_GAME)) {
+                arena.end(arena.getOpponentPlayer(player));
+            } else {
+                CorePlugin.getInstance().getArenaHandler().leaveGame(player, arena);
+            }
         }
 
         event.setQuitMessage(null);

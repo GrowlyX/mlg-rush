@@ -1,7 +1,7 @@
 package com.solexgames.mlg.menu.paginated;
 
-import com.solexgames.mlg.menu.button.Button;
 import com.solexgames.mlg.menu.AbstractMenu;
+import com.solexgames.mlg.menu.button.Button;
 import com.solexgames.mlg.menu.button.impl.ViewPageButton;
 import com.solexgames.mlg.util.Color;
 import com.solexgames.mlg.util.builder.ItemBuilder;

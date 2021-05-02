@@ -1,25 +1,24 @@
 package com.solexgames.mlg;
 
-import co.aikar.commands.MessageType;
 import co.aikar.commands.PaperCommandManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.solexgames.mlg.adapter.type.LocationTypeAdapter;
 import com.solexgames.mlg.adapter.ScoreboardAdapter;
+import com.solexgames.mlg.adapter.type.LocationTypeAdapter;
 import com.solexgames.mlg.command.ArenaCommand;
 import com.solexgames.mlg.command.JoinGameCommand;
-import com.solexgames.mlg.handler.*;
+import com.solexgames.mlg.command.LeaveCommand;
+import com.solexgames.mlg.handler.ArenaHandler;
+import com.solexgames.mlg.handler.HotbarHandler;
+import com.solexgames.mlg.handler.MongoHandler;
+import com.solexgames.mlg.handler.PlayerHandler;
 import com.solexgames.mlg.listener.PaginationListener;
 import com.solexgames.mlg.listener.PlayerListener;
-import com.solexgames.mlg.model.Arena;
 import io.github.nosequel.scoreboard.ScoreboardHandler;
 import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.conversations.ConversationFactory;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.potion.PotionEffect;
-
-import java.util.Date;
 
 /**
  * @author GrowlyX
@@ -63,18 +62,21 @@ public final class CorePlugin extends JavaPlugin {
 
         manager.registerCommand(new ArenaCommand());
         manager.registerCommand(new JoinGameCommand());
+        manager.registerCommand(new LeaveCommand());
 
         manager.enableUnstableAPI("help");
 
         this.getServer().getPluginManager().registerEvents(new PlayerListener(), this);
         this.getServer().getPluginManager().registerEvents(new PaginationListener(), this);
 
-        new ScoreboardHandler(this, new ScoreboardAdapter(), 20L);
+        new ScoreboardHandler(this, new ScoreboardAdapter(), 5L);
     }
 
     @Override
     public void onDisable() {
-        this.arenaHandler.getAllArenas().forEach(Arena::cleanup);
-        this.arenaHandler.getAllArenas().forEach(Arena::saveArenaData);
+        this.arenaHandler.getAllArenas().forEach(arena -> {
+            arena.cleanup();
+            arena.saveArenaData();
+        });
     }
 }

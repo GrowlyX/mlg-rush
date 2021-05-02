@@ -1,7 +1,7 @@
 package com.solexgames.mlg.menu.impl;
 
-import com.solexgames.mlg.menu.button.Button;
 import com.solexgames.mlg.menu.AbstractMenu;
+import com.solexgames.mlg.menu.button.Button;
 import com.solexgames.mlg.menu.button.impl.SelectPageButton;
 import com.solexgames.mlg.menu.paginated.AbstractPaginatedMenu;
 import lombok.RequiredArgsConstructor;

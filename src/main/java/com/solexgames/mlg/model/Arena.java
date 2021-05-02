@@ -24,6 +24,8 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -181,6 +183,7 @@ public class Arena extends StateBasedModel<ArenaState, ArenaPlayer> {
             }
 
             arenaPlayer.getPlayer().setMetadata("frozen", new FixedMetadataValue(CorePlugin.getInstance(), true));
+            arenaPlayer.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 10000, 10));
         }));
 
         new RoundStartTask(5, this);

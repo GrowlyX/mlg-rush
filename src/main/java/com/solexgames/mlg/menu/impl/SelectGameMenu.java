@@ -1,10 +1,10 @@
 package com.solexgames.mlg.menu.impl;
 
 import com.solexgames.mlg.CorePlugin;
-import com.solexgames.mlg.state.impl.ArenaState;
 import com.solexgames.mlg.menu.button.Button;
 import com.solexgames.mlg.menu.paginated.AbstractPaginatedMenu;
 import com.solexgames.mlg.model.Arena;
+import com.solexgames.mlg.state.impl.ArenaState;
 import com.solexgames.mlg.util.Color;
 import com.solexgames.mlg.util.builder.ItemBuilder;
 import lombok.RequiredArgsConstructor;

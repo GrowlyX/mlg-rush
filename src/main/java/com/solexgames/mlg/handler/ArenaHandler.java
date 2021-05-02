@@ -112,18 +112,22 @@ public class ArenaHandler {
      * @param arena  Arena to remove the player from
      */
     public void leaveGame(Player player, Arena arena) {
-        if (arena.getState().equals(ArenaState.IN_GAME)) {
-            player.sendMessage(ChatColor.RED + "You cannot leave this arena at the moment.");
+        if (arena == null) {
+            player.sendMessage(ChatColor.RED + "You aren't currently in an arena.");
             return;
         }
 
-        arena.getAllPlayerList().remove(player);
-        arena.getGamePlayerList().remove(arena.getByPlayer(player));
-        arena.broadcastMessage(Color.PRIMARY + player.getName() + Color.SECONDARY + " has left the arena. " + ChatColor.GRAY + "(" + arena.getGamePlayerList().size() + "/" + arena.getMaxPlayers() + ")");
+        if (arena.getState().equals(ArenaState.AVAILABLE)) {
+            arena.getAllPlayerList().remove(player);
+            arena.getGamePlayerList().remove(arena.getByPlayer(player));
+            arena.broadcastMessage(Color.PRIMARY + player.getName() + Color.SECONDARY + " has left the arena. " + ChatColor.GRAY + "(" + arena.getGamePlayerList().size() + "/" + arena.getMaxPlayers() + ")");
 
-        player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
+            player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
 
-        CorePlugin.getInstance().getHotbarHandler().setupLobbyHotbar(player);
+            CorePlugin.getInstance().getHotbarHandler().setupLobbyHotbar(player);
+        } else {
+            arena.end(arena.getOpponentPlayer(player));
+        }
     }
 
     /**
