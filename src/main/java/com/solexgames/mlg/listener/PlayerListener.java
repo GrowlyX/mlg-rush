@@ -241,7 +241,7 @@ public class PlayerListener implements Listener {
         final Arena arena = this.getArena(player);
 
         if (arena != null) {
-            arena.end(arena.getByPlayer(player));
+            arena.end(arena.getOpponentPlayer(player));
         }
 
         event.setQuitMessage(null);

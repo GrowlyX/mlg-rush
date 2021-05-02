@@ -1,8 +1,6 @@
 package com.solexgames.mlg.util.prompt;
 
-import com.solexgames.mlg.model.Arena;
 import com.solexgames.mlg.util.Color;
-import com.solexgames.mlg.util.cuboid.Cuboid;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -11,7 +9,10 @@ import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
 
-import java.util.UUID;
+/**
+ * @author GrowlyX
+ * @since 4/30/2021
+ */
 
 @RequiredArgsConstructor
 public class ArenaLocationTwoPrompt extends StringPrompt {

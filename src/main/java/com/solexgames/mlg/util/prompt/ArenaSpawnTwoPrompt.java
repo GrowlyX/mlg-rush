@@ -13,6 +13,11 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
+/**
+ * @author GrowlyX
+ * @since 4/30/2021
+ */
+
 @RequiredArgsConstructor
 public class ArenaSpawnTwoPrompt extends StringPrompt {
 

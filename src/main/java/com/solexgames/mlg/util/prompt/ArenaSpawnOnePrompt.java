@@ -9,6 +9,11 @@ import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
 
+/**
+ * @author GrowlyX
+ * @since 4/30/2021
+ */
+
 @RequiredArgsConstructor
 public class ArenaSpawnOnePrompt extends StringPrompt {
 

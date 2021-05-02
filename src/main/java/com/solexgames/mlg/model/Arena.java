@@ -221,6 +221,12 @@ public class Arena extends StateBasedModel<ArenaState, ArenaPlayer> {
         return arenaTeam == ArenaTeam.BLUE ? this.spawnOne : spawnTwo;
     }
 
+    public ArenaPlayer getOpponentPlayer(Player player) {
+        return this.gamePlayerList.stream()
+                .filter(arenaPlayer -> !arenaPlayer.getArenaTeam().equals(this.getByPlayer(player).getArenaTeam()))
+                .findFirst().orElse(null);
+    }
+
     @Override
     public ArenaState getState() {
         return this.arenaState;

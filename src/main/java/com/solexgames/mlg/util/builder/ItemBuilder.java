@@ -14,6 +14,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+/**
+ * @author GrowlyX
+ * @since 3/25/2021
+ * @revised 4/30/2021
+ */
+
 public class ItemBuilder {
 
     private final Map<Enchantment, Integer> enchantments = new HashMap<>();
@@ -21,22 +28,11 @@ public class ItemBuilder {
     private final ItemStack itemStack;
     private ItemMeta itemMeta;
 
-    /**
-     * Constructor to make a new item builder object
-     *
-     * @param material the type of the item
-     */
     public ItemBuilder(Material material) {
         this.itemStack = new ItemStack(material);
         this.itemMeta = itemStack.getItemMeta();
     }
 
-    /**
-     * Constructor to make a new item builder object
-     *
-     * @param material the type of the item
-     * @param data the data/durability of the material
-     */
     public ItemBuilder(Material material, int data) {
         this.itemStack = new ItemStack(material, 1, (short) data);
         this.itemMeta = itemStack.getItemMeta();
