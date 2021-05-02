@@ -29,6 +29,8 @@ import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
+
 public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -97,7 +99,8 @@ public class PlayerListener implements Listener {
             final Arena arena = this.getArena(player);
 
             if ((int) player.getLocation().getY() <= arena.getCuboid().getYMin()) {
-                player.setHealth(0.0D);
+                final PlayerDeathEvent playerDeathEvent = new PlayerDeathEvent(player, new ArrayList<>(), 0, "");
+                Bukkit.getPluginManager().callEvent(playerDeathEvent);
                 return;
             }
 
@@ -164,6 +167,16 @@ public class PlayerListener implements Listener {
 
                 event.setCancelled(true);
             } else if (arena.getState().equals(ArenaState.IN_GAME)) {
+                if (arena.isCloseToSpawn(event.getBlock().getLocation(), arena.getByPlayer(player).getArenaTeam())) {
+                    event.setCancelled(true);
+                    return;
+                }
+
+                if (arena.isCloseToSpawn(event.getBlock().getLocation(), arena.getOpposingTeam(arena.getByPlayer(player)))) {
+                    event.setCancelled(true);
+                    return;
+                }
+
                 arena.getBlockLocationList().add(event.getBlock().getLocation());
 
                 event.setCancelled(false);
@@ -187,7 +200,7 @@ public class PlayerListener implements Listener {
         if (this.isInArena(player)) {
             final Arena arena = this.getArena(player);
 
-            if (event.getBlock().getType().equals(Material.BED_BLOCK) && arena.isTeamsBed(event.getBlock().getLocation(), (arena.getByPlayer(player).getArenaTeam() == ArenaTeam.BLUE ? ArenaTeam.RED : ArenaTeam.BLUE)) && arena.getState().equals(ArenaState.IN_GAME)) {
+            if (event.getBlock().getType().equals(Material.BED_BLOCK) && arena.isTeamsBed(event.getBlock().getLocation(), arena.getOpposingTeam(arena.getByPlayer(player))) && arena.getState().equals(ArenaState.IN_GAME)) {
                 arena.incrementPointAndStartRound(player);
             }
 

@@ -12,7 +12,6 @@ import com.solexgames.mlg.handler.*;
 import com.solexgames.mlg.listener.PaginationListener;
 import com.solexgames.mlg.listener.PlayerListener;
 import com.solexgames.mlg.model.Arena;
-import com.solexgames.mlg.model.Kit;
 import io.github.nosequel.scoreboard.ScoreboardHandler;
 import lombok.Getter;
 import org.bukkit.Location;
@@ -30,7 +29,6 @@ public final class CorePlugin extends JavaPlugin {
     @Getter
     private static CorePlugin instance;
 
-    private KitHandler kitHandler;
     private ArenaHandler arenaHandler;
     private MongoHandler mongoHandler;
     private PlayerHandler playerHandler;
@@ -51,7 +49,6 @@ public final class CorePlugin extends JavaPlugin {
 
         this.saveDefaultConfig();
 
-        this.kitHandler = new KitHandler();
         this.arenaHandler = new ArenaHandler();
         this.mongoHandler = new MongoHandler();
         this.playerHandler = new PlayerHandler();
@@ -69,8 +66,6 @@ public final class CorePlugin extends JavaPlugin {
     @Override
     public void onDisable() {
         this.arenaHandler.getAllArenas().forEach(Arena::cleanup);
-
-        this.kitHandler.getAllKits().forEach(Kit::saveKitData);
         this.arenaHandler.getAllArenas().forEach(Arena::saveArenaData);
     }
 }

@@ -1,8 +1,6 @@
 package com.solexgames.mlg.state;
 
 /**
- * State based modelling
- *
  * @param <T> type parameter for the model's state enum
  * @param <V> type parameter for the model's player profile object
  */

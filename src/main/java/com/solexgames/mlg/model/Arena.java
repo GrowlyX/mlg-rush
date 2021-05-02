@@ -196,7 +196,17 @@ public class Arena extends StateBasedModel<ArenaState, ArenaPlayer> {
     public boolean isTeamsBed(Location location, ArenaTeam arenaTeam) {
         final Location spawn = arenaTeam == ArenaTeam.BLUE ? this.spawnOne : this.spawnTwo;
 
-        return location.getBlock().getLocation().distance(spawn) <= 3.0;
+        return location.getBlock().getLocation().distance(spawn) <= 3.0D;
+    }
+
+    public boolean isCloseToSpawn(Location location, ArenaTeam arenaTeam) {
+        final Location spawn = arenaTeam == ArenaTeam.BLUE ? this.spawnOne : this.spawnTwo;
+
+        return location.getBlock().getLocation().distance(spawn) <= 2.0D;
+    }
+
+    public ArenaTeam getOpposingTeam(ArenaPlayer arenaPlayer) {
+        return arenaPlayer.getArenaTeam() == ArenaTeam.BLUE ? ArenaTeam.RED : ArenaTeam.BLUE;
     }
 
     @Override
