@@ -23,7 +23,6 @@ import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -54,6 +53,7 @@ public class Arena extends StateBasedModel<ArenaState, ArenaPlayer> {
 
     public static final boolean ARMOR_ENABLED = false;
     public static final boolean ROUND_DELAY = false;
+    public static final boolean LONG_START = false;
 
     private final List<Location> blockLocationList = new ArrayList<>();
     private final List<ArenaPlayer> gamePlayerList = new ArrayList<>();
@@ -178,8 +178,9 @@ public class Arena extends StateBasedModel<ArenaState, ArenaPlayer> {
             PlayerUtil.resetPlayer(arenaPlayer.getPlayer());
 
             arenaPlayer.getPlayer().teleport(this.getSpawnFromTeam(arenaPlayer.getArenaTeam()));
-            arenaPlayer.getPlayer().setMetadata("frozen", new FixedMetadataValue(CorePlugin.getInstance(), true));
             arenaPlayer.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 10000, 2));
+
+            CorePlugin.getInstance().getHotbarHandler().setupArenaInGameHotbar(arenaPlayer.getPlayer());
 
             if (Arena.ARMOR_ENABLED) {
                 arenaPlayer.getPlayer().getInventory().setArmorContents(arenaPlayer.getArenaTeam().equals(ArenaTeam.BLUE) ? Arena.BLUE_ITEM_STACK_ARRAY : Arena.RED_ITEM_STACK_ARRAY);
@@ -189,11 +190,6 @@ public class Arena extends StateBasedModel<ArenaState, ArenaPlayer> {
         if (Arena.ROUND_DELAY) {
             new RoundStartTask(5, this);
         } else {
-            this.getAllPlayerList().forEach(player -> {
-                player.removeMetadata("frozen", CorePlugin.getInstance());
-                CorePlugin.getInstance().getHotbarHandler().setupArenaInGameHotbar(player);
-            });
-
             this.broadcastMessage(Color.PRIMARY + "The round has started! " + ChatColor.GREEN + "Good luck and have fun!");
         }
     }

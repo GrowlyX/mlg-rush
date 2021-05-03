@@ -97,7 +97,7 @@ public class ArenaHandler {
             CorePlugin.getInstance().getHotbarHandler().setupArenaWaitingHotbar(player);
 
             if (arena.getGamePlayerList().size() >= arena.getMaxPlayers()) {
-                new GameStartTask(20, arena);
+                new GameStartTask(Arena.LONG_START ? 20 : 5, arena);
             }
         } else {
             player.sendMessage(ChatColor.RED + "MLG Rush Teams mode is currently in development!");
