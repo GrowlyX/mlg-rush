@@ -42,7 +42,7 @@ public class HotbarHandler {
                 .create();
         this.knockbackStick = new ItemBuilder(Material.STICK)
                 .setDisplayName(Color.PRIMARY + ChatColor.BOLD.toString() + "Knockback Stick" + ChatColor.GRAY + " (Right-click)")
-                .setEnchant(Enchantment.KNOCKBACK, 2)
+                .setEnchant(Enchantment.KNOCKBACK, 1)
                 .setUnbreakable(true)
                 .create();
         this.pickaxe = new ItemBuilder(Material.GOLD_PICKAXE)

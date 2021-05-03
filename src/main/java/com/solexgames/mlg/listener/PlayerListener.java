@@ -22,6 +22,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.player.*;
@@ -117,16 +118,46 @@ public class PlayerListener implements Listener {
         if (this.isInArena(player)) {
             final Arena arena = this.getArena(player);
 
-            if ((int) player.getLocation().getY() <= arena.getCuboid().getYMin()) {
-                player.teleport(arena.getSpawnFromTeam(arena.getByPlayer(player).getArenaTeam()));
-            }
+            if (arena.getState().equals(ArenaState.IN_GAME)) {
+                if ((int) player.getLocation().getY() <= arena.getCuboid().getYMin()) {
+                    player.teleport(arena.getSpawnFromTeam(arena.getByPlayer(player).getArenaTeam()));
+                    arena.broadcastMessage(ChatColor.RED + player.getName() + Color.SECONDARY + " fell into the void!");
 
-            if (!arena.getCuboid().isInWithMarge(player.getLocation(), 0.2)) {
-                player.teleport(arena.getSpawnFromTeam(arena.getByPlayer(player).getArenaTeam()));
+                    CorePlugin.getInstance().getHotbarHandler().setupArenaInGameHotbar(player);
+                    return;
+                }
+
+                if (!arena.getCuboid().isInWithMarge(player.getLocation(), 0.2)) {
+                    player.teleport(event.getFrom());
+                }
+            } else if (arena.getState().equals(ArenaState.AVAILABLE)) {
+                if ((int) player.getLocation().getY() <= arena.getCuboid().getYMin()) {
+                    player.teleport(arena.getSpawnFromTeam(arena.getByPlayer(player).getArenaTeam()));
+                    return;
+                }
+
+                if (!arena.getCuboid().isInWithMarge(player.getLocation(), 0.2)) {
+                    player.teleport(event.getFrom());
+                }
+            } else {
+                player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
             }
         }
     }
 
+    @EventHandler
+    public void onDamage(EntityDamageEvent event) {
+        final EntityDamageEvent.DamageCause cause = event.getCause();
+
+        switch (cause) {
+            case FALL:
+            case FIRE:
+            case VOID:
+            case FIRE_TICK:
+                event.setCancelled(true);
+                break;
+        }
+    }
     @EventHandler
     public void onDeath(PlayerDeathEvent event) {
         final Player player = event.getEntity();
