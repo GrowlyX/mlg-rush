@@ -8,6 +8,7 @@ import com.solexgames.mlg.CorePlugin;
 import lombok.Getter;
 import lombok.Setter;
 import org.bson.Document;
+import org.bukkit.Bukkit;
 
 /**
  * @author GrowlyX
@@ -18,15 +19,20 @@ import org.bson.Document;
 @Setter
 public class MongoHandler {
 
-    private final MongoClient client;
-    private final MongoDatabase database;
+    private MongoClient client;
+    private MongoDatabase database;
 
-    private final MongoCollection<Document> playerCollection;
+    private MongoCollection<Document> playerCollection;
 
     public MongoHandler() {
-        this.client = new MongoClient(new MongoClientURI(CorePlugin.getInstance().getConfig().getString("mongodb.url")));
-        this.database = client.getDatabase("SGSoftware");
+        try {
+            this.client = new MongoClient(new MongoClientURI(CorePlugin.getInstance().getConfig().getString("mongodb.url")));
+            this.database = client.getDatabase("SGSoftware");
 
-        this.playerCollection = this.database.getCollection("MLGRush");
+            this.playerCollection = this.database.getCollection("MLGRush");
+        } catch (Exception exception) {
+            System.out.println("[MLGRush] Couldn't connect to the mongo database.");
+            Bukkit.getPluginManager().disablePlugin(CorePlugin.getInstance());
+        }
     }
 }

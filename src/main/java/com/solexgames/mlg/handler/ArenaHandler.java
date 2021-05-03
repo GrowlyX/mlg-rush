@@ -52,9 +52,6 @@ public class ArenaHandler {
                 CorePlugin.getInstance().getLogger().info("[Arena] Loaded arena " + arena.getName() + "!");
             });
         } catch (Exception exception) {
-            System.out.println(exception.getMessage());
-            System.out.println(exception.getLocalizedMessage());
-
             exception.printStackTrace();
         }
     }

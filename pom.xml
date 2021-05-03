@@ -58,36 +58,15 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.2.4</version>
-                <configuration>
-                    <relocations>
-                        <relocation>
-                            <pattern>co.aikar.commands</pattern>
-                            <shadedPattern>com.solexgames.mlg.internal.acf</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>co.aikar.locales</pattern>
-                            <shadedPattern>com.solexgames.mlg.internal.locales</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>com.google.code.gson</pattern>
-                            <shadedPattern>com.solexgames.mlg.internal.gson</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>com.github.nosequel.scoreboard</pattern>
-                            <shadedPattern>com.solexgames.mlg.internal.scoreboard</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>org.mongodb</pattern>
-                            <shadedPattern>com.solexgames.mlg.internal.mongo</shadedPattern>
-                        </relocation>
-                    </relocations>
-                </configuration>
                 <executions>
                     <execution>
                         <phase>package</phase>
                         <goals>
                             <goal>shade</goal>
                         </goals>
+                        <configuration>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -133,13 +112,6 @@
             <groupId>com.github.NoSequel</groupId>
             <artifactId>ScoreboardAPI</artifactId>
             <version>d86c2c6d87</version>
-        </dependency>
-        <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>paperspigot-api</artifactId>
-            <version>1.8.8-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/lib/spigot.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>

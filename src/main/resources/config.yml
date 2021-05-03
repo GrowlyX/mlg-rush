@@ -3,4 +3,5 @@ mongodb:
   url: ""
 # List of all arenas
 arenas:
+  # for debug; keep this here
   test: ""
