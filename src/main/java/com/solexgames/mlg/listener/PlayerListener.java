@@ -127,7 +127,7 @@ public class PlayerListener implements Listener {
                     return;
                 }
 
-                if (!arena.getCuboid().isInWithMarge(player.getLocation(), 0.2)) {
+                if (!arena.getCuboid().isInWithMarge(player.getLocation(), 1.0)) {
                     player.teleport(event.getFrom());
                 }
             } else if (arena.getState().equals(ArenaState.AVAILABLE)) {
@@ -136,7 +136,7 @@ public class PlayerListener implements Listener {
                     return;
                 }
 
-                if (!arena.getCuboid().isInWithMarge(player.getLocation(), 0.2)) {
+                if (!arena.getCuboid().isInWithMarge(player.getLocation(), 0.3)) {
                     player.teleport(event.getFrom());
                 }
             } else {
@@ -211,10 +211,12 @@ public class PlayerListener implements Listener {
             final Arena arena = this.getArena(player);
 
             if (!arena.getCuboid().isIn(player)) {
-                player.sendMessage(ChatColor.RED + "You cannot place blocks past the arena boundaries!");
-
+                player.sendMessage(ChatColor.RED + "You cannot place blocks here.");
                 event.setCancelled(true);
-            } else if (arena.getState().equals(ArenaState.IN_GAME)) {
+                return;
+            }
+
+            if (arena.getState().equals(ArenaState.IN_GAME)) {
                 if (arena.isCloseToSpawn(event.getBlock().getLocation(), arena.getByPlayer(player).getArenaTeam())) {
                     event.setCancelled(true);
                     return;

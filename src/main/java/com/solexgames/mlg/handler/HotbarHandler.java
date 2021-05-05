@@ -69,6 +69,8 @@ public class HotbarHandler {
     }
 
     public void setupArenaInGameHotbar(Player player) {
+        player.getInventory().clear();
+
         player.getInventory().setItem(0, this.knockbackStick);
         player.getInventory().setItem(4, this.sandStoneStack);
         player.getInventory().setItem(8, this.pickaxe);

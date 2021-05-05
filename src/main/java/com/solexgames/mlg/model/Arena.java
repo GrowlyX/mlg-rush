@@ -189,8 +189,6 @@ public class Arena extends StateBasedModel<ArenaState, ArenaPlayer> {
 
         if (Arena.ROUND_DELAY) {
             new RoundStartTask(5, this);
-        } else {
-            this.broadcastMessage(Color.PRIMARY + "The round has started! " + ChatColor.GREEN + "Good luck and have fun!");
         }
     }
 
