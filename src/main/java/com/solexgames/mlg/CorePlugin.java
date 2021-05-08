@@ -13,6 +13,7 @@ import com.solexgames.mlg.player.GamePlayer;
 import com.solexgames.mlg.util.Color;
 import io.github.nosequel.scoreboard.ScoreboardHandler;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.conversations.ConversationFactory;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -62,15 +63,14 @@ public final class CorePlugin extends JavaPlugin {
 
         manager.enableUnstableAPI("help");
 
-        this.getServer().getPluginManager().registerEvents(new PlayerListener(), this);
-        this.getServer().getPluginManager().registerEvents(new PaginationListener(), this);
+        Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
+        Bukkit.getPluginManager().registerEvents(new PaginationListener(), this);
 
         new ScoreboardHandler(this, new ScoreboardAdapter(), 5L);
     }
 
     @Override
     public void onDisable() {
-        this.playerHandler.getPlayerList().forEach(GamePlayer::savePlayerData);
         this.arenaHandler.getAllArenas().forEach(arena -> {
             arena.cleanup();
             arena.saveArenaData();

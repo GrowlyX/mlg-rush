@@ -287,21 +287,18 @@ public class PlayerListener implements Listener {
         event.setQuitMessage(null);
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(
+            priority = EventPriority.HIGHEST
+    )
     public void onConnect(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
         final Location spawn = Bukkit.getWorlds().get(0).getSpawnLocation();
-        final GamePlayer gamePlayer = CorePlugin.getInstance().getPlayerHandler().getByUuid(event.getPlayer().getUniqueId());
 
-        if (gamePlayer != null) {
-            if (spawn != null) {
-                player.teleport(spawn);
-            }
-
-            CorePlugin.getInstance().getHotbarHandler().setupLobbyHotbar(player);
-        } else {
-            event.getPlayer().kickPlayer(CoreConstants.PLAYER_DATA_LOAD);
+        if (spawn != null) {
+            player.teleport(spawn);
         }
+
+        CorePlugin.getInstance().getHotbarHandler().setupLobbyHotbar(player);
 
         event.setJoinMessage(null);
     }

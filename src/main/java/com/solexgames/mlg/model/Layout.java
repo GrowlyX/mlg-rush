@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName;
 import com.solexgames.mlg.CorePlugin;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -33,7 +34,13 @@ public class Layout {
         }
 
         for (int i = 0; i <= 8; i++) {
-            player.getInventory().setItem(i, this.itemStacks[i]);
+            final ItemStack itemStack = this.itemStacks[i];
+
+            if (itemStack == null) {
+                player.getInventory().setItem(i, new ItemStack(Material.AIR));
+            } else {
+                player.getInventory().setItem(i, this.itemStacks[i]);
+            }
         }
 
         player.updateInventory();

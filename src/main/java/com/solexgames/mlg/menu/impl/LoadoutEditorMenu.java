@@ -6,6 +6,7 @@ import com.solexgames.mlg.menu.button.Button;
 import com.solexgames.mlg.player.GamePlayer;
 import com.solexgames.mlg.util.Color;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -30,7 +31,13 @@ public class LoadoutEditorMenu extends AbstractMenu {
             buttonMap.put(i, new Button() {
                 @Override
                 public ItemStack getButtonItem(Player player) {
-                    return gamePlayer.getLayout().getItemStacks()[finalSlot];
+                    final ItemStack itemStack = gamePlayer.getLayout().getItemStacks()[finalSlot];
+
+                    if (itemStack != null) {
+                        return gamePlayer.getLayout().getItemStacks()[finalSlot];
+                    } else {
+                        return new ItemStack(Material.AIR);
+                    }
                 }
             });
         }

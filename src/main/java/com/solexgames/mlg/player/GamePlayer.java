@@ -7,6 +7,7 @@ import com.solexgames.mlg.CorePlugin;
 import com.solexgames.mlg.adapter.factory.GsonFactory;
 import com.solexgames.mlg.model.Layout;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.bson.Document;
 
@@ -38,26 +39,16 @@ public class GamePlayer {
 
     private Layout layout;
 
-    /**
-     * Creates a new instance of {@link GamePlayer}
-     * <p></p>
-     *
-     * @param uuid Player UUID
-     * @param name Player Name
-     */
+    public void savePlayerData() {
+        CompletableFuture.runAsync(() -> CorePlugin.getInstance().getMongoHandler().getPlayerCollection().replaceOne(Filters.eq("_id", this.uuid), this.getDocument(), new ReplaceOptions().upsert(true)));
+        CorePlugin.getInstance().getPlayerHandler().getPlayerList().remove(this);
+    }
+
     public GamePlayer(UUID uuid, String name) {
         this.uuid = uuid;
         this.name = name;
 
         this.loadPlayerData();
-    }
-
-    public void savePlayerData() {
-        CompletableFuture.runAsync(() -> {
-            CorePlugin.getInstance().getMongoHandler().getPlayerCollection().replaceOne(Filters.eq("_id", this.uuid), this.getDocument(), new ReplaceOptions().upsert(true));
-        });
-
-        CorePlugin.getInstance().getPlayerHandler().getPlayerList().remove(this);
     }
 
     public Document getDocument() {
@@ -79,37 +70,36 @@ public class GamePlayer {
     }
 
     private void loadPlayerData() {
-        CompletableFuture.supplyAsync(() -> CorePlugin.getInstance().getMongoHandler().getPlayerCollection().find(Filters.eq("_id", this.uuid)).first())
-                .thenAccept(document -> {
-                    if (document == null) {
-                        this.layout = new Layout(this.uuid);
-                        this.layout.setupDefaultInventory();
+        CompletableFuture.supplyAsync(() -> CorePlugin.getInstance().getMongoHandler().getPlayerCollection().find(Filters.eq("_id", this.uuid)).first()).thenAccept(document -> {
+            if (document == null) {
+                this.layout = new Layout(this.uuid);
+                this.layout.setupDefaultInventory();
 
-                        CorePlugin.getInstance().getServer().getScheduler().runTaskLaterAsynchronously(CorePlugin.getInstance(), this::savePlayerData, 20L);
-                    } else {
-                        if (document.getDouble("kdr") != null) {
-                            this.kdr = document.getDouble("kdr");
-                        }
-                        if (document.getDouble("kills") != null) {
-                            this.kills = document.getInteger("kills");
-                        }
-                        if (document.getDouble("deaths") != null) {
-                            this.deaths = document.getInteger("deaths");
-                        }
-                        if (document.getDouble("totalWins") != null) {
-                            this.wins = document.getInteger("totalWins");
-                        }
-                        if (document.getDouble("totalLosses") != null) {
-                            this.losses = document.getInteger("totalLosses");
-                        }
-                        if (document.getString("layout") != null) {
-                            this.layout = GsonFactory.getPrettyGson().fromJson(document.getString("layout"), Layout.class);
-                        } else {
-                            this.layout = new Layout(this.uuid);
-                        }
+                CorePlugin.getInstance().getServer().getScheduler().runTaskLaterAsynchronously(CorePlugin.getInstance(), this::savePlayerData, 20L);
+            } else {
+                if (document.getDouble("kdr") != null) {
+                    this.kdr = document.getDouble("kdr");
+                }
+                if (document.getInteger("kills") != null) {
+                    this.kills = document.getInteger("kills");
+                }
+                if (document.getInteger("deaths") != null) {
+                    this.deaths = document.getInteger("deaths");
+                }
+                if (document.getInteger("totalWins") != null) {
+                    this.wins = document.getInteger("totalWins");
+                }
+                if (document.getInteger("totalLosses") != null) {
+                    this.losses = document.getInteger("totalLosses");
+                }
+                if (document.getString("layout") != null) {
+                    this.layout = GsonFactory.getPrettyGson().fromJson(document.getString("layout"), Layout.class);
+                } else {
+                    this.layout = new Layout(this.uuid);
+                }
 
-                        this.layout.setupDefaultInventory();
-                    }
-                });
+                this.layout.setupDefaultInventory();
+            }
+        });
     }
 }

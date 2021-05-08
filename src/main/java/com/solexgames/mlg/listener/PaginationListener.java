@@ -17,7 +17,7 @@ public class PaginationListener implements Listener {
         final Player player = (Player) event.getWhoClicked();
         final AbstractMenu openMenu = AbstractMenu.currentlyOpenedMenus.get(player.getName());
 
-        if (openMenu != null) {
+        if (openMenu != null && !event.getClickedInventory().getName().contains("Editing Loadout")) {
             if (event.getSlot() != event.getRawSlot()) {
                 if ((event.getClick() == ClickType.SHIFT_LEFT || event.getClick() == ClickType.SHIFT_RIGHT)) {
                     event.setCancelled(true);

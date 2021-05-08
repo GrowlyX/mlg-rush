@@ -29,6 +29,8 @@ public class HotbarHandler {
     private final ItemStack sandStoneStack;
     private final ItemStack pickaxe;
 
+    private final ItemStack placeholder;
+
     public HotbarHandler() {
         this.joinGameItem = new ItemBuilder(Material.COMPASS)
                 .setDisplayName(Color.PRIMARY + "Join an Arena")
@@ -49,16 +51,17 @@ public class HotbarHandler {
         this.pickaxe = new ItemBuilder(Material.GOLD_PICKAXE)
                 .setUnbreakable(true)
                 .create();
+        this.placeholder = new ItemStack(Material.AIR);
 
         this.defaultInventory = new ItemStack[] {
                 this.knockbackStick,
-                null,
-                null,
-                null,
+                this.placeholder,
+                this.placeholder,
+                this.placeholder,
                 this.sandStoneStack,
-                null,
-                null,
-                null,
+                this.placeholder,
+                this.placeholder,
+                this.placeholder,
                 this.pickaxe,
         };
     }
