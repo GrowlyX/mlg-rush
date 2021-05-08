@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
 import com.solexgames.mlg.CorePlugin;
+import com.solexgames.mlg.adapter.factory.GsonFactory;
+import com.solexgames.mlg.model.Layout;
 import lombok.Getter;
 import lombok.Setter;
 import org.bson.Document;
@@ -34,6 +36,8 @@ public class GamePlayer {
     private int wins;
     private int losses;
 
+    private Layout layout;
+
     /**
      * Creates a new instance of {@link GamePlayer}
      * <p></p>
@@ -51,8 +55,9 @@ public class GamePlayer {
     public void savePlayerData() {
         CompletableFuture.runAsync(() -> {
             CorePlugin.getInstance().getMongoHandler().getPlayerCollection().replaceOne(Filters.eq("_id", this.uuid), this.getDocument(), new ReplaceOptions().upsert(true));
-            CorePlugin.getInstance().getPlayerHandler().getPlayerList().remove(this);
         });
+
+        CorePlugin.getInstance().getPlayerHandler().getPlayerList().remove(this);
     }
 
     public Document getDocument() {
@@ -68,6 +73,8 @@ public class GamePlayer {
         document.put("totalWins", this.wins);
         document.put("totalLosses", this.losses);
 
+        document.put("layout", GsonFactory.getPrettyGson().toJson(this.layout));
+
         return document;
     }
 
@@ -75,24 +82,33 @@ public class GamePlayer {
         CompletableFuture.supplyAsync(() -> CorePlugin.getInstance().getMongoHandler().getPlayerCollection().find(Filters.eq("_id", this.uuid)).first())
                 .thenAccept(document -> {
                     if (document == null) {
-                        CorePlugin.getInstance().getServer().getScheduler().runTaskLaterAsynchronously(CorePlugin.getInstance(), this::savePlayerData, 20L);
-                        return;
-                    }
+                        this.layout = new Layout(this.uuid);
+                        this.layout.setupDefaultInventory();
 
-                    if (document.getDouble("kdr") != null) {
-                        this.kdr = document.getDouble("kdr");
-                    }
-                    if (document.getDouble("kills") != null) {
-                        this.kills = document.getInteger("kills");
-                    }
-                    if (document.getDouble("deaths") != null) {
-                        this.deaths = document.getInteger("deaths");
-                    }
-                    if (document.getDouble("totalWins") != null) {
-                        this.wins = document.getInteger("totalWins");
-                    }
-                    if (document.getDouble("totalLosses") != null) {
-                        this.losses = document.getInteger("totalLosses");
+                        CorePlugin.getInstance().getServer().getScheduler().runTaskLaterAsynchronously(CorePlugin.getInstance(), this::savePlayerData, 20L);
+                    } else {
+                        if (document.getDouble("kdr") != null) {
+                            this.kdr = document.getDouble("kdr");
+                        }
+                        if (document.getDouble("kills") != null) {
+                            this.kills = document.getInteger("kills");
+                        }
+                        if (document.getDouble("deaths") != null) {
+                            this.deaths = document.getInteger("deaths");
+                        }
+                        if (document.getDouble("totalWins") != null) {
+                            this.wins = document.getInteger("totalWins");
+                        }
+                        if (document.getDouble("totalLosses") != null) {
+                            this.losses = document.getInteger("totalLosses");
+                        }
+                        if (document.getString("layout") != null) {
+                            this.layout = GsonFactory.getPrettyGson().fromJson(document.getString("layout"), Layout.class);
+                        } else {
+                            this.layout = new Layout(this.uuid);
+                        }
+
+                        this.layout.setupDefaultInventory();
                     }
                 });
     }

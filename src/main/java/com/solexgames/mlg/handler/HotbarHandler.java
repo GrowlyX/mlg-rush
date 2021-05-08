@@ -1,6 +1,7 @@
 package com.solexgames.mlg.handler;
 
 import com.solexgames.mlg.CorePlugin;
+import com.solexgames.mlg.player.GamePlayer;
 import com.solexgames.mlg.util.Color;
 import com.solexgames.mlg.util.builder.ItemBuilder;
 import lombok.Getter;
@@ -17,6 +18,8 @@ import org.bukkit.inventory.ItemStack;
 
 @Getter
 public class HotbarHandler {
+
+    private final ItemStack[] defaultInventory;
 
     private final ItemStack joinGameItem;
     private final ItemStack profileItem;
@@ -37,18 +40,27 @@ public class HotbarHandler {
                 .setDisplayName(ChatColor.RED + ChatColor.BOLD.toString() + "Leave Arena")
                 .create();
         this.sandStoneStack = new ItemBuilder(Material.SANDSTONE)
-                .setDisplayName(ChatColor.GOLD + "Sandstone")
                 .setAmount(64)
                 .create();
         this.knockbackStick = new ItemBuilder(Material.STICK)
-                .setDisplayName(ChatColor.AQUA + "Knockback Stick")
                 .setEnchant(Enchantment.KNOCKBACK, 1)
                 .setUnbreakable(true)
                 .create();
         this.pickaxe = new ItemBuilder(Material.GOLD_PICKAXE)
-                .setDisplayName(ChatColor.BLUE + "Pickaxe")
                 .setUnbreakable(true)
                 .create();
+
+        this.defaultInventory = new ItemStack[] {
+                this.knockbackStick,
+                null,
+                null,
+                null,
+                this.sandStoneStack,
+                null,
+                null,
+                null,
+                this.pickaxe,
+        };
     }
 
     public void setupLobbyHotbar(Player player) {
@@ -69,12 +81,8 @@ public class HotbarHandler {
     }
 
     public void setupArenaInGameHotbar(Player player) {
-        player.getInventory().clear();
+        final GamePlayer gamePlayer = CorePlugin.getInstance().getPlayerHandler().getByName(player.getName());
 
-        player.getInventory().setItem(0, this.knockbackStick);
-        player.getInventory().setItem(4, this.sandStoneStack);
-        player.getInventory().setItem(8, this.pickaxe);
-
-        player.updateInventory();
+        gamePlayer.getLayout().applyInventory(player);
     }
 }
