@@ -38,6 +38,8 @@ public abstract class AbstractMenu {
 
     private Button placeholderButton = Button.placeholder(Material.STAINED_GLASS_PANE, (byte) 15, " ");
 
+    private Inventory inventory;
+
     private ItemStack createItemStack(Player player, Button button) {
         final ItemStack item = button.getButtonItem(player);
 
@@ -116,6 +118,8 @@ public abstract class AbstractMenu {
         }
 
         this.setClosedByMenu(false);
+
+        this.inventory = inventory;
     }
 
     public int size(Map<Integer, Button> buttons) {

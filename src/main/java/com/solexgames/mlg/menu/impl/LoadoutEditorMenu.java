@@ -52,6 +52,12 @@ public class LoadoutEditorMenu extends AbstractMenu {
 
     @Override
     public void onClose(Player player) {
+        final GamePlayer gamePlayer = CorePlugin.getInstance().getPlayerHandler().getByName(player.getName());
+
+        for (int i = 0; i <= 8; i++) {
+            gamePlayer.getLayout().getItemStacks()[i] = this.getInventory().getItem(i);
+        }
+
         player.sendMessage(new String[]{
                 Color.SECONDARY + "You've modified your loadout!",
                 ChatColor.GRAY.toString() + ChatColor.ITALIC + "If you need to reset your loadout, try " + Color.SECONDARY + "/resetloadout"
