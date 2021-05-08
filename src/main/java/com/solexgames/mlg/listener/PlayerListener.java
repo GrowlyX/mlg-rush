@@ -174,7 +174,6 @@ public class PlayerListener implements Listener {
 
                 player.spigot().respawn();
                 player.teleport((arenaPlayer.getArenaTeam() == ArenaTeam.BLUE ? arena.getSpawnOne() : arena.getSpawnTwo()));
-                player.getInventory().setArmorContents((arenaPlayer.getArenaTeam() == ArenaTeam.BLUE ? Arena.BLUE_ITEM_STACK_ARRAY : Arena.RED_ITEM_STACK_ARRAY));
 
                 CorePlugin.getInstance().getHotbarHandler().setupArenaInGameHotbar(player);
             }
@@ -322,6 +321,10 @@ public class PlayerListener implements Listener {
                 }
             } else {
                 event.setCancelled(true);
+            }
+
+            if (event.getEntity() instanceof Player) {
+                ((Player) event.getEntity()).setHealth(20);
             }
         }
     }

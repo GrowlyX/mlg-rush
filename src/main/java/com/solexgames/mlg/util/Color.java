@@ -1,5 +1,6 @@
 package com.solexgames.mlg.util;
 
+import com.solexgames.mlg.CorePlugin;
 import org.bukkit.ChatColor;
 
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import java.util.List;
 
 public final class Color {
 
-    public static ChatColor PRIMARY = ChatColor.AQUA;
+    public static ChatColor PRIMARY = ChatColor.GOLD;
     public static ChatColor SECONDARY = ChatColor.YELLOW;
 
     public static String SB_LINE = ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + "--------------------";

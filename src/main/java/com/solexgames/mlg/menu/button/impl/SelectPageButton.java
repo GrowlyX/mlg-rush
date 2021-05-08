@@ -22,7 +22,7 @@ public class SelectPageButton extends Button {
 
     @Override
     public ItemStack getButtonItem(Player player) {
-        List<String> stringList = new ArrayList<>();
+        final List<String> stringList = new ArrayList<>();
 
         stringList.add(ChatColor.GRAY + "Click to switch to this menu!");
 
@@ -40,6 +40,5 @@ public class SelectPageButton extends Button {
     @Override
     public void clicked(Player player, ClickType clickType) {
         this.menu.modPage(player, this.page - this.menu.getPage());
-        Button.playNeutral(player);
     }
 }

@@ -5,3 +5,6 @@ mongodb:
 arenas:
   # for debug; keep this here
   test: ""
+language:
+  primary-color: "GOLD"
+  secondary-color: "YELLOW"

@@ -129,5 +129,12 @@
             <artifactId>unirest-java</artifactId>
             <version>1.4.9</version>
         </dependency>
+        <dependency>
+            <groupId>com.solexgames.spigot</groupId>
+            <artifactId>spigot-server</artifactId>
+            <version>LATEST</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/spigot.jar</systemPath>
+        </dependency>
     </dependencies>
 </project>

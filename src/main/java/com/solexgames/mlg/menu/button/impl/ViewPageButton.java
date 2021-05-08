@@ -48,7 +48,7 @@ public class ViewPageButton extends Button {
     }
 
     private boolean hasNext(Player player) {
-        int pg = this.menu.getPage() + this.mod;
+        final int pg = this.menu.getPage() + this.mod;
         return pg > 0 && this.menu.getPages(player) >= pg;
     }
 }

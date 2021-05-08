@@ -23,8 +23,6 @@ import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -178,7 +176,6 @@ public class Arena extends StateBasedModel<ArenaState, ArenaPlayer> {
             PlayerUtil.resetPlayer(arenaPlayer.getPlayer());
 
             arenaPlayer.getPlayer().teleport(this.getSpawnFromTeam(arenaPlayer.getArenaTeam()));
-            arenaPlayer.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 10000, 2));
 
             CorePlugin.getInstance().getHotbarHandler().setupArenaInGameHotbar(arenaPlayer.getPlayer());
 
@@ -195,7 +192,7 @@ public class Arena extends StateBasedModel<ArenaState, ArenaPlayer> {
     /**
      * Resets the arena & its players
      */
-    public void resetAndStop() {
+    public void resetAndStop(ArenaPlayer player) {
         this.arenaState = ArenaState.REGENERATING;
 
         this.cleanup();
@@ -205,6 +202,14 @@ public class Arena extends StateBasedModel<ArenaState, ArenaPlayer> {
             CorePlugin.getInstance().getHotbarHandler().setupLobbyHotbar(arenaPlayer.getPlayer());
 
             Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> arenaPlayer.getPlayer().teleport(Bukkit.getWorlds().get(0).getSpawnLocation()), 50L);
+
+            if (player != arenaPlayer) {
+                final GamePlayer gamePlayer = CorePlugin.getInstance().getPlayerHandler().getByName(arenaPlayer.getPlayer().getName());
+
+                if (gamePlayer != null) {
+                    gamePlayer.setLosses(gamePlayer.getLosses() + 1);
+                }
+            }
         });
 
         this.gamePlayerList.clear();
@@ -256,7 +261,7 @@ public class Arena extends StateBasedModel<ArenaState, ArenaPlayer> {
             this.broadcastMessage(Color.PRIMARY + profile.getPlayer().getName() + Color.SECONDARY + " has won the game!");
         }
 
-        this.resetAndStop();
+        this.resetAndStop(profile);
     }
 
     @Override

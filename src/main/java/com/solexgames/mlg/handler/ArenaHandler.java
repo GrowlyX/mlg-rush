@@ -110,6 +110,7 @@ public class ArenaHandler {
      */
     public void leaveGame(Player player, Arena arena) {
         if (arena == null) {
+            player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
             player.sendMessage(ChatColor.RED + "You aren't currently in an arena.");
             return;
         }

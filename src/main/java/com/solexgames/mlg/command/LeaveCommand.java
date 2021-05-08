@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 
 public class LeaveCommand extends BaseCommand {
 
-    @CommandAlias("leave|leavegame|quit")
+    @CommandAlias("leave|leavegame|quit|l|spawn")
     public void joinGame(Player player) {
         CorePlugin.getInstance().getArenaHandler().leaveGame(player, CorePlugin.getInstance().getArenaHandler().getByPlayer(player));
     }

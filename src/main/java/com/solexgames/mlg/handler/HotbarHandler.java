@@ -1,5 +1,6 @@
 package com.solexgames.mlg.handler;
 
+import com.solexgames.mlg.CorePlugin;
 import com.solexgames.mlg.util.Color;
 import com.solexgames.mlg.util.builder.ItemBuilder;
 import lombok.Getter;
@@ -25,28 +26,27 @@ public class HotbarHandler {
     private final ItemStack sandStoneStack;
     private final ItemStack pickaxe;
 
-    // TODO: Recode or move to config
     public HotbarHandler() {
         this.joinGameItem = new ItemBuilder(Material.COMPASS)
-                .setDisplayName(Color.PRIMARY + ChatColor.BOLD.toString() + "Join an Arena" + ChatColor.GRAY + " (Right-click)")
+                .setDisplayName(Color.PRIMARY + "Join an Arena")
                 .create();
         this.profileItem = new ItemBuilder(Material.EMERALD)
-                .setDisplayName(ChatColor.GOLD + ChatColor.BOLD.toString() + "Profile" + ChatColor.GRAY + " (Right-click)")
+                .setDisplayName(Color.PRIMARY + "Profile")
                 .create();
         this.leaveGameItem = new ItemBuilder(Material.BED)
-                .setDisplayName(ChatColor.RED + ChatColor.BOLD.toString() + "Leave Arena" + ChatColor.GRAY + " (Right-click)")
+                .setDisplayName(ChatColor.RED + ChatColor.BOLD.toString() + "Leave Arena")
                 .create();
         this.sandStoneStack = new ItemBuilder(Material.SANDSTONE)
-                .setDisplayName(Color.PRIMARY + ChatColor.BOLD.toString() + "Sandstone" + ChatColor.GRAY + " (Right-click)")
+                .setDisplayName(ChatColor.GOLD + "Sandstone")
                 .setAmount(64)
                 .create();
         this.knockbackStick = new ItemBuilder(Material.STICK)
-                .setDisplayName(Color.PRIMARY + ChatColor.BOLD.toString() + "Knockback Stick" + ChatColor.GRAY + " (Right-click)")
+                .setDisplayName(ChatColor.AQUA + "Knockback Stick")
                 .setEnchant(Enchantment.KNOCKBACK, 1)
                 .setUnbreakable(true)
                 .create();
         this.pickaxe = new ItemBuilder(Material.GOLD_PICKAXE)
-                .setDisplayName(Color.PRIMARY + ChatColor.BOLD.toString() + "Pickaxe" + ChatColor.GRAY + " (Right-click)")
+                .setDisplayName(ChatColor.BLUE + "Pickaxe")
                 .setUnbreakable(true)
                 .create();
     }

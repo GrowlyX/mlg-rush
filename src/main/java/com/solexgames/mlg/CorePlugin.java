@@ -14,8 +14,11 @@ import com.solexgames.mlg.handler.MongoHandler;
 import com.solexgames.mlg.handler.PlayerHandler;
 import com.solexgames.mlg.listener.PaginationListener;
 import com.solexgames.mlg.listener.PlayerListener;
+import com.solexgames.mlg.player.GamePlayer;
+import com.solexgames.mlg.util.Color;
 import io.github.nosequel.scoreboard.ScoreboardHandler;
 import lombok.Getter;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.conversations.ConversationFactory;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -51,6 +54,9 @@ public final class CorePlugin extends JavaPlugin {
 
         this.saveDefaultConfig();
 
+        Color.PRIMARY = ChatColor.valueOf(this.getConfig().getString("lang.primary-color"));
+        Color.SECONDARY = ChatColor.valueOf(this.getConfig().getString("lang.secondary-color"));
+
         this.arenaHandler = new ArenaHandler();
         this.arenaHandler.loadArenas();
 
@@ -74,6 +80,7 @@ public final class CorePlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        this.playerHandler.getPlayerList().forEach(GamePlayer::savePlayerData);
         this.arenaHandler.getAllArenas().forEach(arena -> {
             arena.cleanup();
             arena.saveArenaData();

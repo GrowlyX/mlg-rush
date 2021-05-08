@@ -59,7 +59,7 @@ public class ScoreboardAdapter implements ScoreboardElementHandler {
         }
 
         element.add("  ");
-        element.add(ChatColor.GRAY + ChatColor.ITALIC.toString() + "www.mlgrush.com");
+        element.add(ChatColor.GRAY + ChatColor.ITALIC.toString() + "bridger.land");
         element.add(Color.SB_LINE);
 
         return element;
