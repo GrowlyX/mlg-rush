@@ -251,7 +251,7 @@ public class PlayerListener implements Listener {
         if (this.isInArena(player)) {
             final Arena arena = this.getArena(player);
 
-            if (event.getBlock().getType().equals(Material.BED_BLOCK) && arena.isTeamsBed(event.getBlock().getLocation(), arena.getOpposingTeam(arena.getByPlayer(player))) && arena.getState().equals(ArenaState.IN_GAME)) {
+            if ((event.getBlock().getType().equals(Material.BED_BLOCK) || event.getBlock().getType().equals(Material.BED)) && arena.isTeamsBed(event.getBlock().getLocation(), arena.getOpposingTeam(arena.getByPlayer(player))) && arena.getState().equals(ArenaState.IN_GAME)) {
                 arena.incrementPointAndStartRound(player);
             }
 
@@ -307,7 +307,7 @@ public class PlayerListener implements Listener {
     }
 
     @EventHandler
-    public void onDamage(EntityDamageByEntityEvent event) {
+    public void onDamageByEntity(EntityDamageByEntityEvent event) {
         final Entity entity = event.getDamager();
 
         if (entity instanceof Player) {
@@ -326,6 +326,17 @@ public class PlayerListener implements Listener {
             if (event.getEntity() instanceof Player) {
                 ((Player) event.getEntity()).setHealth(20);
             }
+        }
+    }
+
+    @EventHandler
+    public void onEntityDamage(EntityDamageEvent event) {
+        final Entity entity = event.getEntity();
+
+        if (entity instanceof Player) {
+            final Player player = (Player) event.getEntity();
+
+            player.setHealth(20D);
         }
     }
 

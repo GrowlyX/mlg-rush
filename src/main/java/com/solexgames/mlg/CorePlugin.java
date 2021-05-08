@@ -54,8 +54,8 @@ public final class CorePlugin extends JavaPlugin {
 
         this.saveDefaultConfig();
 
-        Color.PRIMARY = ChatColor.valueOf(this.getConfig().getString("lang.primary-color"));
-        Color.SECONDARY = ChatColor.valueOf(this.getConfig().getString("lang.secondary-color"));
+        Color.PRIMARY = ChatColor.valueOf(this.getConfig().getString("language.primary-color"));
+        Color.SECONDARY = ChatColor.valueOf(this.getConfig().getString("language.secondary-color"));
 
         this.arenaHandler = new ArenaHandler();
         this.arenaHandler.loadArenas();
