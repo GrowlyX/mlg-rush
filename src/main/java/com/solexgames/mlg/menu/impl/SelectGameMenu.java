@@ -59,7 +59,7 @@ public class SelectGameMenu extends AbstractPaginatedMenu {
                             ChatColor.GRAY + "State: " + this.getStateString(),
                             ChatColor.GRAY + "Players: " + Color.PRIMARY + this.arena.getGamePlayerList().size() + "/" + this.arena.getMaxPlayers(),
                             "",
-                            this.getJoinabilityString()
+                            this.getJoinableString()
                     )
                     .create();
         }
@@ -94,7 +94,7 @@ public class SelectGameMenu extends AbstractPaginatedMenu {
             }
         }
 
-        private String getJoinabilityString() {
+        private String getJoinableString() {
             if (this.arena.getArenaState() == ArenaState.AVAILABLE) {
                 return ChatColor.GREEN + "[Click to join this game]";
             }

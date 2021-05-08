@@ -38,4 +38,8 @@ public class Layout {
 
         player.updateInventory();
     }
+
+    public void resetLayout() {
+        this.itemStacks = CorePlugin.getInstance().getHotbarHandler().getDefaultInventory();
+    }
 }

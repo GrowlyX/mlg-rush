@@ -34,8 +34,7 @@ public class PlayerHandler {
     public GamePlayer getByName(String name) {
         return this.playerList.stream()
                 .filter(gamePlayer -> gamePlayer.getName().equalsIgnoreCase(name))
-                .findFirst()
-                .orElse(null);
+                .findFirst().orElse(null);
     }
 
     /**
@@ -47,7 +46,6 @@ public class PlayerHandler {
     public GamePlayer getByUuid(UUID uuid) {
         return this.playerList.stream()
                 .filter(gamePlayer -> gamePlayer.getUuid().equals(uuid))
-                .findFirst()
-                .orElse(null);
+                .findFirst().orElse(null);
     }
 }

@@ -1,13 +1,8 @@
 package com.solexgames.mlg;
 
 import co.aikar.commands.PaperCommandManager;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.solexgames.mlg.adapter.ScoreboardAdapter;
-import com.solexgames.mlg.adapter.type.LocationTypeAdapter;
-import com.solexgames.mlg.command.ArenaCommand;
-import com.solexgames.mlg.command.JoinGameCommand;
-import com.solexgames.mlg.command.LeaveCommand;
+import com.solexgames.mlg.command.*;
 import com.solexgames.mlg.handler.ArenaHandler;
 import com.solexgames.mlg.handler.HotbarHandler;
 import com.solexgames.mlg.handler.MongoHandler;
@@ -19,7 +14,6 @@ import com.solexgames.mlg.util.Color;
 import io.github.nosequel.scoreboard.ScoreboardHandler;
 import lombok.Getter;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.conversations.ConversationFactory;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -30,8 +24,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 @Getter
 public final class CorePlugin extends JavaPlugin {
-
-    public static Gson GSON;
 
     @Getter
     private static CorePlugin instance;
@@ -46,11 +38,6 @@ public final class CorePlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-
-        GSON = new GsonBuilder()
-                .registerTypeAdapter(Location.class, new LocationTypeAdapter())
-                .disableHtmlEscaping()
-                .create();
 
         this.saveDefaultConfig();
 
@@ -68,7 +55,10 @@ public final class CorePlugin extends JavaPlugin {
 
         manager.registerCommand(new ArenaCommand());
         manager.registerCommand(new JoinGameCommand());
+        manager.registerCommand(new MLGRushCommand());
         manager.registerCommand(new LeaveCommand());
+        manager.registerCommand(new ResetLoadoutCommand());
+        manager.registerCommand(new LoadoutCommand());
 
         manager.enableUnstableAPI("help");
 

@@ -8,9 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.*;
 
 public class PaginationListener implements Listener {
 
@@ -82,7 +80,33 @@ public class PaginationListener implements Listener {
         final AbstractMenu openMenu = AbstractMenu.currentlyOpenedMenus.get(player.getName());
 
         if (openMenu != null) {
+            openMenu.onClose(player);
+
             AbstractMenu.currentlyOpenedMenus.remove(player.getName());
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onDrag(InventoryDragEvent event) {
+        final AbstractMenu openMenu = AbstractMenu.currentlyOpenedMenus.get(event.getWhoClicked().getName());
+        final Player player = (Player) event.getWhoClicked();
+
+        if (openMenu != null && openMenu.getTitle(player).contains("Editing Loadout")) {
+            event.setCancelled(false);
+        } else if (openMenu != null) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onMoveItem(InventoryMoveItemEvent event) {
+        final AbstractMenu openMenu = AbstractMenu.currentlyOpenedMenus.get(event.getInitiator().getViewers().get(0).getName());
+        final Player player = (Player) event.getInitiator().getViewers().get(0);
+
+        if (openMenu != null && openMenu.getTitle(player).contains("Editing Loadout")) {
+            if (event.getDestination().equals(player.getInventory())) {
+                event.setCancelled(true);
+            }
         }
     }
 }

@@ -1,6 +1,6 @@
 package com.solexgames.mlg.util.cuboid;
 
-import com.solexgames.mlg.CorePlugin;
+import com.solexgames.mlg.adapter.factory.GsonFactory;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -61,7 +61,7 @@ public class Cuboid {
      * @return A cuboid from {@link com.google.gson.Gson} or else null.
      */
     public static Cuboid getCuboidFromJson(String json) {
-        return Optional.ofNullable(CorePlugin.GSON.fromJson(json, Cuboid.class)).orElse(null);
+        return Optional.ofNullable(GsonFactory.getPrettyGson().fromJson(json, Cuboid.class)).orElse(null);
     }
 
     public double getDistance() {
@@ -121,6 +121,6 @@ public class Cuboid {
     }
 
     public String getSerialized() {
-        return CorePlugin.GSON.toJson(this);
+        return GsonFactory.getPrettyGson().toJson(this);
     }
 }

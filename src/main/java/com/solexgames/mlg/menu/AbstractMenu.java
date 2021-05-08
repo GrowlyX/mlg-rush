@@ -57,6 +57,8 @@ public abstract class AbstractMenu {
     public void openMenu(final Player player) {
         this.buttons = this.getButtons(player);
 
+        this.onOpen(player);
+
         final AbstractMenu previousAbstractMenu = AbstractMenu.currentlyOpenedMenus.get(player.getName());
 
         Inventory inventory = null;
@@ -127,6 +129,9 @@ public abstract class AbstractMenu {
 
         return (int) (Math.ceil((highest + 1) / 9D) * 9D);
     }
+
+    public void onClose(Player player) { }
+    public void onOpen(Player player) { }
 
     public int getSize() {
         return -1;
