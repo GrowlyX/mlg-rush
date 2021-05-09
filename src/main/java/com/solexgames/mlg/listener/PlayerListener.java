@@ -124,20 +124,10 @@ public class PlayerListener implements Listener {
                     arena.broadcastMessage(ChatColor.RED + player.getName() + Color.SECONDARY + " fell into the void!");
 
                     CorePlugin.getInstance().getHotbarHandler().setupArenaInGameHotbar(player);
-                    return;
-                }
-
-                if (!arena.getCuboid().isInWithMarge(player.getLocation(), 1.0)) {
-                    player.teleport(event.getFrom());
                 }
             } else if (arena.getState().equals(ArenaState.AVAILABLE)) {
                 if ((int) player.getLocation().getY() <= arena.getCuboid().getYMin()) {
                     player.teleport(arena.getSpawnFromTeam(arena.getByPlayer(player).getArenaTeam()));
-                    return;
-                }
-
-                if (!arena.getCuboid().isInWithMarge(player.getLocation(), 0.3)) {
-                    player.teleport(event.getFrom());
                 }
             } else {
                 player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
@@ -150,9 +140,7 @@ public class PlayerListener implements Listener {
         final EntityDamageEvent.DamageCause cause = event.getCause();
 
         switch (cause) {
-            case FALL:
-            case FIRE:
-            case VOID:
+            case DROWNING: case FALL: case FIRE: case VOID:
             case FIRE_TICK:
                 event.setCancelled(true);
                 break;
@@ -201,6 +189,7 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onBuild(BlockPlaceEvent event) {
         final Player player = event.getPlayer();
+        final Location blockLocation = event.getBlock().getLocation();
 
         if (!this.isInArena(player)) {
             if (!player.isOp()) {
@@ -209,24 +198,26 @@ public class PlayerListener implements Listener {
         } else {
             final Arena arena = this.getArena(player);
 
-            if (!arena.getCuboid().isIn(player)) {
+            if (!arena.getCuboid().isIn(blockLocation) || !arena.getBuildableCuboid().isIn(blockLocation)) {
                 player.sendMessage(ChatColor.RED + "You cannot place blocks here.");
                 event.setCancelled(true);
                 return;
             }
 
             if (arena.getState().equals(ArenaState.IN_GAME)) {
-                if (arena.isCloseToSpawn(event.getBlock().getLocation(), arena.getByPlayer(player).getArenaTeam())) {
-                    event.setCancelled(true);
-                    return;
+                if (Arena.SPAWN_PROTECTION) {
+                    if (arena.isCloseToSpawn(blockLocation, arena.getByPlayer(player).getArenaTeam())) {
+                        event.setCancelled(true);
+                        return;
+                    }
+
+                    if (arena.isCloseToSpawn(blockLocation, arena.getOpposingTeam(arena.getByPlayer(player)))) {
+                        event.setCancelled(true);
+                        return;
+                    }
                 }
 
-                if (arena.isCloseToSpawn(event.getBlock().getLocation(), arena.getOpposingTeam(arena.getByPlayer(player)))) {
-                    event.setCancelled(true);
-                    return;
-                }
-
-                arena.getBlockLocationList().add(event.getBlock().getLocation());
+                arena.getBlockLocationList().add(blockLocation);
 
                 event.setCancelled(false);
             } else if (arena.getState().equals(ArenaState.AVAILABLE)) {

@@ -59,8 +59,8 @@ public class LoadoutEditorMenu extends AbstractMenu {
         }
 
         player.sendMessage(new String[]{
-                Color.SECONDARY + "You've modified your loadout!",
-                ChatColor.GRAY.toString() + ChatColor.ITALIC + "If you need to reset your loadout, try " + Color.SECONDARY + "/resetloadout"
+                Color.SECONDARY + "You've modified your layout!",
+                ChatColor.GRAY.toString() + ChatColor.ITALIC + "If you need to reset your layout, try " + Color.SECONDARY + "/resetlayout"
         });
 
         CorePlugin.getInstance().getHotbarHandler().setupLobbyHotbar(player);

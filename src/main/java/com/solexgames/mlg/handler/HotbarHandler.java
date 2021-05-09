@@ -86,6 +86,22 @@ public class HotbarHandler {
     public void setupArenaInGameHotbar(Player player) {
         final GamePlayer gamePlayer = CorePlugin.getInstance().getPlayerHandler().getByName(player.getName());
 
-        gamePlayer.getLayout().applyInventory(player);
+        try {
+            gamePlayer.getLayout().applyInventory(player);
+        } catch (Exception ignored) {
+            player.getInventory().clear();
+
+            for (int i = 0; i <= 8; i++) {
+                final ItemStack itemStack = CorePlugin.getInstance().getHotbarHandler().getDefaultInventory()[i];
+
+                if (itemStack == null) {
+                    player.getInventory().setItem(i, new ItemStack(Material.AIR));
+                } else {
+                    player.getInventory().setItem(i, CorePlugin.getInstance().getHotbarHandler().getDefaultInventory()[i]);
+                }
+            }
+
+            player.updateInventory();
+        }
     }
 }

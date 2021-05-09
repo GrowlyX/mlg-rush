@@ -15,6 +15,6 @@ public class ResetLoadoutCommand extends BaseCommand {
 
         gamePlayer.getLayout().resetLayout();
 
-        player.sendMessage(ChatColor.GREEN + "You've reset your loadout!");
+        player.sendMessage(ChatColor.GREEN + "You've reset your layout!");
     }
 }

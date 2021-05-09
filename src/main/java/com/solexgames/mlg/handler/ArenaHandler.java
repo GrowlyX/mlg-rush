@@ -11,9 +11,12 @@ import com.solexgames.mlg.util.LocationUtil;
 import com.solexgames.mlg.util.cuboid.Cuboid;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import net.minecraft.server.v1_8_R3.IChatBaseComponent;
+import net.minecraft.server.v1_8_R3.PacketPlayOutTitle;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -37,12 +40,14 @@ public class ArenaHandler {
     public void loadArenas() {
         final ConfigurationSection configurationSection = CorePlugin.getInstance().getConfig().getConfigurationSection("arenas");
 
-        try {
-            configurationSection.getKeys(false).stream().filter(s -> !s.equalsIgnoreCase("test")).forEach(path -> {
+        configurationSection.getKeys(false).stream().filter(s -> !s.equalsIgnoreCase("test")).forEach(path -> {
+            try {
                 final Arena arena = new Arena(UUID.randomUUID(), configurationSection.getString(path + ".name"));
                 final Cuboid cuboid = Cuboid.getCuboidFromJson(configurationSection.getString(path + ".cuboid"));
+                final Cuboid buildableCuboid = Cuboid.getCuboidFromJson(configurationSection.getString(path + ".buildable-cuboid"));
 
                 arena.setCuboid(cuboid);
+                arena.setBuildableCuboid(buildableCuboid);
                 arena.setTeamSize(configurationSection.getInt(path + ".team-size"));
                 arena.setMaxPlayers(configurationSection.getInt(path + ".max-players"));
 
@@ -50,10 +55,10 @@ public class ArenaHandler {
                 arena.setSpawnTwo(LocationUtil.getLocationFromString(configurationSection.getString(path + ".spawn-two")).orElse(null));
 
                 CorePlugin.getInstance().getLogger().info("[Arena] Loaded arena " + arena.getName() + "!");
-            });
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
+            } catch (Exception exception) {
+                CorePlugin.getInstance().getLogger().info("[Arena] An arena was not loaded because it is corrupted. (" + path + ")");
+            }
+        });
     }
 
     /**
@@ -143,5 +148,32 @@ public class ArenaHandler {
         return this.allArenas.stream()
                 .filter(kit -> kit.getAllPlayerList().contains(player))
                 .findFirst().orElse(null);
+    }
+
+    public void sendEndTitle(Player player, boolean winner) {
+        final CraftPlayer craftPlayer = (CraftPlayer) player;
+
+        PacketPlayOutTitle packetPlayOutTitle;
+        PacketPlayOutTitle packetPlayOutSubtitle;
+
+        if (winner) {
+            packetPlayOutTitle = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, IChatBaseComponent.ChatSerializer
+                    .a("{\"text\": \"" + "VICTORY" + "\",color:" + ChatColor.BOLD.name().toLowerCase() + "\",color:" + ChatColor.GOLD.name().toLowerCase() + "}")
+            );
+            packetPlayOutSubtitle = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, IChatBaseComponent.ChatSerializer
+                    .a("{\"text\": \"" + "You've won the game!" + "\",color:" + ChatColor.GRAY.name().toLowerCase() + "}")
+            );
+
+        } else {
+            packetPlayOutTitle = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, IChatBaseComponent.ChatSerializer
+                    .a("{\"text\": \"" + "YOU LOST" + "\",color:" + ChatColor.BOLD.name().toLowerCase() + "\",color:" + ChatColor.RED.name().toLowerCase() + "}")
+            );
+            packetPlayOutSubtitle = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, IChatBaseComponent.ChatSerializer
+                    .a("{\"text\": \"" + "You lost the game!" + "\",color:" + ChatColor.GRAY.name().toLowerCase() + "}")
+            );
+        }
+
+        craftPlayer.getHandle().playerConnection.sendPacket(packetPlayOutTitle);
+        craftPlayer.getHandle().playerConnection.sendPacket(packetPlayOutSubtitle);
     }
 }

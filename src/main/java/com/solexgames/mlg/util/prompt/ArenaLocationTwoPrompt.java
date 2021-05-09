@@ -31,7 +31,7 @@ public class ArenaLocationTwoPrompt extends StringPrompt {
     @Override
     public Prompt acceptInput(ConversationContext context, String input) {
         if (input.equalsIgnoreCase("here")) {
-            return new ArenaSpawnOnePrompt(this.player, this.name, this.size, this.location, this.player.getLocation());
+            return new ArenaBuildableOnePrompt(this.player, this.name, this.size, this.location, this.player.getLocation());
         } else {
             context.getForWhom().sendRawMessage(Color.SECONDARY + "I couldn't understand what you said.");
 

@@ -15,10 +15,7 @@ import com.solexgames.mlg.util.builder.ItemBuilder;
 import com.solexgames.mlg.util.cuboid.Cuboid;
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -52,6 +49,7 @@ public class Arena extends StateBasedModel<ArenaState, ArenaPlayer> {
     public static final boolean ARMOR_ENABLED = false;
     public static final boolean ROUND_DELAY = false;
     public static final boolean LONG_START = false;
+    public static final boolean SPAWN_PROTECTION = false;
 
     private final List<Location> blockLocationList = new ArrayList<>();
     private final List<ArenaPlayer> gamePlayerList = new ArrayList<>();
@@ -63,6 +61,7 @@ public class Arena extends StateBasedModel<ArenaState, ArenaPlayer> {
     private String name;
     private String configPath;
     private Cuboid cuboid;
+    private Cuboid buildableCuboid;
 
     private int teamSize;
     private int maxPlayers;
@@ -98,6 +97,7 @@ public class Arena extends StateBasedModel<ArenaState, ArenaPlayer> {
             configurationSection.set(this.name + ".team-size", this.teamSize);
             configurationSection.set(this.name + ".max-players", this.maxPlayers);
             configurationSection.set(this.name + ".cuboid", this.cuboid.getSerialized());
+            configurationSection.set(this.name + ".buildable-cuboid", this.buildableCuboid.getSerialized());
             configurationSection.set(this.name + ".spawn-one", LocationUtil.getStringFromLocation(this.spawnOne).orElse(null));
             configurationSection.set(this.name + ".spawn-two", LocationUtil.getStringFromLocation(this.spawnTwo).orElse(null));
         } catch (Exception exception) {
@@ -140,12 +140,12 @@ public class Arena extends StateBasedModel<ArenaState, ArenaPlayer> {
     public void incrementPointAndStartRound(Player player) {
         final ArenaPlayer arenaPlayer = this.getByPlayer(player);
 
+        arenaPlayer.setPoints(arenaPlayer.getPoints() + 1);
+
         if (arenaPlayer.getPoints() == Arena.WINNER_POINT_AMOUNT) {
             this.end(this.getByPlayer(player));
             return;
         }
-
-        arenaPlayer.setPoints(arenaPlayer.getPoints() + 1);
 
         this.broadcastMessage(Color.PRIMARY + player.getName() + Color.SECONDARY + " has scored a point! " + ChatColor.GRAY + "(" + ChatColor.BLUE + this.getPoints(ArenaTeam.BLUE) + ChatColor.GRAY + "/" + ChatColor.RED + this.getPoints(ArenaTeam.RED) + ChatColor.GRAY + ")");
         this.resetAndSetupGameSystem();
@@ -195,13 +195,17 @@ public class Arena extends StateBasedModel<ArenaState, ArenaPlayer> {
     public void resetAndStop(ArenaPlayer player) {
         this.arenaState = ArenaState.REGENERATING;
 
-        this.cleanup();
-
         this.getGamePlayerList().forEach(arenaPlayer -> {
-            PlayerUtil.resetPlayer(arenaPlayer.getPlayer());
-            CorePlugin.getInstance().getHotbarHandler().setupLobbyHotbar(arenaPlayer.getPlayer());
+            arenaPlayer.getPlayer().setGameMode(GameMode.SPECTATOR);
 
-            Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> arenaPlayer.getPlayer().teleport(Bukkit.getWorlds().get(0).getSpawnLocation()), 50L);
+            PlayerUtil.resetPlayer(arenaPlayer.getPlayer());
+
+            Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> {
+                arenaPlayer.getPlayer().setGameMode(GameMode.SURVIVAL);
+                arenaPlayer.getPlayer().teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
+
+                CorePlugin.getInstance().getHotbarHandler().setupLobbyHotbar(arenaPlayer.getPlayer());
+            }, 30L);
 
             if (player != arenaPlayer) {
                 final GamePlayer gamePlayer = CorePlugin.getInstance().getPlayerHandler().getByName(arenaPlayer.getPlayer().getName());
@@ -209,13 +213,18 @@ public class Arena extends StateBasedModel<ArenaState, ArenaPlayer> {
                 if (gamePlayer != null) {
                     gamePlayer.setLosses(gamePlayer.getLosses() + 1);
                 }
+
+                CorePlugin.getInstance().getArenaHandler().sendEndTitle(arenaPlayer.getPlayer(), false);
+            } else {
+                CorePlugin.getInstance().getArenaHandler().sendEndTitle(arenaPlayer.getPlayer(), true);
             }
         });
 
         this.gamePlayerList.clear();
         this.allPlayerList.clear();
 
-        Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), ()-> this.arenaState = ArenaState.AVAILABLE, 60L);
+        Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), this::cleanup, 40L);
+        Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> this.arenaState = ArenaState.AVAILABLE, 60L);
     }
 
     public boolean isTeamsBed(Location location, ArenaTeam arenaTeam) {

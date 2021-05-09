@@ -28,6 +28,9 @@ public class ArenaSpawnTwoPrompt extends StringPrompt {
     private final Location location;
     private final Location locationTwo;
 
+    private final Location buildable;
+    private final Location buildableTwo;
+
     private final Location spawnOne;
 
     @Override
@@ -42,7 +45,10 @@ public class ArenaSpawnTwoPrompt extends StringPrompt {
 
             arena.setTeamSize(this.size);
             arena.setMaxPlayers(this.size + this.size);
+
+            arena.setBuildableCuboid(new Cuboid(this.buildable, this.buildableTwo));
             arena.setCuboid(new Cuboid(this.location, this.locationTwo));
+
             arena.setConfigPath(this.name.replace(" ", "-").toLowerCase());
 
             arena.setSpawnOne(this.spawnOne);

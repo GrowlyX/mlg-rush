@@ -9,13 +9,8 @@ import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
 
-/**
- * @author GrowlyX
- * @since 4/30/2021
- */
-
 @RequiredArgsConstructor
-public class ArenaSpawnOnePrompt extends StringPrompt {
+public class ArenaBuildableTwoPrompt extends StringPrompt {
 
     private final Player player;
     private final String name;
@@ -25,17 +20,16 @@ public class ArenaSpawnOnePrompt extends StringPrompt {
     private final Location locationTwo;
 
     private final Location buildable;
-    private final Location buildableTwo;
 
     @Override
     public String getPromptText(ConversationContext context) {
-        return Color.SECONDARY + "Please type " + Color.PRIMARY + "'here'" + Color.SECONDARY + " when you are at the arena " + ChatColor.BLUE + "Blue" + Color.SECONDARY + " location! " + ChatColor.GRAY + "(" + Color.PRIMARY + "Type 'cancel' to exit at any time!" + ChatColor.GRAY + ")";
+        return Color.SECONDARY + "Please type " + Color.PRIMARY + "'here'" + Color.SECONDARY + " when you are at the BUILDING MAXIMUM location! " + ChatColor.GRAY + "(" + Color.PRIMARY + "Type 'cancel' to exit at any time!" + ChatColor.GRAY + ")";
     }
 
     @Override
     public Prompt acceptInput(ConversationContext context, String input) {
         if (input.equalsIgnoreCase("here")) {
-            return new ArenaSpawnTwoPrompt(this.player, this.name, this.size, this.location, this.locationTwo, this.buildable, this.buildableTwo, this.player.getLocation());
+            return new ArenaSpawnOnePrompt(this.player, this.name, this.size, this.location, this.locationTwo, this.buildable, this.player.getLocation());
         } else {
             context.getForWhom().sendRawMessage(Color.SECONDARY + "I couldn't understand what you said.");
 

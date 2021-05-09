@@ -4,12 +4,17 @@ import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import com.solexgames.mlg.CorePlugin;
 import com.solexgames.mlg.menu.impl.LoadoutEditorMenu;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public class LoadoutCommand extends BaseCommand {
 
-    @CommandAlias("loadout")
+    @CommandAlias("layout")
     public void joinGame(Player player) {
-        new LoadoutEditorMenu().openMenu(player);
+        if (CorePlugin.getInstance().getArenaHandler().getByPlayer(player) == null) {
+            new LoadoutEditorMenu().openMenu(player);
+        } else {
+            player.sendMessage(ChatColor.RED + "You cannot edit layouts during games.");
+        }
     }
 }
