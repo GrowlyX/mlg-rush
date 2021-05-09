@@ -1,4 +1,6 @@
-# MongoDB URL
+#
+#  MLG Rush - created by GrowlyX (SolexGames)
+#
 mongodb:
   url: ""
 # List of all arenas

@@ -23,6 +23,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.player.*;
@@ -65,7 +66,7 @@ public class PlayerListener implements Listener {
         final ItemStack itemStack = event.getItem();
         final ArenaHandler arenaHandler = CorePlugin.getInstance().getArenaHandler();
 
-        if (event.getClickedBlock() != null && event.getClickedBlock().getType() != null && event.getClickedBlock().getType().equals(Material.BED_BLOCK) && event.getAction().name().contains("RIGHT")) {
+        if (event.getClickedBlock() != null && event.getClickedBlock().getType() != null && event.getClickedBlock().getType().equals(Material.BED_BLOCK) && event.getAction().name().contains("RIGHT") && !event.hasBlock()) {
             event.setCancelled(true);
             return;
         }
@@ -217,13 +218,36 @@ public class PlayerListener implements Listener {
                     }
                 }
 
-                arena.getBlockLocationList().add(blockLocation);
+                this.checkLocations(blockLocation, arena, event);
+                this.checkLocations(event.getBlockAgainst().getLocation(), arena, event);
 
-                event.setCancelled(false);
+                if (!event.isCancelled()) {
+                    arena.getBlockLocationList().add(blockLocation);
+
+                    event.setCancelled(false);
+                }
             } else if (arena.getState().equals(ArenaState.AVAILABLE)) {
                 event.setCancelled(true);
             }
         }
+    }
+
+    public void checkLocations(Location blockLocation, Arena arena, BlockPlaceEvent event) {
+        if (blockLocation.distance(arena.getSpawnOne()) < 1) {
+            event.setCancelled(true);
+        } else if (blockLocation.distance(arena.getSpawnTwo()) < 1) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onHunger(FoodLevelChangeEvent event) {
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onWeatherChange(WeatherChangeEvent event) {
+        event.setCancelled(true);
     }
 
     @EventHandler

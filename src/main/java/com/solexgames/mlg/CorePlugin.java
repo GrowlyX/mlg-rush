@@ -15,6 +15,7 @@ import io.github.nosequel.scoreboard.ScoreboardHandler;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Difficulty;
 import org.bukkit.conversations.ConversationFactory;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -51,6 +52,13 @@ public final class CorePlugin extends JavaPlugin {
         this.mongoHandler = new MongoHandler();
         this.playerHandler = new PlayerHandler();
         this.hotbarHandler = new HotbarHandler();
+
+        this.getServer().getWorlds().forEach(world -> {
+            world.setDifficulty(Difficulty.NORMAL);
+            world.setTime(1000);
+
+            this.getLogger().info("[World] Updated world settings for: " + world.getName());
+        });
 
         final PaperCommandManager manager = new PaperCommandManager(this);
 
