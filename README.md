@@ -1,2 +1,5 @@
 # mlg-rush
-MLG Rush core for BedlessNoob 
+SolexGames MLG Rush core, originally designed for bridger.land.
+
+# Dependencies
+- Mongo
