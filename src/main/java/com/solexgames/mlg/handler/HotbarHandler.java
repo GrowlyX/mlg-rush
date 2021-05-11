@@ -17,6 +17,7 @@ import org.bukkit.inventory.ItemStack;
  */
 
 @Getter
+@SuppressWarnings("all")
 public class HotbarHandler {
 
     private final ItemStack[] defaultInventory;
@@ -24,6 +25,9 @@ public class HotbarHandler {
     private final ItemStack joinGameItem;
     private final ItemStack profileItem;
     private final ItemStack leaveGameItem;
+    private final ItemStack layoutEditorItem;
+    private final ItemStack startSpectateItem;
+    private final ItemStack stopSpectateItem;
 
     private final ItemStack knockbackStick;
     private final ItemStack sandStoneStack;
@@ -35,11 +39,20 @@ public class HotbarHandler {
         this.joinGameItem = new ItemBuilder(Material.COMPASS)
                 .setDisplayName(Color.PRIMARY + "Join an Arena")
                 .create();
+        this.layoutEditorItem = new ItemBuilder(Material.BOOK)
+                .setDisplayName(Color.PRIMARY + "Edit layout")
+                .create();
+        this.startSpectateItem = new ItemBuilder(Material.ENDER_CHEST)
+                .setDisplayName(Color.PRIMARY + "Spectate a match")
+                .create();
         this.profileItem = new ItemBuilder(Material.EMERALD)
                 .setDisplayName(Color.PRIMARY + "Profile")
                 .create();
         this.leaveGameItem = new ItemBuilder(Material.BED)
                 .setDisplayName(ChatColor.RED + ChatColor.BOLD.toString() + "Leave Arena")
+                .create();
+        this.stopSpectateItem = new ItemBuilder(Material.BED)
+                .setDisplayName(ChatColor.RED + ChatColor.BOLD.toString() + "Stop Spectating")
                 .create();
         this.sandStoneStack = new ItemBuilder(Material.SANDSTONE)
                 .setAmount(64)
@@ -71,6 +84,8 @@ public class HotbarHandler {
 
         player.getInventory().setItem(0, this.joinGameItem);
         player.getInventory().setItem(4, this.profileItem);
+        player.getInventory().setItem(7, this.startSpectateItem);
+        player.getInventory().setItem(8, this.layoutEditorItem);
 
         player.updateInventory();
     }
@@ -95,7 +110,7 @@ public class HotbarHandler {
                 final ItemStack itemStack = CorePlugin.getInstance().getHotbarHandler().getDefaultInventory()[i];
 
                 if (itemStack == null) {
-                    player.getInventory().setItem(i, new ItemStack(Material.AIR));
+                    player.getInventory().setItem(i, this.placeholder);
                 } else {
                     player.getInventory().setItem(i, CorePlugin.getInstance().getHotbarHandler().getDefaultInventory()[i]);
                 }
@@ -103,5 +118,13 @@ public class HotbarHandler {
 
             player.updateInventory();
         }
+    }
+
+    public void setupSpectatorHotbar(Player player) {
+        player.getInventory().clear();
+
+        player.getInventory().setItem(8, this.stopSpectateItem);
+
+        player.updateInventory();
     }
 }

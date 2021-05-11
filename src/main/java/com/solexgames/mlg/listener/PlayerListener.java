@@ -3,6 +3,8 @@ package com.solexgames.mlg.listener;
 import com.solexgames.mlg.CorePlugin;
 import com.solexgames.mlg.enums.ArenaTeam;
 import com.solexgames.mlg.handler.ArenaHandler;
+import com.solexgames.mlg.menu.impl.LayoutEditorMenu;
+import com.solexgames.mlg.menu.impl.MatchSpectateMenu;
 import com.solexgames.mlg.menu.impl.SelectGameMenu;
 import com.solexgames.mlg.model.Arena;
 import com.solexgames.mlg.player.ArenaPlayer;
@@ -35,22 +37,13 @@ import org.bukkit.inventory.ItemStack;
  * @since 4/30/2021
  */
 
+@SuppressWarnings("all")
 public class PlayerListener implements Listener {
 
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onAsyncPreLoginHigh(AsyncPlayerPreLoginEvent event) {
-        CorePlugin.getInstance().getPlayerHandler().setupPlayer(event.getUniqueId(), event.getName());
-
-        event.allow();
-    }
-
-    @EventHandler(
-            priority = EventPriority.LOWEST,
-            ignoreCancelled = true
-    )
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onAsyncPreLoginLow(AsyncPlayerPreLoginEvent event) {
         if (event.getLoginResult().equals(AsyncPlayerPreLoginEvent.Result.ALLOWED)) {
-            final GamePlayer gamePlayer = CorePlugin.getInstance().getPlayerHandler().getByUuid(event.getUniqueId());
+            final GamePlayer gamePlayer = new GamePlayer(event.getUniqueId(), event.getName());
 
             if (gamePlayer != null) {
                 event.allow();
@@ -64,7 +57,6 @@ public class PlayerListener implements Listener {
     public void onInteract(PlayerInteractEvent event) {
         final Player player = event.getPlayer();
         final ItemStack itemStack = event.getItem();
-        final ArenaHandler arenaHandler = CorePlugin.getInstance().getArenaHandler();
 
         if (event.getClickedBlock() != null && event.getClickedBlock().getType() != null && event.getClickedBlock().getType().equals(Material.BED_BLOCK) && event.getAction().name().contains("RIGHT") && !event.hasBlock()) {
             event.setCancelled(true);
@@ -79,9 +71,18 @@ public class PlayerListener implements Listener {
                 case COMPASS:
                     new SelectGameMenu().openMenu(player);
                     break;
+                case BOOK:
+                    new LayoutEditorMenu().openMenu(player);
+                    break;
+                case ENDER_CHEST:
+                    new MatchSpectateMenu().openMenu(player);
+                    break;
                 case BED:
-                    if (arenaHandler.isInArena(player)) {
-                        arenaHandler.leaveGame(player, arenaHandler.getByPlayer(player));
+                    if (this.isSpectating(player)) {
+                        CorePlugin.getInstance().getArenaHandler().stopSpectating(player, this.getArena(player));
+                        return;
+                    } else if (this.isInArena(player)) {
+                        CorePlugin.getInstance().getArenaHandler().leaveGame(player, this.getArena(player));
                     }
                     break;
                 default:
@@ -121,6 +122,11 @@ public class PlayerListener implements Listener {
 
             if (arena.getState().equals(ArenaState.IN_GAME)) {
                 if ((int) player.getLocation().getY() <= arena.getCuboid().getYMin()) {
+                    if (this.isSpectating(player)) {
+                        player.teleport(arena.getSpawnOne());
+                        return;
+                    }
+
                     player.teleport(arena.getSpawnFromTeam(arena.getByPlayer(player).getArenaTeam()));
                     arena.broadcastMessage(ChatColor.RED + player.getName() + Color.SECONDARY + " fell into the void!");
 
@@ -128,10 +134,15 @@ public class PlayerListener implements Listener {
                 }
             } else if (arena.getState().equals(ArenaState.AVAILABLE)) {
                 if ((int) player.getLocation().getY() <= arena.getCuboid().getYMin()) {
+                    if (this.isSpectating(player)) {
+                        player.teleport(arena.getSpawnOne());
+                        return;
+                    }
+
                     player.teleport(arena.getSpawnFromTeam(arena.getByPlayer(player).getArenaTeam()));
                 }
             } else {
-                player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
+                player.teleport(Bukkit.getWorld("mlg").getSpawnLocation());
             }
         }
     }
@@ -147,12 +158,20 @@ public class PlayerListener implements Listener {
                 break;
         }
     }
+
     @EventHandler
     public void onDeath(PlayerDeathEvent event) {
         final Player player = event.getEntity();
 
         if (this.isInArena(player)) {
             final Arena arena = this.getArena(player);
+
+            if (this.isSpectating(player)) {
+                player.spigot().respawn();
+                player.teleport(arena.getSpawnOne());
+                return;
+            }
+
             final GamePlayer gamePlayer = CorePlugin.getInstance().getPlayerHandler().getByName(player.getName());
 
             if (gamePlayer != null) {
@@ -199,6 +218,11 @@ public class PlayerListener implements Listener {
         } else {
             final Arena arena = this.getArena(player);
 
+            if (this.isSpectating(player)) {
+                event.setCancelled(true);
+                return;
+            }
+
             if (!arena.getCuboid().isIn(blockLocation) || !arena.getBuildableCuboid().isIn(blockLocation)) {
                 player.sendMessage(ChatColor.RED + "You cannot place blocks here.");
                 event.setCancelled(true);
@@ -218,25 +242,22 @@ public class PlayerListener implements Listener {
                     }
                 }
 
-                this.checkLocations(blockLocation, arena, event);
-                this.checkLocations(event.getBlockAgainst().getLocation(), arena, event);
-
-                if (!event.isCancelled()) {
-                    arena.getBlockLocationList().add(blockLocation);
-
-                    event.setCancelled(false);
+                if (blockLocation.getX() == arena.getSpawnOne().getX() && blockLocation.getZ() == arena.getSpawnOne().getZ()) {
+                    event.setCancelled(true);
+                    return;
                 }
+
+                if (blockLocation.getX() == arena.getSpawnTwo().getX() && blockLocation.getZ() == arena.getSpawnTwo().getZ()) {
+                    event.setCancelled(true);
+                    return;
+                }
+
+                arena.getBlockLocationList().add(blockLocation);
+
+                event.setCancelled(false);
             } else if (arena.getState().equals(ArenaState.AVAILABLE)) {
                 event.setCancelled(true);
             }
-        }
-    }
-
-    public void checkLocations(Location blockLocation, Arena arena, BlockPlaceEvent event) {
-        if (blockLocation.distance(arena.getSpawnOne()) < 1) {
-            event.setCancelled(true);
-        } else if (blockLocation.distance(arena.getSpawnTwo()) < 1) {
-            event.setCancelled(true);
         }
     }
 
@@ -266,6 +287,11 @@ public class PlayerListener implements Listener {
         if (this.isInArena(player)) {
             final Arena arena = this.getArena(player);
 
+            if (this.isSpectating(player)) {
+                event.setCancelled(true);
+                return;
+            }
+
             if ((event.getBlock().getType().equals(Material.BED_BLOCK) || event.getBlock().getType().equals(Material.BED)) && arena.isTeamsBed(event.getBlock().getLocation(), arena.getOpposingTeam(arena.getByPlayer(player))) && arena.getState().equals(ArenaState.IN_GAME)) {
                 arena.incrementPointAndStartRound(player);
             }
@@ -291,6 +317,10 @@ public class PlayerListener implements Listener {
 
         final Arena arena = this.getArena(player);
 
+        if (this.isSpectating(player)) {
+            CorePlugin.getInstance().getArenaHandler().stopSpectating(player, arena);
+        }
+
         if (arena != null) {
             if (arena.getState().equals(ArenaState.IN_GAME)) {
                 arena.end(arena.getOpponentPlayer(player));
@@ -307,7 +337,7 @@ public class PlayerListener implements Listener {
     )
     public void onConnect(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
-        final Location spawn = Bukkit.getWorlds().get(0).getSpawnLocation();
+        final Location spawn = Bukkit.getWorld("mlg").getSpawnLocation();
 
         if (spawn != null) {
             player.teleport(spawn);
@@ -355,12 +385,24 @@ public class PlayerListener implements Listener {
     private boolean isInArena(Player player) {
         final ArenaHandler arenaHandler = CorePlugin.getInstance().getArenaHandler();
 
-        return arenaHandler.isInArena(player);
+        return arenaHandler.isInArena(player) || arenaHandler.isSpectating(player);
+    }
+
+    private boolean isSpectating(Player player) {
+        final ArenaHandler arenaHandler = CorePlugin.getInstance().getArenaHandler();
+
+        return arenaHandler.isSpectating(player);
     }
 
     private Arena getArena(Player player) {
         final ArenaHandler arenaHandler = CorePlugin.getInstance().getArenaHandler();
 
-        return arenaHandler.getByPlayer(player);
+        if (arenaHandler.getByPlayer(player) != null) {
+            return arenaHandler.getByPlayer(player);
+        } else if (arenaHandler.getSpectating(player) != null) {
+            return arenaHandler.getSpectating(player);
+        } else {
+            return null;
+        }
     }
 }

@@ -54,6 +54,7 @@ public class Arena extends StateBasedModel<ArenaState, ArenaPlayer> {
     private final List<Location> blockLocationList = new ArrayList<>();
     private final List<ArenaPlayer> gamePlayerList = new ArrayList<>();
     private final List<Player> allPlayerList = new ArrayList<>();
+    private final List<Player> spectatorList = new ArrayList<>();
 
     @SerializedName("_id")
     private final UUID uuid;
@@ -102,6 +103,7 @@ public class Arena extends StateBasedModel<ArenaState, ArenaPlayer> {
             configurationSection.set(this.name + ".spawn-two", LocationUtil.getStringFromLocation(this.spawnTwo).orElse(null));
         } catch (Exception exception) {
             CorePlugin.getInstance().getLogger().severe("[Arena] Couldn't save the arena " + this.name + ": " + exception.getMessage());
+            exception.printStackTrace();
         }
 
         CorePlugin.getInstance().saveConfig();
@@ -189,44 +191,6 @@ public class Arena extends StateBasedModel<ArenaState, ArenaPlayer> {
         }
     }
 
-    /**
-     * Resets the arena & its players
-     */
-    public void resetAndStop(ArenaPlayer player) {
-        this.arenaState = ArenaState.REGENERATING;
-
-        this.getGamePlayerList().forEach(arenaPlayer -> {
-            arenaPlayer.getPlayer().setGameMode(GameMode.SPECTATOR);
-
-            PlayerUtil.resetPlayer(arenaPlayer.getPlayer());
-
-            Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> {
-                arenaPlayer.getPlayer().setGameMode(GameMode.SURVIVAL);
-                arenaPlayer.getPlayer().teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
-
-                CorePlugin.getInstance().getHotbarHandler().setupLobbyHotbar(arenaPlayer.getPlayer());
-            }, 30L);
-
-            if (player != arenaPlayer) {
-                final GamePlayer gamePlayer = CorePlugin.getInstance().getPlayerHandler().getByName(arenaPlayer.getPlayer().getName());
-
-                if (gamePlayer != null) {
-                    gamePlayer.setLosses(gamePlayer.getLosses() + 1);
-                }
-
-                CorePlugin.getInstance().getArenaHandler().sendEndTitle(arenaPlayer.getPlayer(), false);
-            } else {
-                CorePlugin.getInstance().getArenaHandler().sendEndTitle(arenaPlayer.getPlayer(), true);
-            }
-        });
-
-        this.gamePlayerList.clear();
-        this.allPlayerList.clear();
-
-        Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), this::cleanup, 40L);
-        Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> this.arenaState = ArenaState.AVAILABLE, 60L);
-    }
-
     public boolean isTeamsBed(Location location, ArenaTeam arenaTeam) {
         final Location spawn = arenaTeam == ArenaTeam.BLUE ? this.spawnOne : this.spawnTwo;
 
@@ -270,7 +234,50 @@ public class Arena extends StateBasedModel<ArenaState, ArenaPlayer> {
             this.broadcastMessage(Color.PRIMARY + profile.getPlayer().getName() + Color.SECONDARY + " has won the game!");
         }
 
-        this.resetAndStop(profile);
+        this.arenaState = ArenaState.REGENERATING;
+
+        this.getGamePlayerList().forEach(arenaPlayer -> {
+            arenaPlayer.getPlayer().setGameMode(GameMode.SPECTATOR);
+
+            Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> {
+                arenaPlayer.getPlayer().teleport(Bukkit.getWorld("mlg").getSpawnLocation());
+
+                PlayerUtil.resetPlayer(arenaPlayer.getPlayer());
+
+                CorePlugin.getInstance().getHotbarHandler().setupLobbyHotbar(arenaPlayer.getPlayer());
+            }, 30L);
+
+            if (profile != arenaPlayer) {
+                final GamePlayer player = CorePlugin.getInstance().getPlayerHandler().getByName(arenaPlayer.getPlayer().getName());
+
+                if (player != null) {
+                    player.setLosses(player.getLosses() + 1);
+                }
+
+                CorePlugin.getInstance().getArenaHandler().sendEndTitle(arenaPlayer.getPlayer(), false);
+            } else {
+                CorePlugin.getInstance().getArenaHandler().sendEndTitle(arenaPlayer.getPlayer(), true);
+            }
+        });
+
+        this.getSpectatorList().forEach(player -> {
+            player.sendMessage(Color.PRIMARY + profile.getPlayer().getName() + Color.SECONDARY + " has won the game!");
+
+            Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> {
+                player.teleport(Bukkit.getWorld("mlg").getSpawnLocation());
+
+                PlayerUtil.resetPlayer(player);
+
+                CorePlugin.getInstance().getHotbarHandler().setupLobbyHotbar(player);
+            }, 30L);
+        });
+
+        this.gamePlayerList.clear();
+        this.spectatorList.clear();
+        this.allPlayerList.clear();
+
+        Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), this::cleanup, 40L);
+        Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> this.arenaState = ArenaState.AVAILABLE, 60L);
     }
 
     @Override

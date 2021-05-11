@@ -66,8 +66,9 @@ public class SelectGameMenu extends AbstractPaginatedMenu {
 
         @Override
         public void clicked(Player player, ClickType clickType) {
-            CorePlugin.getInstance().getArenaHandler().addToGame(player, this.arena);
             player.closeInventory();
+
+            CorePlugin.getInstance().getArenaHandler().addToGame(player, this.arena);
         }
 
         private int getDurability() {

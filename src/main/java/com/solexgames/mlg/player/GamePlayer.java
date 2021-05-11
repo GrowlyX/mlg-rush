@@ -70,6 +70,8 @@ public class GamePlayer {
     }
 
     private void loadPlayerData() {
+        System.out.println("loading data");
+
         CompletableFuture.supplyAsync(() -> CorePlugin.getInstance().getMongoHandler().getPlayerCollection().find(Filters.eq("_id", this.uuid)).first()).thenAccept(document -> {
             if (document == null) {
                 this.layout = new Layout(this.uuid);
@@ -100,6 +102,8 @@ public class GamePlayer {
 
                 this.layout.setupDefaultInventory();
             }
+
+            System.out.println(document);
         });
     }
 }

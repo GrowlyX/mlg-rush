@@ -10,7 +10,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.*;
 
-public class PaginationListener implements Listener {
+public class MenuListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onButtonPress(InventoryClickEvent event) {

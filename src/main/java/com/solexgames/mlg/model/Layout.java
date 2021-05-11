@@ -18,7 +18,7 @@ public class Layout {
     private final UUID playerUuid;
 
     @SerializedName("layout")
-    private ItemStack[] itemStacks;
+    private ItemStack[] itemStacks = null;
 
     public void setupDefaultInventory() {
         if (this.itemStacks == null) {

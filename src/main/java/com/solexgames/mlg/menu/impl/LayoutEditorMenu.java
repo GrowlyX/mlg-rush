@@ -13,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LoadoutEditorMenu extends AbstractMenu {
+public class LayoutEditorMenu extends AbstractMenu {
 
     @Override
     public String getTitle(Player player) {
@@ -24,6 +24,7 @@ public class LoadoutEditorMenu extends AbstractMenu {
     public Map<Integer, Button> getButtons(Player player) {
         final Map<Integer, Button> buttonMap = new HashMap<>();
         final GamePlayer gamePlayer = CorePlugin.getInstance().getPlayerHandler().getByName(player.getName());
+        final ItemStack[] itemStacks = gamePlayer.getLayout().getItemStacks() == null ? CorePlugin.getInstance().getHotbarHandler().getDefaultInventory() : gamePlayer.getLayout().getItemStacks();
 
         for (int i = 0; i <= 8; i++) {
             final int finalSlot = i;
@@ -31,10 +32,10 @@ public class LoadoutEditorMenu extends AbstractMenu {
             buttonMap.put(i, new Button() {
                 @Override
                 public ItemStack getButtonItem(Player player) {
-                    final ItemStack itemStack = gamePlayer.getLayout().getItemStacks()[finalSlot];
+                    final ItemStack itemStack = itemStacks[finalSlot];
 
                     if (itemStack != null) {
-                        return gamePlayer.getLayout().getItemStacks()[finalSlot];
+                        return itemStacks[finalSlot];
                     } else {
                         return new ItemStack(Material.AIR);
                     }

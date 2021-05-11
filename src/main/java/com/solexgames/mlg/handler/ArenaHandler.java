@@ -1,20 +1,26 @@
 package com.solexgames.mlg.handler;
 
 import com.solexgames.mlg.CorePlugin;
+import com.solexgames.mlg.duel.DuelRequest;
 import com.solexgames.mlg.enums.ArenaTeam;
 import com.solexgames.mlg.model.Arena;
 import com.solexgames.mlg.player.ArenaPlayer;
 import com.solexgames.mlg.state.impl.ArenaState;
+import com.solexgames.mlg.task.DuelRequestExpirationTask;
 import com.solexgames.mlg.task.GameStartTask;
 import com.solexgames.mlg.util.Color;
 import com.solexgames.mlg.util.LocationUtil;
+import com.solexgames.mlg.util.PlayerUtil;
+import com.solexgames.mlg.util.clickable.Clickable;
 import com.solexgames.mlg.util.cuboid.Cuboid;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import net.md_5.bungee.api.chat.ClickEvent;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.PacketPlayOutTitle;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
@@ -33,6 +39,7 @@ import java.util.UUID;
 public class ArenaHandler {
 
     private final List<Arena> allArenas = new ArrayList<>();
+    private final List<DuelRequest> duelRequests = new ArrayList<>();
 
     /**
      * Loads all arenas from the config.yml
@@ -115,7 +122,7 @@ public class ArenaHandler {
      */
     public void leaveGame(Player player, Arena arena) {
         if (arena == null) {
-            player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
+            player.teleport(Bukkit.getWorld("mlg").getSpawnLocation());
             player.sendMessage(ChatColor.RED + "You aren't currently in an arena.");
             return;
         }
@@ -125,7 +132,7 @@ public class ArenaHandler {
             arena.getGamePlayerList().remove(arena.getByPlayer(player));
             arena.broadcastMessage(Color.PRIMARY + player.getName() + Color.SECONDARY + " has left the arena. " + ChatColor.GRAY + "(" + arena.getGamePlayerList().size() + "/" + arena.getMaxPlayers() + ")");
 
-            player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
+            player.teleport(Bukkit.getWorld("mlg").getSpawnLocation());
 
             CorePlugin.getInstance().getHotbarHandler().setupLobbyHotbar(player);
         } else {
@@ -133,23 +140,54 @@ public class ArenaHandler {
         }
     }
 
+    public void startSpectating(Player player, Arena arena) {
+        arena.broadcastMessage(Color.PRIMARY + player.getDisplayName() + Color.SECONDARY + " has started spectating the match.");
+        arena.getSpectatorList().add(player);
+
+        PlayerUtil.resetPlayer(player);
+        CorePlugin.getInstance().getHotbarHandler().setupSpectatorHotbar(player);
+
+        player.setGameMode(GameMode.SPECTATOR);
+        player.teleport(arena.getAllPlayerList().get(0).getLocation().add(0.0D, 2.0D, 0.0D));
+    }
+
+    public void stopSpectating(Player player, Arena arena) {
+        arena.broadcastMessage(Color.PRIMARY + player.getDisplayName() + Color.SECONDARY + " has stopped spectating the match.");
+        arena.getSpectatorList().remove(player);
+
+        player.teleport(Bukkit.getWorld("mlg").getSpawnLocation());
+
+        PlayerUtil.resetPlayer(player);
+        CorePlugin.getInstance().getHotbarHandler().setupLobbyHotbar(player);
+    }
+
+    public void sendDuelRequest(Player issuer, Player target, Arena selectedArena) {
+        final DuelRequest duelRequest = new DuelRequest(UUID.randomUUID(),
+                issuer.getUniqueId(), target.getUniqueId(),
+                System.currentTimeMillis(), issuer.getDisplayName(),
+                target.getDisplayName(), selectedArena);
+
+        issuer.sendMessage(Color.SECONDARY + "You've sent out a duel request to " + target.getDisplayName() + Color.SECONDARY + " on the map " + Color.PRIMARY + selectedArena.getName() + Color.SECONDARY + "!");
+
+        final Clickable clickable = new Clickable("");
+
+        clickable.add(Color.SECONDARY + "You've received a duel request from " + issuer.getDisplayName() + Color.SECONDARY + "! ");
+        clickable.add(ChatColor.GREEN + ChatColor.BOLD.toString() + "[Accept]", ChatColor.GREEN + "Click to accept " + issuer.getDisplayName() + ChatColor.GREEN + "'s duel request.", "/duel accept " + duelRequest.getId().toString(), ClickEvent.Action.RUN_COMMAND);
+
+        target.spigot().sendMessage(clickable.asComponents());
+
+        this.duelRequests.add(duelRequest);
+
+        new DuelRequestExpirationTask(duelRequest);
+    }
+
     /**
-     * Checks if a player is in an arena or not
+     * Sends the end display title to a player
      * <p></p>
      *
-     * @param player Player to check the status of
-     * @return if the player is in the arena or not
+     * @param player Player to send the title to
+     * @param winner If the title should be the victory title or not
      */
-    public boolean isInArena(Player player) {
-        return this.getByPlayer(player) != null;
-    }
-
-    public Arena getByPlayer(Player player) {
-        return this.allArenas.stream()
-                .filter(kit -> kit.getAllPlayerList().contains(player))
-                .findFirst().orElse(null);
-    }
-
     public void sendEndTitle(Player player, boolean winner) {
         final CraftPlayer craftPlayer = (CraftPlayer) player;
 
@@ -175,5 +213,68 @@ public class ArenaHandler {
 
         craftPlayer.getHandle().playerConnection.sendPacket(packetPlayOutTitle);
         craftPlayer.getHandle().playerConnection.sendPacket(packetPlayOutSubtitle);
+    }
+
+    /**
+     * Checks if a player is in an arena or not
+     * <p></p>
+     *
+     * @param player Player to check the status of
+     * @return if the player is in the arena or not
+     */
+    public boolean isInArena(Player player) {
+        return this.getByPlayer(player) != null;
+    }
+
+    /**
+     * Checks if a player is spectating a game or not
+     * <p></p>
+     *
+     * @param player Player to check the status of
+     * @return if the player is in the arena or not
+     */
+    public boolean isSpectating(Player player) {
+        return this.allArenas.stream()
+                .filter(kit -> kit.getSpectatorList().contains(player))
+                .findFirst().orElse(null) != null;
+    }
+
+    /**
+     * Gets a player's spectating arena
+     * <p></p>
+     *
+     * @param player Player to find an arena from
+     * @return An arena a player is in, or null
+     */
+    public Arena getSpectating(Player player) {
+        return this.allArenas.stream()
+                .filter(kit -> kit.getSpectatorList().contains(player))
+                .findFirst().orElse(null);
+    }
+
+    /**
+     * Gets a player's arena
+     * <p></p>
+     *
+     * @param player Player to find an arena from
+     * @return An arena a player is in, or null
+     */
+    public Arena getByPlayer(Player player) {
+        return this.allArenas.stream()
+                .filter(kit -> kit.getAllPlayerList().contains(player))
+                .findFirst().orElse(null);
+    }
+
+    /**
+     * Gets a player's incoming duel request
+     * <p></p>
+     *
+     * @param uuid UUID of a duel request
+     * @return A duel request from a player, or else null
+     */
+    public DuelRequest getIncomingDuelRequest(UUID uuid) {
+        return this.duelRequests.stream()
+                .filter(duelRequest -> duelRequest.getId().equals(uuid))
+                .findFirst().orElse(null);
     }
 }

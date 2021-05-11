@@ -7,9 +7,8 @@ import com.solexgames.mlg.handler.ArenaHandler;
 import com.solexgames.mlg.handler.HotbarHandler;
 import com.solexgames.mlg.handler.MongoHandler;
 import com.solexgames.mlg.handler.PlayerHandler;
-import com.solexgames.mlg.listener.PaginationListener;
+import com.solexgames.mlg.listener.MenuListener;
 import com.solexgames.mlg.listener.PlayerListener;
-import com.solexgames.mlg.player.GamePlayer;
 import com.solexgames.mlg.util.Color;
 import io.github.nosequel.scoreboard.ScoreboardHandler;
 import lombok.Getter;
@@ -68,11 +67,12 @@ public final class CorePlugin extends JavaPlugin {
         manager.registerCommand(new LeaveCommand());
         manager.registerCommand(new ResetLoadoutCommand());
         manager.registerCommand(new LoadoutCommand());
+        manager.registerCommand(new DuelCommand());
 
         manager.enableUnstableAPI("help");
 
         Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
-        Bukkit.getPluginManager().registerEvents(new PaginationListener(), this);
+        Bukkit.getPluginManager().registerEvents(new MenuListener(), this);
 
         new ScoreboardHandler(this, new ScoreboardAdapter(), 5L);
     }
