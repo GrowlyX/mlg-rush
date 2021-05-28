@@ -1,5 +1,6 @@
-package com.solexgames.mlg.world;
+package com.solexgames.mlg.util.world;
 
+import com.solexgames.mlg.CorePlugin;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.generator.BlockPopulator;
@@ -34,6 +35,6 @@ public class VoidWorldGenerator extends ChunkGenerator {
 
 	@Override
 	public Location getFixedSpawnLocation(World world, Random random) {
-		return new Location(world, 0, 62, 0);
+		return CorePlugin.getInstance().getLocationHandler().getSpawnLocation();
 	}
 }

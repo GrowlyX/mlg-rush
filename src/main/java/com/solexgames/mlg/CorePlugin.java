@@ -12,7 +12,7 @@ import com.solexgames.mlg.state.impl.Arena;
 import com.solexgames.mlg.task.DuelExpireTask;
 import com.solexgames.mlg.util.Color;
 import com.solexgames.mlg.util.CoreConstants;
-import com.solexgames.mlg.world.VoidWorldGenerator;
+import com.solexgames.mlg.util.world.VoidWorldGenerator;
 import io.github.nosequel.scoreboard.ScoreboardHandler;
 import lombok.Getter;
 import org.bukkit.*;
@@ -38,6 +38,7 @@ public final class CorePlugin extends JavaPlugin {
     private PlayerHandler playerHandler;
     private HotbarHandler hotbarHandler;
     private ConfigHandler configHandler;
+    private LocationHandler locationHandler;
 
     private final ConversationFactory conversationFactory = new ConversationFactory(this);
 
@@ -49,6 +50,9 @@ public final class CorePlugin extends JavaPlugin {
 
         this.arenaHandler = new ArenaHandler();
         this.arenaHandler.loadArenas();
+
+        this.locationHandler = new LocationHandler();
+        this.locationHandler.loadSpawn();
 
         this.mongoHandler = new MongoHandler();
         this.playerHandler = new PlayerHandler();

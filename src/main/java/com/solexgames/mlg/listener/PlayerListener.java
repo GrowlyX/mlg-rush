@@ -6,13 +6,13 @@ import com.solexgames.mlg.handler.ArenaHandler;
 import com.solexgames.mlg.menu.impl.LoadoutEditorMenu;
 import com.solexgames.mlg.menu.impl.MatchSpectateMenu;
 import com.solexgames.mlg.menu.impl.SelectGameMenu;
-import com.solexgames.mlg.state.impl.Arena;
 import com.solexgames.mlg.player.ArenaPlayer;
 import com.solexgames.mlg.player.GamePlayer;
+import com.solexgames.mlg.state.impl.Arena;
 import com.solexgames.mlg.state.impl.ArenaState;
 import com.solexgames.mlg.util.Color;
 import com.solexgames.mlg.util.CoreConstants;
-import org.bukkit.Bukkit;
+import com.solexgames.mlg.util.PlayerUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -38,19 +38,6 @@ import org.bukkit.inventory.ItemStack;
 public class PlayerListener implements Listener {
 
     private final CorePlugin plugin = CorePlugin.getInstance();
-
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onAsyncPreLoginLow(AsyncPlayerPreLoginEvent event) {
-        if (event.getLoginResult().equals(AsyncPlayerPreLoginEvent.Result.ALLOWED)) {
-            final GamePlayer gamePlayer = this.plugin.getPlayerHandler().setupPlayer(event.getUniqueId(), event.getName());
-
-            if (gamePlayer != null) {
-                event.allow();
-            } else {
-                event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, CoreConstants.PLAYER_DATA_LOAD);
-            }
-        }
-    }
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
@@ -150,7 +137,7 @@ public class PlayerListener implements Listener {
                     player.teleport(arena.getSpawnFromTeam(arena.getByPlayer(player).getArenaTeam()));
                 }
             } else {
-                player.teleport(Bukkit.getWorld("mlg").getSpawnLocation());
+                player.teleport(CorePlugin.getInstance().getLocationHandler().getSpawnLocation());
             }
         }
     }
@@ -345,7 +332,15 @@ public class PlayerListener implements Listener {
     )
     public void onConnect(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
-        final Location spawn = Bukkit.getWorld("mlg").getSpawnLocation();
+        final Location spawn = CorePlugin.getInstance().getLocationHandler().getSpawnLocation();
+        final GamePlayer gamePlayer = this.plugin.getPlayerHandler().setupPlayer(event.getPlayer().getUniqueId(), event.getPlayer().getName());
+
+        if (gamePlayer == null) {
+            player.kickPlayer(CoreConstants.PLAYER_DATA_LOAD);
+            return;
+        }
+
+        PlayerUtil.resetPlayer(player);
 
         if (spawn != null) {
             player.teleport(spawn);
@@ -385,6 +380,11 @@ public class PlayerListener implements Listener {
 
         if (entity instanceof Player) {
             final Player player = (Player) event.getEntity();
+
+            if (event.getCause().equals(EntityDamageEvent.DamageCause.VOID) && !this.isInArena(player)) {
+                player.teleport(CorePlugin.getInstance().getLocationHandler().getSpawnLocation());
+                return;
+            }
 
             event.setDamage(0.0D);
         }

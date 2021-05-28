@@ -144,7 +144,7 @@ public class ArenaHandler {
      */
     public void leaveGame(Player player, Arena arena) {
         if (arena == null) {
-            player.teleport(Bukkit.getWorld("mlg").getSpawnLocation());
+            player.teleport(CorePlugin.getInstance().getLocationHandler().getSpawnLocation());
             player.sendMessage(ChatColor.RED + "You aren't currently in an arena.");
             return;
         }
@@ -156,7 +156,7 @@ public class ArenaHandler {
             arena.getGamePlayerList().remove(arena.getByPlayer(player));
             arena.broadcastMessage(Color.PRIMARY + player.getName() + Color.SECONDARY + " has left the arena. " + ChatColor.GRAY + "(" + arena.getGamePlayerList().size() + "/" + arena.getMaxPlayers() + ")");
 
-            player.teleport(Bukkit.getWorld("mlg").getSpawnLocation());
+            player.teleport(CorePlugin.getInstance().getLocationHandler().getSpawnLocation());
 
             CorePlugin.getInstance().getHotbarHandler().setupLobbyHotbar(player);
         } else {
@@ -185,7 +185,7 @@ public class ArenaHandler {
         arena.broadcastMessage(Color.PRIMARY + player.getDisplayName() + Color.SECONDARY + " has stopped spectating the match.");
         arena.getSpectatorList().remove(player);
 
-        player.teleport(Bukkit.getWorld("mlg").getSpawnLocation());
+        player.teleport(CorePlugin.getInstance().getLocationHandler().getSpawnLocation());
 
         this.spectatorWeakHashMap.remove(player);
 

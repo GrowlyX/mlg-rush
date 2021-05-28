@@ -19,4 +19,5 @@ language:
   primary-color: "GOLD"
   secondary-color: "YELLOW"
 locations:
+  spawn: ""
   join-game-npc: ""
