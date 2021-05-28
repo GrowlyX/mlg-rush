@@ -6,6 +6,7 @@ import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Default;
 import co.aikar.commands.annotation.Subcommand;
 import com.solexgames.mlg.CorePlugin;
+import com.solexgames.mlg.model.Arena;
 import com.solexgames.mlg.util.Color;
 import com.solexgames.mlg.util.prompt.ArenaNamePrompt;
 import org.bukkit.Bukkit;
@@ -37,5 +38,12 @@ public class ArenaCommand extends BaseCommand {
                 .withLocalEcho(false)
                 .buildConversation(player)
                 .begin();
+    }
+
+    @Subcommand("delete")
+    @CommandPermission("mlgrush.command.arena.subcommand.delete")
+    public void arenaDelete(Player player) {
+        // todo: complete this
+//        final Arena arena = CorePlugin.getInstance().getArenaHandler().getAllArenas()
     }
 }
