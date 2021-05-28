@@ -31,7 +31,7 @@ public class ConfigHandler {
 		for (String key : this.scoreboardConfig.getConfig().getKeys(false)) {
 			final ConfigurationSection section = this.scoreboardConfig.getConfig().getConfigurationSection(key);
 
-			if (section.get("lines") != null) {
+			if (section != null && section.get("lines") != null) {
 				this.scoreboardMap.put(key, new Pair<>(Color.translate(section.getString("title")), Color.translate(section.getStringList("lines"))));
 			}
 		}
