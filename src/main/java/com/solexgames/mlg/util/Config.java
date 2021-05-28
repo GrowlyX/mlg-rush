@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
+@Getter @SuppressWarnings("all")
 public class Config {
 
 	private FileConfiguration config;
