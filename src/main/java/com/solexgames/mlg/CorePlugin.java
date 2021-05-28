@@ -1,15 +1,12 @@
 package com.solexgames.mlg;
 
 import co.aikar.commands.PaperCommandManager;
-import com.solexgames.mlg.adapter.ScoreboardAdapter;
 import com.solexgames.mlg.cache.StatusCache;
 import com.solexgames.mlg.command.*;
-import com.solexgames.mlg.handler.ArenaHandler;
-import com.solexgames.mlg.handler.HotbarHandler;
-import com.solexgames.mlg.handler.MongoHandler;
-import com.solexgames.mlg.handler.PlayerHandler;
+import com.solexgames.mlg.handler.*;
 import com.solexgames.mlg.listener.MenuListener;
 import com.solexgames.mlg.listener.PlayerListener;
+import com.solexgames.mlg.scoreboard.ScoreboardAdapter;
 import com.solexgames.mlg.util.Color;
 import com.solexgames.mlg.util.CoreConstants;
 import com.solexgames.mlg.world.VoidWorldGenerator;
@@ -20,13 +17,7 @@ import org.bukkit.block.Block;
 import org.bukkit.conversations.ConversationFactory;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.generator.BlockPopulator;
-import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
 
 /**
  * @author GrowlyX
@@ -43,6 +34,7 @@ public final class CorePlugin extends JavaPlugin {
     private MongoHandler mongoHandler;
     private PlayerHandler playerHandler;
     private HotbarHandler hotbarHandler;
+    private ConfigHandler configHandler;
 
     private final ConversationFactory conversationFactory = new ConversationFactory(this);
 
@@ -59,6 +51,7 @@ public final class CorePlugin extends JavaPlugin {
         this.mongoHandler = new MongoHandler();
         this.playerHandler = new PlayerHandler();
         this.hotbarHandler = new HotbarHandler();
+        this.configHandler = new ConfigHandler();
 
         this.createDefaultWorld();
 
