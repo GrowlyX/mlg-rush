@@ -1,6 +1,8 @@
 #
-#  MLG Rush - created by GrowlyX (SolexGames)
+#  MLG Rush - created by GrowlyX & puugz (SolexGames)
 #
+settings:
+  server-ip: "nigeria.live.ng"
 mongodb:
   url: ""
 # List of all arenas

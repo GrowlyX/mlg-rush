@@ -86,6 +86,7 @@ public final class CorePlugin extends JavaPlugin {
     private void setupTheming() {
         Color.PRIMARY = ChatColor.valueOf(this.getConfig().getString("language.primary-color"));
         Color.SECONDARY = ChatColor.valueOf(this.getConfig().getString("language.secondary-color"));
+        Color.SERVER_IP = this.getConfig().getString("settings.server-ip");
     }
 
     private void createDefaultWorld() {
