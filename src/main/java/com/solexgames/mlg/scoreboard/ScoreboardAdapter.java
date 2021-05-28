@@ -47,6 +47,12 @@ public class ScoreboardAdapter implements ScoreboardElementHandler {
             }
         }
 
+        element.setTitle(CorePlugin.getInstance().getConfigHandler().getScoreboardList().get(boardType.toString()).getKey());
+
+        for (String s : CorePlugin.getInstance().getConfigHandler().getScoreboardList().get(boardType.toString()).getValue()) {
+            element.add(s);
+        }
+
         return element;
     }
 
