@@ -90,14 +90,10 @@
     </build>
 
     <repositories>
-<!--        <repository>-->
-<!--            <id>spigotmc-repo</id>-->
-<!--            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>-->
-<!--        </repository>-->
-<!--        <repository>-->
-<!--            <id>sonatype</id>-->
-<!--            <url>https://oss.sonatype.org/content/groups/public/</url>-->
-<!--        </repository>-->
+        <repository>
+            <id>sonatype</id>
+            <url>https://oss.sonatype.org/content/groups/public/</url>
+        </repository>
         <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
@@ -109,10 +105,11 @@
     </repositories>
 
     <dependencies>
+        <!-- Shaded Libraries !-->
         <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>mongo-java-driver</artifactId>
-            <version>3.12.7</version>
+            <groupId>net.jitse</groupId>
+            <artifactId>npclib-api</artifactId>
+            <version>2.11.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.github.NoSequel</groupId>
@@ -120,20 +117,22 @@
             <version>d86c2c6d87</version>
         </dependency>
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.20</version>
-            <scope>provided</scope>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongo-java-driver</artifactId>
+            <version>LATEST</version>
         </dependency>
         <dependency>
             <groupId>co.aikar</groupId>
             <artifactId>acf-paper</artifactId>
             <version>0.5.0-SNAPSHOT</version>
         </dependency>
+
+        <!-- Provided Libraries !-->
         <dependency>
-            <groupId>com.mashape.unirest</groupId>
-            <artifactId>unirest-java</artifactId>
-            <version>1.4.9</version>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>LATEST</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.solexgames.spigot</groupId>

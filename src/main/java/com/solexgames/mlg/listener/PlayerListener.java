@@ -94,7 +94,7 @@ public class PlayerListener implements Listener {
     }
 
     @EventHandler
-    public void onDrop(EntitySpawnEvent event) {
+    public void onSpawn(EntitySpawnEvent event) {
         final Entity entity = event.getEntity();
 
         if (!(entity instanceof Player)) {

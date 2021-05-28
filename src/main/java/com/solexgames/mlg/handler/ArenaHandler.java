@@ -17,6 +17,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
+import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketPlayOutTitle;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -26,6 +27,7 @@ import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,6 +39,24 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 public class ArenaHandler {
+
+    private final static Packet[] WINNER_OUT_PACKETS = new Packet[]{
+            new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, IChatBaseComponent.ChatSerializer
+                    .a("{\"text\": \"" + "VICTORY" + "\",color:" + ChatColor.BOLD.name().toLowerCase() + "\",color:" + ChatColor.GOLD.name().toLowerCase() + "}")
+            ),
+            new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, IChatBaseComponent.ChatSerializer
+                    .a("{\"text\": \"" + "You've won the game!" + "\",color:" + ChatColor.GRAY.name().toLowerCase() + "}")
+            ),
+    };
+
+    private final static Packet[] LOSER_OUT_PACKETS = new Packet[]{
+            new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, IChatBaseComponent.ChatSerializer
+                    .a("{\"text\": \"" + "YOU LOST" + "\",color:" + ChatColor.BOLD.name().toLowerCase() + "\",color:" + ChatColor.RED.name().toLowerCase() + "}")
+            ),
+            new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, IChatBaseComponent.ChatSerializer
+                    .a("{\"text\": \"" + "You lost the game!" + "\",color:" + ChatColor.GRAY.name().toLowerCase() + "}")
+            ),
+    };
 
     private final List<Arena> allArenas = new ArrayList<>();
     private final List<DuelRequest> duelRequests = new ArrayList<>();
@@ -198,28 +218,8 @@ public class ArenaHandler {
     public void sendEndTitle(Player player, boolean winner) {
         final CraftPlayer craftPlayer = (CraftPlayer) player;
 
-        PacketPlayOutTitle packetPlayOutTitle;
-        PacketPlayOutTitle packetPlayOutSubtitle;
-
-        if (winner) {
-            packetPlayOutTitle = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, IChatBaseComponent.ChatSerializer
-                    .a("{\"text\": \"" + "VICTORY" + "\",color:" + ChatColor.BOLD.name().toLowerCase() + "\",color:" + ChatColor.GOLD.name().toLowerCase() + "}")
-            );
-            packetPlayOutSubtitle = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, IChatBaseComponent.ChatSerializer
-                    .a("{\"text\": \"" + "You've won the game!" + "\",color:" + ChatColor.GRAY.name().toLowerCase() + "}")
-            );
-
-        } else {
-            packetPlayOutTitle = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, IChatBaseComponent.ChatSerializer
-                    .a("{\"text\": \"" + "YOU LOST" + "\",color:" + ChatColor.BOLD.name().toLowerCase() + "\",color:" + ChatColor.RED.name().toLowerCase() + "}")
-            );
-            packetPlayOutSubtitle = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, IChatBaseComponent.ChatSerializer
-                    .a("{\"text\": \"" + "You lost the game!" + "\",color:" + ChatColor.GRAY.name().toLowerCase() + "}")
-            );
-        }
-
-        craftPlayer.getHandle().playerConnection.sendPacket(packetPlayOutTitle);
-        craftPlayer.getHandle().playerConnection.sendPacket(packetPlayOutSubtitle);
+        Arrays.asList(winner ? ArenaHandler.WINNER_OUT_PACKETS : ArenaHandler.LOSER_OUT_PACKETS)
+                .forEach(packet -> craftPlayer.getHandle().playerConnection.sendPacket(packet));
     }
 
     /**
@@ -227,6 +227,7 @@ public class ArenaHandler {
      * <p></p>
      *
      * @param player Player to check the status of
+     *
      * @return if the player is in the arena or not
      */
     public boolean isInArena(Player player) {
@@ -238,6 +239,7 @@ public class ArenaHandler {
      * <p></p>
      *
      * @param player Player to check the status of
+     *
      * @return if the player is in the arena or not
      */
     public boolean isSpectating(Player player) {
@@ -251,6 +253,7 @@ public class ArenaHandler {
      * <p></p>
      *
      * @param player Player to find an arena from
+     *
      * @return An arena a player is in, or null
      */
     public Arena getSpectating(Player player) {
@@ -264,6 +267,7 @@ public class ArenaHandler {
      * <p></p>
      *
      * @param player Player to find an arena from
+     *
      * @return An arena a player is in, or null
      */
     public Arena getByPlayer(Player player) {
@@ -277,6 +281,7 @@ public class ArenaHandler {
      * <p></p>
      *
      * @param uuid UUID of a duel request
+     *
      * @return A duel request from a player, or else null
      */
     public DuelRequest getIncomingDuelRequest(UUID uuid) {
