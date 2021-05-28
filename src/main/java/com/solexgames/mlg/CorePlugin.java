@@ -8,6 +8,7 @@ import com.solexgames.mlg.listener.MenuListener;
 import com.solexgames.mlg.listener.PlayerListener;
 import com.solexgames.mlg.scoreboard.ScoreboardAdapter;
 import com.solexgames.mlg.util.Color;
+import com.solexgames.mlg.util.Config;
 import com.solexgames.mlg.util.CoreConstants;
 import com.solexgames.mlg.world.VoidWorldGenerator;
 import io.github.nosequel.scoreboard.ScoreboardHandler;
@@ -36,13 +37,15 @@ public final class CorePlugin extends JavaPlugin {
     private HotbarHandler hotbarHandler;
     private ConfigHandler configHandler;
 
+    private Config config;
+
     private final ConversationFactory conversationFactory = new ConversationFactory(this);
 
     @Override
     public void onEnable() {
         instance = this;
 
-        this.saveDefaultConfig();
+        saveDefaultConfig();
 
         this.configHandler = new ConfigHandler();
 
@@ -117,5 +120,10 @@ public final class CorePlugin extends JavaPlugin {
             arena.cleanup();
             arena.saveArenaData();
         });
+    }
+
+    @Override
+    public void saveDefaultConfig() {
+        this.config = new Config("config", this);
     }
 }
