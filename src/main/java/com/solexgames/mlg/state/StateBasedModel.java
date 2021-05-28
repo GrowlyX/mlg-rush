@@ -7,13 +7,14 @@ package com.solexgames.mlg.state;
  * @param <K> model's state enum
  * @param <V> model's profile object
  */
-public abstract class StateBasedModel<K, V> {
 
-    public abstract void start();
-    public abstract void end(V profile);
+public interface StateBasedModel<K, V> {
 
-    public abstract K getState();
+    void start();
+    void end(V profile);
 
-    public abstract void cleanup();
+    K getState();
+
+    void cleanup();
 
 }

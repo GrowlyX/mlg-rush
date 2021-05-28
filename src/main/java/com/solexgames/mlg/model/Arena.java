@@ -32,7 +32,7 @@ import java.util.UUID;
 
 @Getter
 @Setter
-public class Arena extends StateBasedModel<ArenaState, ArenaPlayer> {
+public class Arena implements StateBasedModel<ArenaState, ArenaPlayer> {
 
     public static final ItemStack[] RED_ITEM_STACK_ARRAY = new ItemStack[]{new ItemBuilder(Material.LEATHER_BOOTS).setColor(org.bukkit.Color.RED).create(),
             new ItemBuilder(Material.LEATHER_LEGGINGS).setColor(org.bukkit.Color.RED).create(),
