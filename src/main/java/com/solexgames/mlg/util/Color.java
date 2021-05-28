@@ -1,5 +1,6 @@
 package com.solexgames.mlg.util;
 
+import lombok.experimental.UtilityClass;
 import org.bukkit.ChatColor;
 
 import java.util.ArrayList;
@@ -10,7 +11,8 @@ import java.util.List;
  * @since 3/4/2021
  */
 
-public final class Color {
+@UtilityClass
+public class Color {
 
     public static ChatColor PRIMARY = ChatColor.GOLD;
     public static ChatColor SECONDARY = ChatColor.YELLOW;

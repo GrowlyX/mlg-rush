@@ -1,6 +1,7 @@
 package com.solexgames.mlg.util;
 
 import com.mashape.unirest.http.utils.Base64Coder;
+import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -18,6 +19,7 @@ import java.io.IOException;
  * @source https://gist.github.com/graywolf336/8153678#file-bukkitserialization-java
  */
 
+@UtilityClass
 public final class InventoryUtil {
 
     /**

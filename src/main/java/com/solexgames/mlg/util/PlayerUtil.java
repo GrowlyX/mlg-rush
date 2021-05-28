@@ -1,10 +1,12 @@
 package com.solexgames.mlg.util;
 
+import lombok.experimental.UtilityClass;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public final class PlayerUtil {
+@UtilityClass
+public class PlayerUtil {
 
     /**
      * Resets player related functions
