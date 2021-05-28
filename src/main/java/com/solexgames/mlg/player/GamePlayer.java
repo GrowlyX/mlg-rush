@@ -49,10 +49,8 @@ public class GamePlayer {
         CompletableFuture.runAsync(() -> CorePlugin.getInstance().getMongoHandler().getPlayerCollection().replaceOne(Filters.eq("uuid", this.uuid.toString()), this.getDocument(), new ReplaceOptions().upsert(true)));
 
         if (remove) {
-            CorePlugin.getInstance().getPlayerHandler().getPlayerList().remove(this);
+            CorePlugin.getInstance().getPlayerHandler().getPlayerList().remove(this.getUuid());
         }
-
-        System.out.println("saved data");
     }
 
     public Document getDocument() {
@@ -74,46 +72,38 @@ public class GamePlayer {
     }
 
     private void loadPlayerData() {
-        System.out.println("loading data");
+        CompletableFuture.runAsync(() -> {
+            final Document document = CorePlugin.getInstance().getMongoHandler().getPlayerCollection().find(Filters.eq("uuid", this.uuid.toString())).first();
 
-        CompletableFuture.supplyAsync(() -> CorePlugin.getInstance().getMongoHandler().getPlayerCollection().find(Filters.eq("uuid", this.uuid.toString())).first())
-                .thenAccept(document -> {
-                    if (document == null) {
-                        System.out.println("player data null for: " + this.name);
+            if (document == null) {
+                this.layout = new Layout(this.uuid);
+                this.layout.setupDefaultInventory();
 
-                        this.layout = new Layout(this.uuid);
-                        this.layout.setupDefaultInventory();
+                CorePlugin.getInstance().getServer().getScheduler().runTaskLaterAsynchronously(CorePlugin.getInstance(), () -> this.savePlayerData(false), 20L);
+            } else {
+                if (document.getDouble("kdr") != null) {
+                    this.kdr = document.getDouble("kdr");
+                }
+                if (document.getInteger("kills") != null) {
+                    this.kills = document.getInteger("kills");
+                }
+                if (document.getInteger("deaths") != null) {
+                    this.deaths = document.getInteger("deaths");
+                }
+                if (document.getInteger("totalWins") != null) {
+                    this.wins = document.getInteger("totalWins");
+                }
+                if (document.getInteger("totalLosses") != null) {
+                    this.losses = document.getInteger("totalLosses");
+                }
+                if (document.getString("layout") != null) {
+                    this.layout = GsonFactory.getPrettyGson().fromJson(document.getString("layout"), Layout.class);
+                } else {
+                    this.layout = new Layout(this.uuid);
+                }
 
-                        CorePlugin.getInstance().getServer().getScheduler().runTaskLaterAsynchronously(CorePlugin.getInstance(), () -> this.savePlayerData(false), 20L);
-                    } else {
-                        // for debug because Completeablefuture#suppylasync alr catches excetipns and doesnt rprint them for some weird ass reason
-                        try {
-                            if (document.getDouble("kdr") != null) {
-                                this.kdr = document.getDouble("kdr");
-                            }
-                            if (document.getInteger("kills") != null) {
-                                this.kills = document.getInteger("kills");
-                            }
-                            if (document.getInteger("deaths") != null) {
-                                this.deaths = document.getInteger("deaths");
-                            }
-                            if (document.getInteger("totalWins") != null) {
-                                this.wins = document.getInteger("totalWins");
-                            }
-                            if (document.getInteger("totalLosses") != null) {
-                                this.losses = document.getInteger("totalLosses");
-                            }
-                            if (document.getString("layout") != null) {
-                                this.layout = GsonFactory.getPrettyGson().fromJson(document.getString("layout"), Layout.class);
-                            } else {
-                                this.layout = new Layout(this.uuid);
-                            }
-
-                            this.layout.setupDefaultInventory();
-                        } catch (Exception exception) {
-                            exception.printStackTrace();
-                        }
-                    }
-                });
+                this.layout.setupDefaultInventory();
+            }
+        });
     }
 }
