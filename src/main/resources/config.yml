@@ -2,6 +2,8 @@
 #  MLG Rush - created by GrowlyX & puugz (SolexGames)
 #
 settings:
+  # the server ip used on the scoreboard
+  server-ip: "solexgames.com"
   # should we enable the npc command
   enable-npcs: true
   # what should the amount of points be for a player to win a match
@@ -14,16 +16,13 @@ settings:
   # place blocks their or the opponent's beds
   spawn-protection: false
 mongodb:
-  # MongoDB connection URL
   url: ""
-# list of all arenas
+# List of all arenas
 arenas:
   # for debug; keep this here
   test: ""
 language:
-  # your highlight color which will show on messages
   primary-color: "GOLD"
-  # your primary color which will be used as a secondary background color
   secondary-color: "YELLOW"
 locations:
   join-game-npc: ""

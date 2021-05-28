@@ -64,7 +64,7 @@ public class ArenaHandler {
      * Loads all arenas from the config.yml
      */
     public void loadArenas() {
-        final ConfigurationSection configurationSection = CorePlugin.getInstance().getConfig().getConfigurationSection("arenas");
+        final ConfigurationSection configurationSection = CorePlugin.getInstance().getConfigHandler().getArenasConfig().getConfig().getConfigurationSection("arenas");
 
         configurationSection.getKeys(false).stream().filter(s -> !s.equalsIgnoreCase("test")).forEach(path -> {
             try {

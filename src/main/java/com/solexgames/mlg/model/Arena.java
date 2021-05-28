@@ -90,7 +90,7 @@ public class Arena extends StateBasedModel<ArenaState, ArenaPlayer> {
      * Saves the arena's data to the main config
      */
     public void saveArenaData() {
-        final ConfigurationSection configurationSection = CorePlugin.getInstance().getConfig().getConfigurationSection("arenas");
+        final ConfigurationSection configurationSection = CorePlugin.getInstance().getConfigHandler().getArenasConfig().getConfig().getConfigurationSection("arenas");
 
         try {
             configurationSection.set(this.name + ".uuid", this.uuid.toString());

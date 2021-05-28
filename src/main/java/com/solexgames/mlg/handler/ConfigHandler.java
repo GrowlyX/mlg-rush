@@ -22,9 +22,11 @@ public class ConfigHandler {
 	private final Map<String, Pair<String, List<String>>> scoreboardMap = new HashMap<>();
 
 	private final Config scoreboardConfig;
+	private final Config arenasConfig;
 
 	public ConfigHandler() {
 		this.scoreboardConfig = new Config("scoreboard", CorePlugin.getInstance());
+		this.arenasConfig = new Config("arenas", CorePlugin.getInstance());
 
 		for (String key : this.scoreboardConfig.getConfig().getKeys(false)) {
 			final ConfigurationSection section = this.scoreboardConfig.getConfig().getConfigurationSection(key);
