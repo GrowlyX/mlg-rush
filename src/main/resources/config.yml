@@ -15,3 +15,5 @@ arenas:
 language:
   primary-color: "GOLD"
   secondary-color: "YELLOW"
+locations:
+  join-game-npc: ""

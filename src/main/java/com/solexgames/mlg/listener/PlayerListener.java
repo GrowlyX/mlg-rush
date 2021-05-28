@@ -37,10 +37,12 @@ import org.bukkit.inventory.ItemStack;
 @SuppressWarnings("all")
 public class PlayerListener implements Listener {
 
+    private final CorePlugin plugin = CorePlugin.getInstance();
+
     @EventHandler(priority = EventPriority.LOWEST)
     public void onAsyncPreLoginLow(AsyncPlayerPreLoginEvent event) {
         if (event.getLoginResult().equals(AsyncPlayerPreLoginEvent.Result.ALLOWED)) {
-            final GamePlayer gamePlayer = CorePlugin.getInstance().getPlayerHandler().setupPlayer(event.getUniqueId(), event.getName());
+            final GamePlayer gamePlayer = this.plugin.getPlayerHandler().setupPlayer(event.getUniqueId(), event.getName());
 
             if (gamePlayer != null) {
                 event.allow();
@@ -76,10 +78,10 @@ public class PlayerListener implements Listener {
                     break;
                 case BED:
                     if (this.isSpectating(player)) {
-                        CorePlugin.getInstance().getArenaHandler().stopSpectating(player, this.getArena(player));
+                        this.plugin.getArenaHandler().stopSpectating(player, this.getArena(player));
                         return;
                     } else if (this.isInArena(player)) {
-                        CorePlugin.getInstance().getArenaHandler().leaveGame(player, this.getArena(player));
+                        this.plugin.getArenaHandler().leaveGame(player, this.getArena(player));
                     }
                     break;
                 default:
@@ -136,7 +138,7 @@ public class PlayerListener implements Listener {
                     player.teleport(arena.getSpawnFromTeam(arena.getByPlayer(player).getArenaTeam()));
                     arena.broadcastMessage(ChatColor.RED + player.getName() + Color.SECONDARY + " fell into the void!");
 
-                    CorePlugin.getInstance().getHotbarHandler().setupArenaInGameHotbar(player);
+                    this.plugin.getHotbarHandler().setupArenaInGameHotbar(player);
                 }
             } else if (arena.getState().equals(ArenaState.AVAILABLE)) {
                 if ((int) player.getLocation().getY() <= arena.getCuboid().getYMin()) {
@@ -178,7 +180,7 @@ public class PlayerListener implements Listener {
                 return;
             }
 
-            final GamePlayer gamePlayer = CorePlugin.getInstance().getPlayerHandler().getByName(player.getName());
+            final GamePlayer gamePlayer = this.plugin.getPlayerHandler().getByName(player.getName());
 
             if (gamePlayer != null) {
                 final ArenaPlayer arenaPlayer = arena.getByPlayer(player);
@@ -189,13 +191,13 @@ public class PlayerListener implements Listener {
                 player.spigot().respawn();
                 player.teleport((arenaPlayer.getArenaTeam() == ArenaTeam.BLUE ? arena.getSpawnOne() : arena.getSpawnTwo()));
 
-                CorePlugin.getInstance().getHotbarHandler().setupArenaInGameHotbar(player);
+                this.plugin.getHotbarHandler().setupArenaInGameHotbar(player);
             }
 
             final Player damagingPlayer = event.getEntity().getKiller();
 
             if (damagingPlayer != null) {
-                final GamePlayer damagingGamePlayer = CorePlugin.getInstance().getPlayerHandler().getByName(damagingPlayer.getName());
+                final GamePlayer damagingGamePlayer = this.plugin.getPlayerHandler().getByName(damagingPlayer.getName());
 
                 if (damagingGamePlayer != null) {
                     final ArenaPlayer damagingArenaPlayer = arena.getByPlayer(damagingPlayer);
@@ -315,7 +317,7 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.LOW)
     public void onDisconnect(PlayerQuitEvent event) {
         final Player player = event.getPlayer();
-        final GamePlayer gamePlayer = CorePlugin.getInstance().getPlayerHandler().getByUuid(player.getUniqueId());
+        final GamePlayer gamePlayer = this.plugin.getPlayerHandler().getByUuid(player.getUniqueId());
 
         if (gamePlayer != null) {
             gamePlayer.savePlayerData(true);
@@ -324,14 +326,14 @@ public class PlayerListener implements Listener {
         final Arena arena = this.getArena(player);
 
         if (this.isSpectating(player)) {
-            CorePlugin.getInstance().getArenaHandler().stopSpectating(player, arena);
+            this.plugin.getArenaHandler().stopSpectating(player, arena);
         }
 
         if (arena != null) {
             if (arena.getState().equals(ArenaState.IN_GAME)) {
                 arena.end(arena.getOpponentPlayer(player));
             } else {
-                CorePlugin.getInstance().getArenaHandler().leaveGame(player, arena);
+                this.plugin.getArenaHandler().leaveGame(player, arena);
             }
         }
 
@@ -349,7 +351,7 @@ public class PlayerListener implements Listener {
             player.teleport(spawn);
         }
 
-        CorePlugin.getInstance().getHotbarHandler().setupLobbyHotbar(player);
+        this.plugin.getHotbarHandler().setupLobbyHotbar(player);
 
         event.setJoinMessage(null);
     }
@@ -389,19 +391,19 @@ public class PlayerListener implements Listener {
     }
 
     private boolean isInArena(Player player) {
-        final ArenaHandler arenaHandler = CorePlugin.getInstance().getArenaHandler();
+        final ArenaHandler arenaHandler = this.plugin.getArenaHandler();
 
         return arenaHandler.isInArena(player) || arenaHandler.isSpectating(player);
     }
 
     private boolean isSpectating(Player player) {
-        final ArenaHandler arenaHandler = CorePlugin.getInstance().getArenaHandler();
+        final ArenaHandler arenaHandler = this.plugin.getArenaHandler();
 
         return arenaHandler.isSpectating(player);
     }
 
     private Arena getArena(Player player) {
-        final ArenaHandler arenaHandler = CorePlugin.getInstance().getArenaHandler();
+        final ArenaHandler arenaHandler = this.plugin.getArenaHandler();
 
         if (arenaHandler.getByPlayer(player) != null) {
             return arenaHandler.getByPlayer(player);

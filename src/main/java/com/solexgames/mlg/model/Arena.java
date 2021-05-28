@@ -258,6 +258,8 @@ public class Arena extends StateBasedModel<ArenaState, ArenaPlayer> {
             } else {
                 CorePlugin.getInstance().getArenaHandler().sendEndTitle(arenaPlayer.getPlayer(), true);
             }
+
+            CorePlugin.getInstance().getArenaHandler().getArenaWeakHashMap().remove(arenaPlayer.getPlayer());
         });
 
         this.getSpectatorList().forEach(player -> {

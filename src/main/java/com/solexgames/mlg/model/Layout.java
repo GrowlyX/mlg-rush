@@ -10,6 +10,11 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
 
+/**
+ * @author GrowlyX
+ * @since ???
+ */
+
 @Getter
 @RequiredArgsConstructor
 public class Layout {

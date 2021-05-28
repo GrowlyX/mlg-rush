@@ -21,15 +21,11 @@ import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketPlayOutTitle;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author GrowlyX
@@ -40,7 +36,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class ArenaHandler {
 
-    private final static Packet[] WINNER_OUT_PACKETS = new Packet[]{
+    private final static Packet<?>[] WINNER_OUT_PACKETS = new Packet[]{
             new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, IChatBaseComponent.ChatSerializer
                     .a("{\"text\": \"" + "VICTORY" + "\",color:" + ChatColor.BOLD.name().toLowerCase() + "\",color:" + ChatColor.GOLD.name().toLowerCase() + "}")
             ),
@@ -49,7 +45,7 @@ public class ArenaHandler {
             ),
     };
 
-    private final static Packet[] LOSER_OUT_PACKETS = new Packet[]{
+    private final static Packet<?>[] LOSER_OUT_PACKETS = new Packet[]{
             new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, IChatBaseComponent.ChatSerializer
                     .a("{\"text\": \"" + "YOU LOST" + "\",color:" + ChatColor.BOLD.name().toLowerCase() + "\",color:" + ChatColor.RED.name().toLowerCase() + "}")
             ),
@@ -57,6 +53,9 @@ public class ArenaHandler {
                     .a("{\"text\": \"" + "You lost the game!" + "\",color:" + ChatColor.GRAY.name().toLowerCase() + "}")
             ),
     };
+
+    private final WeakHashMap<Player, Arena> arenaWeakHashMap = new WeakHashMap<>();
+    private final WeakHashMap<Player, Arena> spectatorWeakHashMap = new WeakHashMap<>();
 
     private final List<Arena> allArenas = new ArrayList<>();
     private final List<DuelRequest> duelRequests = new ArrayList<>();
@@ -117,6 +116,8 @@ public class ArenaHandler {
                 return;
             }
 
+            this.arenaWeakHashMap.put(player, arena);
+
             arena.getAllPlayerList().add(player);
             arena.getGamePlayerList().add(new ArenaPlayer(arena, (arena.getGamePlayerList().size() == 0 ? ArenaTeam.BLUE : (arena.getGamePlayerList().get(0).getArenaTeam() == ArenaTeam.BLUE ? ArenaTeam.RED : ArenaTeam.BLUE)), player));
             arena.broadcastMessage(Color.PRIMARY + player.getName() + Color.SECONDARY + " has joined the arena. " + ChatColor.GRAY + "(" + arena.getGamePlayerList().size() + "/" + arena.getMaxPlayers() + ")");
@@ -148,6 +149,8 @@ public class ArenaHandler {
         }
 
         if (arena.getState().equals(ArenaState.AVAILABLE)) {
+            this.arenaWeakHashMap.remove(player);
+
             arena.getAllPlayerList().remove(player);
             arena.getGamePlayerList().remove(arena.getByPlayer(player));
             arena.broadcastMessage(Color.PRIMARY + player.getName() + Color.SECONDARY + " has left the arena. " + ChatColor.GRAY + "(" + arena.getGamePlayerList().size() + "/" + arena.getMaxPlayers() + ")");
@@ -163,6 +166,8 @@ public class ArenaHandler {
     public void startSpectating(Player player, Arena arena) {
         arena.broadcastMessage(Color.PRIMARY + player.getDisplayName() + Color.SECONDARY + " has started spectating the match.");
         arena.getSpectatorList().add(player);
+
+        this.spectatorWeakHashMap.put(player, arena);
 
         PlayerUtil.resetPlayer(player);
         CorePlugin.getInstance().getHotbarHandler().setupSpectatorHotbar(player);
@@ -181,9 +186,16 @@ public class ArenaHandler {
 
         player.teleport(Bukkit.getWorld("mlg").getSpawnLocation());
 
+        this.spectatorWeakHashMap.remove(player);
+
         PlayerUtil.resetPlayer(player);
 
-        arena.getAllPlayerList().forEach(player1 -> player1.showPlayer(player));
+        arena.getAllPlayerList().forEach(player1 -> {
+            // Just incase the player's offline already
+            if (player != null) {
+                player1.showPlayer(player);
+            }
+        });
 
         CorePlugin.getInstance().getHotbarHandler().setupLobbyHotbar(player);
     }
@@ -199,7 +211,7 @@ public class ArenaHandler {
         final Clickable clickable = new Clickable("");
 
         clickable.add(Color.SECONDARY + "You've received a duel request from " + issuer.getDisplayName() + Color.SECONDARY + "! ");
-        clickable.add(ChatColor.GREEN + ChatColor.BOLD.toString() + "[Accept]", ChatColor.GREEN + "Click to accept " + issuer.getDisplayName() + ChatColor.GREEN + "'s duel request.", "/duel accept " + duelRequest.getId().toString(), ClickEvent.Action.RUN_COMMAND);
+        clickable.add(ChatColor.GREEN + ChatColor.BOLD.toString() + "[Click to Accept]", ChatColor.GREEN + "Click to accept " + issuer.getDisplayName() + ChatColor.GREEN + "'s duel request.", "/duel accept " + duelRequest.getId().toString(), ClickEvent.Action.RUN_COMMAND);
 
         target.spigot().sendMessage(clickable.asComponents());
 
@@ -243,9 +255,7 @@ public class ArenaHandler {
      * @return if the player is in the arena or not
      */
     public boolean isSpectating(Player player) {
-        return this.allArenas.stream()
-                .filter(kit -> kit.getSpectatorList().contains(player))
-                .findFirst().orElse(null) != null;
+        return this.getSpectating(player) != null;
     }
 
     /**
@@ -257,9 +267,7 @@ public class ArenaHandler {
      * @return An arena a player is in, or null
      */
     public Arena getSpectating(Player player) {
-        return this.allArenas.stream()
-                .filter(kit -> kit.getSpectatorList().contains(player))
-                .findFirst().orElse(null);
+        return this.spectatorWeakHashMap.getOrDefault(player, null);
     }
 
     /**
@@ -271,9 +279,7 @@ public class ArenaHandler {
      * @return An arena a player is in, or null
      */
     public Arena getByPlayer(Player player) {
-        return this.allArenas.stream()
-                .filter(kit -> kit.getAllPlayerList().contains(player))
-                .findFirst().orElse(null);
+        return this.arenaWeakHashMap.getOrDefault(player, null);
     }
 
     /**

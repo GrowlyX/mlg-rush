@@ -2,6 +2,7 @@ package com.solexgames.mlg;
 
 import co.aikar.commands.PaperCommandManager;
 import com.solexgames.mlg.adapter.ScoreboardAdapter;
+import com.solexgames.mlg.cache.StatusCache;
 import com.solexgames.mlg.command.*;
 import com.solexgames.mlg.handler.ArenaHandler;
 import com.solexgames.mlg.handler.HotbarHandler;
@@ -88,6 +89,7 @@ public final class CorePlugin extends JavaPlugin {
         manager.enableUnstableAPI("help");
 
         new ScoreboardHandler(this, new ScoreboardAdapter(), 5L);
+        new StatusCache().runTaskTimer(this, 20L, 20L);
     }
 
     private void setupTheming() {

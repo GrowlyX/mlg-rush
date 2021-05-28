@@ -3,10 +3,10 @@ package com.solexgames.mlg.handler;
 import com.solexgames.mlg.player.GamePlayer;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author GrowlyX
@@ -17,12 +17,12 @@ import java.util.UUID;
 @NoArgsConstructor
 public class PlayerHandler {
 
-    private final List<GamePlayer> playerList = new ArrayList<>();
+    private final Map<UUID, GamePlayer> playerList = new HashMap<>();
 
     public GamePlayer setupPlayer(UUID uuid, String name) {
         final GamePlayer gamePlayer = new GamePlayer(uuid, name);
 
-        this.playerList.add(gamePlayer);
+        this.playerList.put(uuid, gamePlayer);
 
         return gamePlayer;
     }
@@ -34,9 +34,13 @@ public class PlayerHandler {
      * @return A profile with the name {@param name}
      */
     public GamePlayer getByName(String name) {
-        return this.playerList.stream()
-                .filter(gamePlayer -> gamePlayer.getName().equalsIgnoreCase(name))
-                .findFirst().orElse(null);
+        final Player player = Bukkit.getPlayer(name);
+
+        if (player == null) {
+            return null;
+        }
+
+        return this.playerList.getOrDefault(player.getUniqueId(), null);
     }
 
     /**
@@ -46,8 +50,12 @@ public class PlayerHandler {
      * @return A profile with the name {@param uuid}
      */
     public GamePlayer getByUuid(UUID uuid) {
-        return this.playerList.stream()
-                .filter(gamePlayer -> gamePlayer.getUuid().equals(uuid))
-                .findFirst().orElse(null);
+        final Player player = Bukkit.getPlayer(uuid);
+
+        if (player == null) {
+            return null;
+        }
+
+        return this.playerList.getOrDefault(player.getUniqueId(), null);
     }
 }
