@@ -147,7 +147,11 @@ public class ArenaHandler {
         PlayerUtil.resetPlayer(player);
         CorePlugin.getInstance().getHotbarHandler().setupSpectatorHotbar(player);
 
-        player.setGameMode(GameMode.SPECTATOR);
+        player.setAllowFlight(true);
+        player.setFlying(true);
+
+        arena.getAllPlayerList().forEach(player1 -> player1.hidePlayer(player));
+
         player.teleport(arena.getAllPlayerList().get(0).getLocation().add(0.0D, 2.0D, 0.0D));
     }
 
@@ -158,6 +162,9 @@ public class ArenaHandler {
         player.teleport(Bukkit.getWorld("mlg").getSpawnLocation());
 
         PlayerUtil.resetPlayer(player);
+
+        arena.getAllPlayerList().forEach(player1 -> player1.showPlayer(player));
+
         CorePlugin.getInstance().getHotbarHandler().setupLobbyHotbar(player);
     }
 
