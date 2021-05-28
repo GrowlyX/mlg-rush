@@ -37,15 +37,11 @@ public final class CorePlugin extends JavaPlugin {
     private HotbarHandler hotbarHandler;
     private ConfigHandler configHandler;
 
-    private Config config;
-
     private final ConversationFactory conversationFactory = new ConversationFactory(this);
 
     @Override
     public void onEnable() {
         instance = this;
-
-        saveDefaultConfig();
 
         this.configHandler = new ConfigHandler();
 
@@ -120,10 +116,5 @@ public final class CorePlugin extends JavaPlugin {
             arena.cleanup();
             arena.saveArenaData();
         });
-    }
-
-    @Override
-    public void saveDefaultConfig() {
-        this.config = new Config("config", this);
     }
 }

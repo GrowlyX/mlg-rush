@@ -26,7 +26,7 @@ public class MongoHandler {
 
     public MongoHandler() {
         try {
-            this.client = new MongoClient(new MongoClientURI(CorePlugin.getInstance().getConfig().getString("mongodb.url")));
+            this.client = new MongoClient(new MongoClientURI(CorePlugin.getInstance().getConfigHandler().getConfig().getString("mongodb.url")));
             this.database = client.getDatabase("SGSoftware");
 
             this.playerCollection = this.database.getCollection("MLGRush");

@@ -21,10 +21,12 @@ public class ConfigHandler {
 
 	private final Map<String, Pair<String, List<String>>> scoreboardMap = new HashMap<>();
 
+	private final Config config;
 	private final Config scoreboardConfig;
 	private final Config arenasConfig;
 
 	public ConfigHandler() {
+		this.config = new Config("config", CorePlugin.getInstance());
 		this.scoreboardConfig = new Config("scoreboard", CorePlugin.getInstance());
 		this.arenasConfig = new Config("arenas", CorePlugin.getInstance());
 
