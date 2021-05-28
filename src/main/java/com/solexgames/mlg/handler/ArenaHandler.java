@@ -61,7 +61,7 @@ public class ArenaHandler {
     private final List<DuelRequest> duelRequests = new ArrayList<>();
 
     /**
-     * Loads all arenas from the config.yml
+     * Loads all arenas from arenas.yml
      */
     public void loadArenas() {
         final ConfigurationSection configurationSection = CorePlugin.getInstance().getConfigHandler().getArenasConfig().getConfig().getConfigurationSection("arenas");
