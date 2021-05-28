@@ -89,7 +89,7 @@ public final class CorePlugin extends JavaPlugin {
         Color.PRIMARY = ChatColor.valueOf(this.getConfig().getString("language.primary-color").toUpperCase().replace(" ", "_"));
         Color.SECONDARY = ChatColor.valueOf(this.getConfig().getString("language.secondary-color").toUpperCase().replace(" ", "_"));
 
-        CoreConstants.SERVER_IP = this.getConfig().getString("settings.server-ip");
+        CoreConstants.DEFAULT_SCOREBOARD_TITLE = Color.translate(this.getConfigHandler().getScoreboardConfig().getString("DEFAULT_SCOREBOARD_TITLE"));
         CoreConstants.NPC_ENABLED = this.getConfig().getBoolean("settings.enable-npcs");
     }
 

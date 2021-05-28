@@ -5,6 +5,7 @@ import com.solexgames.mlg.cache.StatusCache;
 import com.solexgames.mlg.model.Arena;
 import com.solexgames.mlg.player.ArenaPlayer;
 import com.solexgames.mlg.player.GamePlayer;
+import com.solexgames.mlg.util.CoreConstants;
 import io.github.nosequel.scoreboard.element.ScoreboardElement;
 import io.github.nosequel.scoreboard.element.ScoreboardElementHandler;
 import javafx.util.Pair;
@@ -26,7 +27,7 @@ public class ScoreboardAdapter implements ScoreboardElementHandler {
         final ScoreboardElement element = new ScoreboardElement();
         final GamePlayer gamePlayer = CorePlugin.getInstance().getPlayerHandler().getByName(player.getName());
 
-        element.setTitle("&6&lMLG Rush");
+        element.setTitle(CoreConstants.DEFAULT_SCOREBOARD_TITLE);
 
         if (gamePlayer == null) {
             return element;
@@ -65,8 +66,7 @@ public class ScoreboardAdapter implements ScoreboardElementHandler {
         final GamePlayer gamePlayer = CorePlugin.getInstance().getPlayerHandler().getByName(player.getName());
         final ArenaPlayer arenaPlayer = arena != null ? arena.getByPlayer(player) : null;
 
-        return input
-                .replace("%player%", player.getName())
+        return input.replace("%player%", player.getName())
                 .replace("%displayname%", player.getDisplayName())
                 .replace("%wins%", gamePlayer.getWins() + "")
                 .replace("%losses%", gamePlayer.getLosses() + "")
