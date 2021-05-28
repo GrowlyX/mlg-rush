@@ -10,3 +10,5 @@ arenas:
 language:
   primary-color: "GOLD"
   secondary-color: "YELLOW"
+# the server ip used on the scoreboard
+server-ip: "mlg.rush"

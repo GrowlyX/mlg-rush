@@ -10,13 +10,19 @@ import com.solexgames.mlg.handler.PlayerHandler;
 import com.solexgames.mlg.listener.MenuListener;
 import com.solexgames.mlg.listener.PlayerListener;
 import com.solexgames.mlg.util.Color;
+import com.solexgames.mlg.world.VoidWorldGenerator;
 import io.github.nosequel.scoreboard.ScoreboardHandler;
 import lombok.Getter;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Difficulty;
+import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.conversations.ConversationFactory;
+import org.bukkit.generator.BlockPopulator;
+import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 /**
  * @author GrowlyX
@@ -51,6 +57,20 @@ public final class CorePlugin extends JavaPlugin {
         this.mongoHandler = new MongoHandler();
         this.playerHandler = new PlayerHandler();
         this.hotbarHandler = new HotbarHandler();
+
+        if (this.getServer().getWorld("mlg") == null) {
+            this.getLogger().info("[World] Creating new 'mlg' world...");
+
+            World world = this.getServer().createWorld(new WorldCreator("mlg").generator(new VoidWorldGenerator()));
+
+            world.setSpawnLocation(0, 62, 0);
+
+            Block block = world.getBlockAt(0, 61, 0);
+            block.setType(Material.BEDROCK);
+            block.getState().update();
+
+            this.getLogger().info("[World] Created 'mlg' world.");
+        }
 
         this.getServer().getWorlds().forEach(world -> {
             world.setDifficulty(Difficulty.NORMAL);
