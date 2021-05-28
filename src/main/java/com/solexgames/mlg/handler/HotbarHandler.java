@@ -23,7 +23,6 @@ public class HotbarHandler {
     private final ItemStack[] defaultInventory;
 
     private final ItemStack joinGameItem;
-    private final ItemStack profileItem;
     private final ItemStack leaveGameItem;
     private final ItemStack layoutEditorItem;
     private final ItemStack startSpectateItem;
@@ -44,9 +43,6 @@ public class HotbarHandler {
                 .create();
         this.startSpectateItem = new ItemBuilder(Material.ENDER_CHEST)
                 .setDisplayName(Color.PRIMARY + "Spectate a match")
-                .create();
-        this.profileItem = new ItemBuilder(Material.EMERALD)
-                .setDisplayName(Color.PRIMARY + "Profile")
                 .create();
         this.leaveGameItem = new ItemBuilder(Material.BED)
                 .setDisplayName(ChatColor.RED + ChatColor.BOLD.toString() + "Leave Arena")
@@ -83,8 +79,7 @@ public class HotbarHandler {
         player.getInventory().clear();
 
         player.getInventory().setItem(0, this.joinGameItem);
-        player.getInventory().setItem(4, this.profileItem);
-        player.getInventory().setItem(7, this.startSpectateItem);
+        player.getInventory().setItem(1, this.startSpectateItem);
         player.getInventory().setItem(8, this.layoutEditorItem);
 
         player.updateInventory();
@@ -92,7 +87,6 @@ public class HotbarHandler {
 
     public void setupArenaWaitingHotbar(Player player) {
         player.getInventory().clear();
-
         player.getInventory().setItem(8, this.leaveGameItem);
 
         player.updateInventory();
@@ -122,7 +116,6 @@ public class HotbarHandler {
 
     public void setupSpectatorHotbar(Player player) {
         player.getInventory().clear();
-
         player.getInventory().setItem(8, this.stopSpectateItem);
 
         player.updateInventory();
