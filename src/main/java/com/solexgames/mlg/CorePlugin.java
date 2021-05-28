@@ -43,7 +43,8 @@ public final class CorePlugin extends JavaPlugin {
         instance = this;
 
         this.saveDefaultConfig();
-        this.setupTheming();
+
+        this.configHandler = new ConfigHandler();
 
         this.arenaHandler = new ArenaHandler();
         this.arenaHandler.loadArenas();
@@ -51,8 +52,8 @@ public final class CorePlugin extends JavaPlugin {
         this.mongoHandler = new MongoHandler();
         this.playerHandler = new PlayerHandler();
         this.hotbarHandler = new HotbarHandler();
-        this.configHandler = new ConfigHandler();
 
+        this.setupTheming();
         this.createDefaultWorld();
 
         this.getServer().getWorlds().forEach(world -> {
