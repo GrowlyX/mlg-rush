@@ -61,7 +61,7 @@ public class LayoutEditorMenu extends AbstractMenu {
 
         player.sendMessage(new String[]{
                 Color.SECONDARY + "You've modified your layout!",
-                ChatColor.GRAY.toString() + ChatColor.ITALIC + "If you need to reset your layout, try " + Color.SECONDARY + "/resetlayout"
+                ChatColor.GRAY.toString() + ChatColor.ITALIC + "If you need to reset your layout, try " + Color.SECONDARY + "/resetloadout" + ChatColor.GRAY.toString() + ChatColor.ITALIC + "."
         });
 
         CorePlugin.getInstance().getHotbarHandler().setupLobbyHotbar(player);

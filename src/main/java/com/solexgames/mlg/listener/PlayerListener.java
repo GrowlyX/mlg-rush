@@ -43,7 +43,7 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onAsyncPreLoginLow(AsyncPlayerPreLoginEvent event) {
         if (event.getLoginResult().equals(AsyncPlayerPreLoginEvent.Result.ALLOWED)) {
-            final GamePlayer gamePlayer = new GamePlayer(event.getUniqueId(), event.getName());
+            final GamePlayer gamePlayer = CorePlugin.getInstance().getPlayerHandler().setupPlayer(event.getUniqueId(), event.getName());
 
             if (gamePlayer != null) {
                 event.allow();
@@ -312,7 +312,7 @@ public class PlayerListener implements Listener {
         final GamePlayer gamePlayer = CorePlugin.getInstance().getPlayerHandler().getByUuid(player.getUniqueId());
 
         if (gamePlayer != null) {
-            gamePlayer.savePlayerData();
+            gamePlayer.savePlayerData(true);
         }
 
         final Arena arena = this.getArena(player);

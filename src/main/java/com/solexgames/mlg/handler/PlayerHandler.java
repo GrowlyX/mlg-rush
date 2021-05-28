@@ -19,10 +19,12 @@ public class PlayerHandler {
 
     private final List<GamePlayer> playerList = new ArrayList<>();
 
-    public void setupPlayer(UUID uuid, String name) {
+    public GamePlayer setupPlayer(UUID uuid, String name) {
         final GamePlayer gamePlayer = new GamePlayer(uuid, name);
 
         this.playerList.add(gamePlayer);
+
+        return gamePlayer;
     }
 
     /**

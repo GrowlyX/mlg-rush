@@ -59,6 +59,9 @@ public final class CorePlugin extends JavaPlugin {
             this.getLogger().info("[World] Updated world settings for: " + world.getName());
         });
 
+        Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
+        Bukkit.getPluginManager().registerEvents(new MenuListener(), this);
+
         final PaperCommandManager manager = new PaperCommandManager(this);
 
         manager.registerCommand(new ArenaCommand());
@@ -70,9 +73,6 @@ public final class CorePlugin extends JavaPlugin {
         manager.registerCommand(new DuelCommand());
 
         manager.enableUnstableAPI("help");
-
-        Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
-        Bukkit.getPluginManager().registerEvents(new MenuListener(), this);
 
         new ScoreboardHandler(this, new ScoreboardAdapter(), 5L);
     }
