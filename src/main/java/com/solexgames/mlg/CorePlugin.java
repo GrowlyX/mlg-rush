@@ -17,6 +17,8 @@ import lombok.Getter;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.conversations.ConversationFactory;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -35,13 +37,11 @@ public final class CorePlugin extends JavaPlugin {
 
     @Getter
     private static CorePlugin instance;
-
+    private final ConversationFactory conversationFactory = new ConversationFactory(this);
     private ArenaHandler arenaHandler;
     private MongoHandler mongoHandler;
     private PlayerHandler playerHandler;
     private HotbarHandler hotbarHandler;
-
-    private final ConversationFactory conversationFactory = new ConversationFactory(this);
 
     @Override
     public void onEnable() {
@@ -62,6 +62,10 @@ public final class CorePlugin extends JavaPlugin {
         this.getServer().getWorlds().forEach(world -> {
             world.setDifficulty(Difficulty.NORMAL);
             world.setTime(1000);
+
+            world.getEntities().stream()
+                    .filter(entity -> !(entity instanceof Player))
+                    .forEach(Entity::remove);
 
             this.getLogger().info("[World] Updated world settings for: " + world.getName());
         });
