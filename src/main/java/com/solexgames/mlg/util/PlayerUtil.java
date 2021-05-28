@@ -15,6 +15,13 @@ public class PlayerUtil {
      * @param player Player to reset
      */
     public static void resetPlayer(Player player) {
+        player.getInventory().setArmorContents(new ItemStack[4]);
+        player.getInventory().setContents(new ItemStack[36]);
+
+        PlayerUtil.restorePlayer(player);
+    }
+
+    public static void restorePlayer(Player player) {
         player.getActivePotionEffects().clear();
 
         player.setHealth(20.0D);
@@ -27,9 +34,6 @@ public class PlayerUtil {
         player.setAllowFlight(false);
         player.setFlying(false);
         player.setGameMode(GameMode.SURVIVAL);
-
-        player.getInventory().setArmorContents(new ItemStack[4]);
-        player.getInventory().setContents(new ItemStack[36]);
 
         player.getActivePotionEffects().forEach(effect -> player.removePotionEffect(effect.getType()));
 

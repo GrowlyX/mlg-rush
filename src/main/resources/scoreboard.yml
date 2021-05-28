@@ -40,6 +40,19 @@ GAME_STARTING:
     - "&7&omlg.rush"
     - "&7&m----------------"
 
+SPECTATING:
+  title: "&6&lMLG Rush"
+  lines:
+    - "&7&m----------------"
+    - "%player1%"
+    - "vs."
+    - "%player2%"
+    - ""
+    - "Arena: &6%arena%"
+    - ""
+    - "&7&omlg.rush"
+    - "&7&m----------------"
+
 GAME_WAITING:
   title: "&6&lMLG Rush"
   lines:

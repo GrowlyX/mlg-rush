@@ -16,6 +16,8 @@ import java.util.Map;
 
 public class ScoreboardAdapter implements ScoreboardElementHandler {
 
+    private final CorePlugin plugin = CorePlugin.getInstance();
+
     /**
      * Get the scoreboard element of a player
      *
@@ -25,7 +27,7 @@ public class ScoreboardAdapter implements ScoreboardElementHandler {
     @Override
     public ScoreboardElement getElement(Player player) {
         final ScoreboardElement element = new ScoreboardElement();
-        final GamePlayer gamePlayer = CorePlugin.getInstance().getPlayerHandler().getByName(player.getName());
+        final GamePlayer gamePlayer = this.plugin.getPlayerHandler().getByName(player.getName());
 
         element.setTitle(CoreConstants.DEFAULT_SCOREBOARD_TITLE);
 
@@ -35,8 +37,8 @@ public class ScoreboardAdapter implements ScoreboardElementHandler {
 
         ScoreboardType boardType = ScoreboardType.LOBBY;
 
-        if (this.isInArena(player)) {
-            final Arena arena = this.getArena(player);
+        if (this.plugin.getArenaHandler().isInArena(player)) {
+            final Arena arena = this.plugin.getArenaHandler().getByPlayer(player);
 
             switch (arena.getState()) {
                 case AVAILABLE:
@@ -46,6 +48,8 @@ public class ScoreboardAdapter implements ScoreboardElementHandler {
                     boardType = ScoreboardType.IN_GAME;
                     break;
             }
+        } else if (this.plugin.getArenaHandler().isSpectating(player)) {
+            boardType = ScoreboardType.SPECTATING;
         }
 
         final Map<String, Pair<String, List<String>>> scoreboardMap = CorePlugin.getInstance().getConfigHandler().getScoreboardMap();
@@ -61,13 +65,18 @@ public class ScoreboardAdapter implements ScoreboardElementHandler {
 
     private String placeholder(Player player, String input, ScoreboardType boardType) {
         final boolean inGame = boardType.equals(ScoreboardType.IN_GAME);
-        final Arena arena = this.getArena(player);
+
+        final Arena arena = this.plugin.getArenaHandler().getByPlayer(player);
+        final Arena spectatingArena = this.plugin.getArenaHandler().getSpectating(player);
 
         final GamePlayer gamePlayer = CorePlugin.getInstance().getPlayerHandler().getByName(player.getName());
         final ArenaPlayer arenaPlayer = arena != null ? arena.getByPlayer(player) : null;
 
         return input.replace("%player%", player.getName())
                 .replace("%displayname%", player.getDisplayName())
+                .replace("%player1%", spectatingArena != null ? spectatingArena.getGamePlayerList().get(0).getPlayer().getDisplayName() : "%player1%")
+                .replace("%player2%", spectatingArena != null ? spectatingArena.getGamePlayerList().get(1).getPlayer().getDisplayName() : "%player2%")
+                .replace("%arena%", spectatingArena != null ? spectatingArena.getName() : "%arena%")
                 .replace("%wins%", gamePlayer.getWins() + "")
                 .replace("%losses%", gamePlayer.getLosses() + "")
                 .replace("%kills%", (inGame && arena != null ? arenaPlayer.getKills() : gamePlayer.getKills()) + "")
@@ -77,13 +86,5 @@ public class ScoreboardAdapter implements ScoreboardElementHandler {
                 .replace("%more%", boardType.equals(ScoreboardType.GAME_WAITING) && arena != null ? arena.getMaxPlayers() - arena.getAllPlayerList().size() + "" : "%more%")
                 .replace("%lobby%", StatusCache.LOBBY + "")
                 .replace("%playing%", StatusCache.PLAYING + "");
-    }
-
-    private boolean isInArena(Player player) {
-        return CorePlugin.getInstance().getArenaHandler().isInArena(player);
-    }
-
-    private Arena getArena(Player player) {
-        return CorePlugin.getInstance().getArenaHandler().getByPlayer(player);
     }
 }

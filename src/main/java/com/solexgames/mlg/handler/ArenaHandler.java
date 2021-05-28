@@ -122,6 +122,8 @@ public class ArenaHandler {
             arena.getGamePlayerList().add(new ArenaPlayer(arena, (arena.getGamePlayerList().size() == 0 ? ArenaTeam.BLUE : (arena.getGamePlayerList().get(0).getArenaTeam() == ArenaTeam.BLUE ? ArenaTeam.RED : ArenaTeam.BLUE)), player));
             arena.broadcastMessage(Color.PRIMARY + player.getName() + Color.SECONDARY + " has joined the arena. " + ChatColor.GRAY + "(" + arena.getGamePlayerList().size() + "/" + arena.getMaxPlayers() + ")");
 
+            PlayerUtil.restorePlayer(player);
+
             player.teleport(arena.getSpawnFromTeam(arena.getByPlayer(player).getArenaTeam()));
 
             CorePlugin.getInstance().getHotbarHandler().setupArenaWaitingHotbar(player);

@@ -9,6 +9,7 @@ public enum ScoreboardType {
 	LOBBY,
 	IN_GAME,
 	GAME_STARTING,
+	SPECTATING,
 	GAME_WAITING
 
 }
