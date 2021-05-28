@@ -1,6 +1,6 @@
 package com.solexgames.mlg.util;
 
-import com.mashape.unirest.http.utils.Base64Coder;
+import com.solexgames.mlg.util.unirest.Base64Coder;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
