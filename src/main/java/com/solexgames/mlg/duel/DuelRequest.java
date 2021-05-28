@@ -1,6 +1,6 @@
 package com.solexgames.mlg.duel;
 
-import com.solexgames.mlg.model.Arena;
+import com.solexgames.mlg.state.impl.Arena;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

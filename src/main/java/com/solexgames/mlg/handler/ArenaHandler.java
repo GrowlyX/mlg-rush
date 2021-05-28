@@ -3,7 +3,7 @@ package com.solexgames.mlg.handler;
 import com.solexgames.mlg.CorePlugin;
 import com.solexgames.mlg.duel.DuelRequest;
 import com.solexgames.mlg.enums.ArenaTeam;
-import com.solexgames.mlg.model.Arena;
+import com.solexgames.mlg.state.impl.Arena;
 import com.solexgames.mlg.player.ArenaPlayer;
 import com.solexgames.mlg.state.impl.ArenaState;
 import com.solexgames.mlg.task.GameStartTask;

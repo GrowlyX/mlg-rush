@@ -1,6 +1,6 @@
 package com.solexgames.mlg.util.prompt;
 
-import com.solexgames.mlg.model.Arena;
+import com.solexgames.mlg.state.impl.Arena;
 import com.solexgames.mlg.util.Color;
 import com.solexgames.mlg.util.cuboid.Cuboid;
 import lombok.RequiredArgsConstructor;

@@ -2,7 +2,7 @@ package com.solexgames.mlg.scoreboard;
 
 import com.solexgames.mlg.CorePlugin;
 import com.solexgames.mlg.cache.StatusCache;
-import com.solexgames.mlg.model.Arena;
+import com.solexgames.mlg.state.impl.Arena;
 import com.solexgames.mlg.player.ArenaPlayer;
 import com.solexgames.mlg.player.GamePlayer;
 import com.solexgames.mlg.util.CoreConstants;

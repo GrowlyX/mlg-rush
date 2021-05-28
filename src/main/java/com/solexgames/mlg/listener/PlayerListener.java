@@ -6,7 +6,7 @@ import com.solexgames.mlg.handler.ArenaHandler;
 import com.solexgames.mlg.menu.impl.LoadoutEditorMenu;
 import com.solexgames.mlg.menu.impl.MatchSpectateMenu;
 import com.solexgames.mlg.menu.impl.SelectGameMenu;
-import com.solexgames.mlg.model.Arena;
+import com.solexgames.mlg.state.impl.Arena;
 import com.solexgames.mlg.player.ArenaPlayer;
 import com.solexgames.mlg.player.GamePlayer;
 import com.solexgames.mlg.state.impl.ArenaState;

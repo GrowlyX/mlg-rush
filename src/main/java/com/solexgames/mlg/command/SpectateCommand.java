@@ -6,7 +6,7 @@ import co.aikar.commands.annotation.Default;
 import co.aikar.commands.bukkit.contexts.OnlinePlayer;
 import com.solexgames.mlg.CorePlugin;
 import com.solexgames.mlg.menu.impl.MatchSpectateMenu;
-import com.solexgames.mlg.model.Arena;
+import com.solexgames.mlg.state.impl.Arena;
 import com.solexgames.mlg.state.impl.ArenaState;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

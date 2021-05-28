@@ -1,7 +1,7 @@
 package com.solexgames.mlg.player;
 
 import com.solexgames.mlg.enums.ArenaTeam;
-import com.solexgames.mlg.model.Arena;
+import com.solexgames.mlg.state.impl.Arena;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;

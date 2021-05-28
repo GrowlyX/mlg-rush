@@ -1,4 +1,4 @@
-package com.solexgames.mlg.model;
+package com.solexgames.mlg.state.impl;
 
 import com.google.gson.annotations.SerializedName;
 import com.solexgames.mlg.CorePlugin;
@@ -6,7 +6,6 @@ import com.solexgames.mlg.enums.ArenaTeam;
 import com.solexgames.mlg.player.ArenaPlayer;
 import com.solexgames.mlg.player.GamePlayer;
 import com.solexgames.mlg.state.StateBasedModel;
-import com.solexgames.mlg.state.impl.ArenaState;
 import com.solexgames.mlg.task.RoundStartTask;
 import com.solexgames.mlg.util.Color;
 import com.solexgames.mlg.util.LocationUtil;

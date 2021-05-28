@@ -1,7 +1,7 @@
 package com.solexgames.mlg.task;
 
 import com.solexgames.mlg.CorePlugin;
-import com.solexgames.mlg.model.Arena;
+import com.solexgames.mlg.state.impl.Arena;
 import com.solexgames.mlg.util.Color;
 import lombok.Getter;
 import org.bukkit.ChatColor;
