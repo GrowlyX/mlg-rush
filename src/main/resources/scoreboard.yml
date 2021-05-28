@@ -9,7 +9,7 @@ DEFAULT_SCOREBOARD_TITLE: "&6&lMLG Rush"
 LOBBY:
   title: "&6&lMLG Rush"
   lines:
-    - "----------------"
+    - "&7&m----------------"
     - "Wins: &6%wins%"
     - "Losses: &6%losses%"
     - ""
@@ -18,34 +18,34 @@ LOBBY:
     - "KDR: &6%kdr%"
     - ""
     - "&7&omlg.rush"
-    - "----------------"
+    - "&7&m----------------"
 
 IN_GAME:
   title: "&6&lMLG Rush"
   lines:
-    - "----------------"
+    - "&7&m----------------"
     - "Points: &6%points%"
     - "Kills: &6%kills%"
     - "Deaths: &6%deaths%"
     - ""
     - "&7&omlg.rush"
-    - "----------------"
+    - "&7&m----------------"
 
 GAME_STARTING:
   title: "&6&lMLG Rush"
   lines:
-    - "----------------"
+    - "&7&m----------------"
     - "&eStarting match..."
     - ""
     - "&7&omlg.rush"
-    - "----------------"
+    - "&7&m----------------"
 
 GAME_WAITING:
   title: "&6&lMLG Rush"
   lines:
-    - "----------------"
+    - "&7&m----------------"
     - "&eWaiting for players..."
     - "&6%more% &eplayers."
     - ""
     - "&7&omlg.rush"
-    - "----------------"
+    - "&7&m----------------"
