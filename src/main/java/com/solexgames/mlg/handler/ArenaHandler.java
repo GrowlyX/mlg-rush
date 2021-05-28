@@ -6,7 +6,6 @@ import com.solexgames.mlg.enums.ArenaTeam;
 import com.solexgames.mlg.model.Arena;
 import com.solexgames.mlg.player.ArenaPlayer;
 import com.solexgames.mlg.state.impl.ArenaState;
-import com.solexgames.mlg.task.DuelRequestExpirationTask;
 import com.solexgames.mlg.task.GameStartTask;
 import com.solexgames.mlg.util.Color;
 import com.solexgames.mlg.util.LocationUtil;
@@ -218,8 +217,6 @@ public class ArenaHandler {
         target.spigot().sendMessage(clickable.asComponents());
 
         this.duelRequests.add(duelRequest);
-
-        new DuelRequestExpirationTask(duelRequest);
     }
 
     /**

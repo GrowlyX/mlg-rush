@@ -7,8 +7,8 @@ import com.solexgames.mlg.handler.*;
 import com.solexgames.mlg.listener.MenuListener;
 import com.solexgames.mlg.listener.PlayerListener;
 import com.solexgames.mlg.scoreboard.ScoreboardAdapter;
+import com.solexgames.mlg.task.DuelExpireTask;
 import com.solexgames.mlg.util.Color;
-import com.solexgames.mlg.util.Config;
 import com.solexgames.mlg.util.CoreConstants;
 import com.solexgames.mlg.world.VoidWorldGenerator;
 import io.github.nosequel.scoreboard.ScoreboardHandler;
@@ -83,7 +83,8 @@ public final class CorePlugin extends JavaPlugin {
         manager.enableUnstableAPI("help");
 
         new ScoreboardHandler(this, new ScoreboardAdapter(), 5L);
-        new StatusCache().runTaskTimer(this, 20L, 20L);
+        new StatusCache().runTaskTimerAsynchronously(this, 20L, 20L);
+        new DuelExpireTask().runTaskTimerAsynchronously(this, 20L, 20L);
     }
 
     private void setupTheming() {
