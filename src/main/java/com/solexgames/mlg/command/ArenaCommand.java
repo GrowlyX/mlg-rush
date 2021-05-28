@@ -38,16 +38,4 @@ public class ArenaCommand extends BaseCommand {
                 .buildConversation(player)
                 .begin();
     }
-
-    @Subcommand("delete|remove")
-    @CommandPermission("mlgrush.command.arena.subcommand.delete")
-    public void arenaDelete(Player player) {
-        player.sendMessage(Color.SECONDARY + "Starting " + Color.PRIMARY + "ArenaBot v1.0" + Color.SECONDARY + "...");
-
-        Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> CorePlugin.getInstance().getConversationFactory()
-                .withFirstPrompt(new ArenaNamePrompt(player))
-                .withLocalEcho(false)
-                .buildConversation(player)
-                .begin(), 40L);
-    }
 }

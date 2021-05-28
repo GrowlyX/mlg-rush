@@ -366,7 +366,7 @@ public class PlayerListener implements Listener {
             }
 
             if (event.getEntity() instanceof Player) {
-                ((Player) event.getEntity()).setHealth(20);
+                event.setDamage(0.0D);
             }
         }
     }
@@ -378,7 +378,7 @@ public class PlayerListener implements Listener {
         if (entity instanceof Player) {
             final Player player = (Player) event.getEntity();
 
-            player.setHealth(20D);
+            event.setDamage(0.0D);
         }
     }
 
