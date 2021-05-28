@@ -82,7 +82,7 @@ public class ScoreboardAdapter implements ScoreboardElementHandler {
                 .replace("%kills%", (inGame && arena != null ? arenaPlayer.getKills() : gamePlayer.getKills()) + "")
                 .replace("%deaths%", (inGame && arena != null ? arenaPlayer.getDeaths() : gamePlayer.getDeaths()) + "")
                 .replace("%points%", inGame && arena != null ? arenaPlayer.getPoints() + "" : "%points%")
-                .replace("%kdr%", String.valueOf((gamePlayer.getKills() == 0 || gamePlayer.getDeaths() == 0) ? "0.0" : (gamePlayer.getKills() / gamePlayer.getDeaths())))
+                .replace("%kdr%", String.valueOf((gamePlayer.getKills() == 0 || gamePlayer.getDeaths() == 0) ? "0.0" : Math.abs(gamePlayer.getKills() / gamePlayer.getDeaths())))
                 .replace("%more%", boardType.equals(ScoreboardType.GAME_WAITING) && arena != null ? arena.getMaxPlayers() - arena.getAllPlayerList().size() + "" : "%more%")
                 .replace("%lobby%", StatusCache.LOBBY + "")
                 .replace("%playing%", StatusCache.PLAYING + "");
