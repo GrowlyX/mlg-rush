@@ -191,12 +191,7 @@ public class ArenaHandler {
 
         PlayerUtil.resetPlayer(player);
 
-        arena.getAllPlayerList().forEach(player1 -> {
-            // Just incase the player's offline already
-            if (player != null) {
-                player1.showPlayer(player);
-            }
-        });
+        arena.getAllPlayerList().forEach(player1 -> player1.showPlayer(player));
 
         CorePlugin.getInstance().getHotbarHandler().setupLobbyHotbar(player);
     }

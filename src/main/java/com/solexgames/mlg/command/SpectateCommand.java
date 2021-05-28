@@ -33,7 +33,7 @@ public class SpectateCommand extends BaseCommand {
         }
 
         if (!arena.getState().equals(ArenaState.IN_GAME)) {
-            player.sendMessage(ChatColor.RED + "Error: That match has not started yet or the arena binded to it is regenerating.");
+            player.sendMessage(ChatColor.RED + "Error: That match has not started yet or the arena bound to it is regenerating.");
             return;
         }
 

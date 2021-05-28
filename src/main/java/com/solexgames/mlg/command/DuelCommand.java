@@ -25,6 +25,10 @@ public class DuelCommand extends BaseCommand {
         sender.sendMessage(ChatColor.RED + "Usage: /duel player <playerName>");
     }
 
+    public void onDuel(Player player, OnlinePlayer target) {
+        new DuelArenaSelectMenu(target.getPlayer()).openMenu(player);
+    }
+
     @Subcommand("accept")
     public void onAccept(Player player, String uuid) {
         UUID finalUuid;
@@ -82,10 +86,5 @@ public class DuelCommand extends BaseCommand {
         CorePlugin.getInstance().getArenaHandler().addToGame(issuer, duelRequest.getArena());
 
         CorePlugin.getInstance().getArenaHandler().getDuelRequests().remove(duelRequest);
-    }
-
-    @Subcommand("player")
-    public void onDuel(Player player, OnlinePlayer toDuel) {
-        new DuelArenaSelectMenu(toDuel.getPlayer()).openMenu(player);
     }
 }

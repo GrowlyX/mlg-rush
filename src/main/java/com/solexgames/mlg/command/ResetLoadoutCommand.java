@@ -12,7 +12,6 @@ public class ResetLoadoutCommand extends BaseCommand {
     @CommandAlias("resetloadout")
     public void execute(Player player) {
         final GamePlayer gamePlayer = CorePlugin.getInstance().getPlayerHandler().getByName(player.getName());
-
         gamePlayer.getLayout().resetLayout();
 
         player.sendMessage(ChatColor.GREEN + "You've reset your layout!");
