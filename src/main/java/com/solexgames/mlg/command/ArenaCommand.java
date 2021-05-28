@@ -1,12 +1,13 @@
 package com.solexgames.mlg.command;
 
 import co.aikar.commands.BaseCommand;
-import co.aikar.commands.annotation.CommandAlias;
-import co.aikar.commands.annotation.CommandPermission;
-import co.aikar.commands.annotation.Default;
-import co.aikar.commands.annotation.Subcommand;
+import co.aikar.commands.CommandHelp;
+import co.aikar.commands.annotation.*;
 import com.solexgames.mlg.CorePlugin;
+import com.solexgames.mlg.state.impl.Arena;
+import com.solexgames.mlg.state.impl.ArenaState;
 import com.solexgames.mlg.util.Color;
+import com.solexgames.mlg.util.Config;
 import com.solexgames.mlg.util.prompt.ArenaNamePrompt;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -21,9 +22,9 @@ import org.bukkit.entity.Player;
 @CommandPermission("mlgrush.command.arena")
 public class ArenaCommand extends BaseCommand {
 
-    @Default
-    public void onDefault(CommandSender sender) {
-        sender.sendMessage(ChatColor.RED + "Usage: /arena <create|delete>");
+    @HelpCommand
+    public void doHelp(CommandSender sender, CommandHelp help) {
+        help.showHelp();
     }
 
     @Subcommand("create|arenabot")
@@ -40,8 +41,19 @@ public class ArenaCommand extends BaseCommand {
 
     @Subcommand("delete")
     @CommandPermission("mlgrush.command.arena.subcommand.delete")
-    public void arenaDelete(Player player) {
-        // todo: complete this
-//        final Arena arena = CorePlugin.getInstance().getArenaHandler().getAllArenas()
+    public void arenaDelete(Player player, Arena arena) {
+        final Config config = CorePlugin.getInstance().getConfigHandler().getArenasConfig();
+
+        config.getConfig().set("arenas." + arena.getConfigPath(), null);
+
+        if (arena.getState().equals(ArenaState.IN_GAME)) {
+            arena.broadcastMessage(ChatColor.RED + "This game has been shut down due to it being deleted by an administrator.");
+            arena.end(arena.getGamePlayerList().get(0));
+            arena.cleanup();
+        }
+
+        player.sendMessage(Color.SECONDARY + "You've just deleted the arena with the name " + Color.PRIMARY + arena.getName() + Color.SECONDARY + ".");
+
+        CorePlugin.getInstance().getArenaHandler().getAllArenas().remove(arena);
     }
 }

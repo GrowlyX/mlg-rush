@@ -1,5 +1,6 @@
 package com.solexgames.mlg;
 
+import co.aikar.commands.InvalidCommandArgument;
 import co.aikar.commands.PaperCommandManager;
 import com.solexgames.mlg.cache.StatusCache;
 import com.solexgames.mlg.command.*;
@@ -7,6 +8,7 @@ import com.solexgames.mlg.handler.*;
 import com.solexgames.mlg.listener.MenuListener;
 import com.solexgames.mlg.listener.PlayerListener;
 import com.solexgames.mlg.scoreboard.ScoreboardAdapter;
+import com.solexgames.mlg.state.impl.Arena;
 import com.solexgames.mlg.task.DuelExpireTask;
 import com.solexgames.mlg.util.Color;
 import com.solexgames.mlg.util.CoreConstants;
@@ -70,6 +72,19 @@ public final class CorePlugin extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new MenuListener(), this);
 
         final PaperCommandManager manager = new PaperCommandManager(this);
+
+        manager.getCommandContexts().registerContext(Arena.class, bukkitCommandExecutionContext -> {
+            final String joinedString = String.join(" ", bukkitCommandExecutionContext.getArgs());
+            final Arena arena = this.getArenaHandler().getAllArenas()
+                    .stream().filter(arena1 -> arena1.getName().equals(joinedString))
+                    .findFirst().orElse(null);
+
+            if (arena == null) {
+                throw new InvalidCommandArgument(ChatColor.RED + "No arena matching " + ChatColor.YELLOW + bukkitCommandExecutionContext.popFirstArg() + ChatColor.RED + " was found.", false);
+            }
+
+            return arena;
+        });
 
         manager.registerCommand(new ArenaCommand());
         manager.registerCommand(new JoinGameCommand());
