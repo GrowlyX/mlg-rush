@@ -106,7 +106,7 @@ public class Arena extends StateBasedModel<ArenaState, ArenaPlayer> {
             exception.printStackTrace();
         }
 
-        CorePlugin.getInstance().saveConfig();
+        CorePlugin.getInstance().getConfigHandler().getArenasConfig().save();
     }
 
     /**
