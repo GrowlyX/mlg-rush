@@ -41,6 +41,9 @@ public class MatchSpectateMenu extends AbstractPaginatedMenu {
             public ItemStack getButtonItem(Player player) {
                 return new ItemBuilder(Material.WOOL)
                         .setDisplayName(Color.PRIMARY + arena.getName())
+                        .addLore(
+                                Color.SECONDARY + "[Click to spectate match]"
+                        )
                         .setDurability(5)
                         .create();
             }
