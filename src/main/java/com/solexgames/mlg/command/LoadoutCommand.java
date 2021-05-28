@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 public class LoadoutCommand extends BaseCommand {
 
     @CommandAlias("layout")
-    public void joinGame(Player player) {
+    public void execute(Player player) {
         if (CorePlugin.getInstance().getArenaHandler().getByPlayer(player) == null) {
             new LoadoutEditorMenu().openMenu(player);
         } else {

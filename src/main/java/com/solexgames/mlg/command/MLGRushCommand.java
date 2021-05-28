@@ -16,7 +16,7 @@ public class MLGRushCommand extends BaseCommand {
     };
 
     @CommandAlias("mlgrush")
-    public void mlgRush(Player player) {
+    public void execute(Player player) {
         player.sendMessage(Color.SECONDARY + "This server is running " + Color.PRIMARY + "MLGRush" + Color.SECONDARY + " created by " + Color.PRIMARY + String.join(Color.SECONDARY + ", " + Color.PRIMARY, AUTHORS) + Color.SECONDARY + ".");
     }
 }

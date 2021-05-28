@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 public class ResetLoadoutCommand extends BaseCommand {
 
     @CommandAlias("resetloadout")
-    public void joinGame(Player player) {
+    public void execute(Player player) {
         final GamePlayer gamePlayer = CorePlugin.getInstance().getPlayerHandler().getByName(player.getName());
 
         gamePlayer.getLayout().resetLayout();

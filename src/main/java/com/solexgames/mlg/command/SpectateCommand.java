@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 public class SpectateCommand extends BaseCommand {
 
     @CommandAlias("spectate|spec")
-    public void joinGame(Player player) {
+    public void execute(Player player) {
         new MatchSpectateMenu().openMenu(player);
     }
 }
