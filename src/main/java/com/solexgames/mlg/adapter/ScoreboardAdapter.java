@@ -61,7 +61,7 @@ public class ScoreboardAdapter implements ScoreboardElementHandler {
 
         element.add("  ");
         element.add(ChatColor.GRAY + ChatColor.ITALIC.toString() + CoreConstants.SERVER_IP);
-        element.add(Color.SB_LINE); //
+        element.add(Color.SB_LINE);
 
         return element;
     }
