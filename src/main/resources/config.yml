@@ -2,7 +2,10 @@
 #  MLG Rush - created by GrowlyX & puugz (SolexGames)
 #
 settings:
+  # the server ip used on the scoreboard
   server-ip: "nigeria.live.ng"
+  # should we enable the npc command
+  enable-npcs: true
 mongodb:
   url: ""
 # List of all arenas

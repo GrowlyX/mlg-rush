@@ -37,11 +37,13 @@ public final class CorePlugin extends JavaPlugin {
 
     @Getter
     private static CorePlugin instance;
-    private final ConversationFactory conversationFactory = new ConversationFactory(this);
+
     private ArenaHandler arenaHandler;
     private MongoHandler mongoHandler;
     private PlayerHandler playerHandler;
     private HotbarHandler hotbarHandler;
+
+    private final ConversationFactory conversationFactory = new ConversationFactory(this);
 
     @Override
     public void onEnable() {
@@ -91,7 +93,9 @@ public final class CorePlugin extends JavaPlugin {
     private void setupTheming() {
         Color.PRIMARY = ChatColor.valueOf(this.getConfig().getString("language.primary-color"));
         Color.SECONDARY = ChatColor.valueOf(this.getConfig().getString("language.secondary-color"));
+
         CoreConstants.SERVER_IP = this.getConfig().getString("settings.server-ip");
+        CoreConstants.NPC_ENABLED = this.getConfig().getBoolean("settings.enable-npcs");
     }
 
     private void createDefaultWorld() {
