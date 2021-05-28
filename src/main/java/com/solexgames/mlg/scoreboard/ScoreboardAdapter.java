@@ -1,6 +1,7 @@
 package com.solexgames.mlg.scoreboard;
 
 import com.solexgames.mlg.CorePlugin;
+import com.solexgames.mlg.cache.StatusCache;
 import com.solexgames.mlg.handler.ArenaHandler;
 import com.solexgames.mlg.model.Arena;
 import com.solexgames.mlg.player.ArenaPlayer;
@@ -69,8 +70,8 @@ public class ScoreboardAdapter implements ScoreboardElementHandler {
                 .replace("%kdr%", String.valueOf((gamePlayer.getKills() == 0 || gamePlayer.getDeaths() == 0) ? "0.0" : (gamePlayer.getKills() / gamePlayer.getDeaths())))
                 .replace("%more%", boardType.equals(ScoreboardType.GAME_WAITING) ?
                         String.valueOf(arena.getMaxPlayers() - arena.getAllPlayerList().size()) : "%more%")
-//                .replace("%lobby%", gamePlayer.getWins() + "")
-//                .replace("%playing%", gamePlayer.getWins() + "") i have to pull
+                .replace("%lobby%", StatusCache.LOBBY + "")
+                .replace("%playing%", StatusCache.PLAYING + "")
                 ;
     }
 
