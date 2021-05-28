@@ -14,7 +14,6 @@ public final class Color {
 
     public static ChatColor PRIMARY = ChatColor.GOLD;
     public static ChatColor SECONDARY = ChatColor.YELLOW;
-    public static String SERVER_IP = "mlg.rush";
 
     public static String SB_LINE = ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + "----------------";
 

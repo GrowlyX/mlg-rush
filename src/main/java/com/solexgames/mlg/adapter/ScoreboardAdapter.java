@@ -5,6 +5,7 @@ import com.solexgames.mlg.handler.ArenaHandler;
 import com.solexgames.mlg.model.Arena;
 import com.solexgames.mlg.player.GamePlayer;
 import com.solexgames.mlg.util.Color;
+import com.solexgames.mlg.util.CoreConstants;
 import io.github.nosequel.scoreboard.element.ScoreboardElement;
 import io.github.nosequel.scoreboard.element.ScoreboardElementHandler;
 import org.bukkit.ChatColor;
@@ -59,7 +60,7 @@ public class ScoreboardAdapter implements ScoreboardElementHandler {
         }
 
         element.add("  ");
-        element.add(ChatColor.GRAY + ChatColor.ITALIC.toString() + "mlg.rush");
+        element.add(ChatColor.GRAY + ChatColor.ITALIC.toString() + CoreConstants.SERVER_IP);
         element.add(Color.SB_LINE);
 
         return element;

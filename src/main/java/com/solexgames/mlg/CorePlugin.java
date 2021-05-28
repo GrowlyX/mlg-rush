@@ -10,6 +10,7 @@ import com.solexgames.mlg.handler.PlayerHandler;
 import com.solexgames.mlg.listener.MenuListener;
 import com.solexgames.mlg.listener.PlayerListener;
 import com.solexgames.mlg.util.Color;
+import com.solexgames.mlg.util.CoreConstants;
 import com.solexgames.mlg.world.VoidWorldGenerator;
 import io.github.nosequel.scoreboard.ScoreboardHandler;
 import lombok.Getter;
@@ -86,7 +87,7 @@ public final class CorePlugin extends JavaPlugin {
     private void setupTheming() {
         Color.PRIMARY = ChatColor.valueOf(this.getConfig().getString("language.primary-color"));
         Color.SECONDARY = ChatColor.valueOf(this.getConfig().getString("language.secondary-color"));
-        Color.SERVER_IP = this.getConfig().getString("settings.server-ip");
+        CoreConstants.SERVER_IP = this.getConfig().getString("settings.server-ip");
     }
 
     private void createDefaultWorld() {
