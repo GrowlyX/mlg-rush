@@ -78,6 +78,7 @@ public final class CorePlugin extends JavaPlugin {
         manager.registerCommand(new ResetLoadoutCommand());
         manager.registerCommand(new LoadoutCommand());
         manager.registerCommand(new DuelCommand());
+        manager.registerCommand(new SpectateCommand());
 
         manager.enableUnstableAPI("help");
 

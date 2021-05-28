@@ -4,6 +4,7 @@
 #  %player%, %displayname%, %wins%, %losses%, %kills%,
 #  %deaths%, %kdr%, %points%, %more%, %lobby%, %playing%
 #
+
 DEFAULT_SCOREBOARD_TITLE: "&6&lMLG Rush"
 LOBBY:
   title: "&6&lMLG Rush"
