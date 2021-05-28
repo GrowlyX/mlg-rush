@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 public class MLGRushCommand extends BaseCommand {
 
     @CommandAlias("mlgrush")
-    public void joinGame(Player player) {
-        player.sendMessage(Color.SECONDARY + "This server is running " + Color.PRIMARY + "MLGRush" + Color.SECONDARY + " created by " + Color.PRIMARY + "GrowlyX#4953" + Color.SECONDARY + "!");
+    public void mlgRush(Player player) {
+        player.sendMessage(Color.SECONDARY + "This server is running " + Color.PRIMARY + "MLGRush" + Color.SECONDARY + " created by " + Color.PRIMARY + "GrowlyX#4953 & puugz#4877" + Color.SECONDARY + "!");
     }
 }
