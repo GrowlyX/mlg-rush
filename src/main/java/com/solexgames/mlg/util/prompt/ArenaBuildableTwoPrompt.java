@@ -28,7 +28,10 @@ public class ArenaBuildableTwoPrompt extends StringPrompt {
 
     @Override
     public Prompt acceptInput(ConversationContext context, String input) {
-        if (input.equalsIgnoreCase("here")) {
+        if (input.equalsIgnoreCase("cancel")) {
+            context.getForWhom().sendRawMessage(ChatColor.RED + "Cancelled arena creation procedure.");
+            return END_OF_CONVERSATION;
+        } else if (input.equalsIgnoreCase("here")) {
             return new ArenaSpawnOnePrompt(this.player, this.name, this.size, this.location, this.locationTwo, this.buildable, this.player.getLocation());
         } else {
             context.getForWhom().sendRawMessage(Color.SECONDARY + "I couldn't understand what you said.");

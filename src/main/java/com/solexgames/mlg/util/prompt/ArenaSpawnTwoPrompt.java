@@ -40,7 +40,10 @@ public class ArenaSpawnTwoPrompt extends StringPrompt {
 
     @Override
     public Prompt acceptInput(ConversationContext context, String input) {
-        if (input.equalsIgnoreCase("here")) {
+        if (input.equalsIgnoreCase("cancel")) {
+            context.getForWhom().sendRawMessage(ChatColor.RED + "Cancelled arena creation procedure.");
+            return END_OF_CONVERSATION;
+        } else if (input.equalsIgnoreCase("here")) {
             final Arena arena = new Arena(UUID.randomUUID(), this.name);
 
             arena.setTeamSize(this.size);
