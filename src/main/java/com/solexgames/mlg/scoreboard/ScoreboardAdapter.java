@@ -2,16 +2,16 @@ package com.solexgames.mlg.scoreboard;
 
 import com.solexgames.mlg.CorePlugin;
 import com.solexgames.mlg.cache.StatusCache;
-import com.solexgames.mlg.handler.ArenaHandler;
 import com.solexgames.mlg.model.Arena;
 import com.solexgames.mlg.player.ArenaPlayer;
 import com.solexgames.mlg.player.GamePlayer;
-import com.solexgames.mlg.util.Color;
-import com.solexgames.mlg.util.CoreConstants;
 import io.github.nosequel.scoreboard.element.ScoreboardElement;
 import io.github.nosequel.scoreboard.element.ScoreboardElementHandler;
-import org.bukkit.ChatColor;
+import javafx.util.Pair;
 import org.bukkit.entity.Player;
+
+import java.util.List;
+import java.util.Map;
 
 public class ScoreboardAdapter implements ScoreboardElementHandler {
 
@@ -46,17 +46,21 @@ public class ScoreboardAdapter implements ScoreboardElementHandler {
                     break;
             }
         }
-        element.setTitle(CorePlugin.getInstance().getConfigHandler().getScoreboardList().get(boardType.toString()).getKey());
 
-        for (String s : CorePlugin.getInstance().getConfigHandler().getScoreboardList().get(boardType.toString()).getValue()) {
-            element.add(s);
+        final Map<String, Pair<String, List<String>>> scoreboardMap = CorePlugin.getInstance().getConfigHandler().getScoreboardMap();
+
+        element.setTitle(scoreboardMap.get(boardType.toString()).getKey());
+
+        for (final String line : scoreboardMap.get(boardType.toString()).getValue()) {
+            element.add(this.placeholder(player, line, boardType));
         }
 
         return element;
     }
 
-    private String placeholder(Arena arena, Player player, String input, ScoreboardType boardType) {
+    private String placeholder(Player player, String input, ScoreboardType boardType) {
         final boolean inGame = boardType.equals(ScoreboardType.IN_GAME);
+        final Arena arena = this.getArena(player);
 
         final GamePlayer gamePlayer = CorePlugin.getInstance().getPlayerHandler().getByName(player.getName());
         final ArenaPlayer arenaPlayer = arena != null ? arena.getByPlayer(player) : null;

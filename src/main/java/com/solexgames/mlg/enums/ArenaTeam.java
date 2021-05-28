@@ -8,6 +8,6 @@ package com.solexgames.mlg.enums;
 public enum ArenaTeam {
 
     RED,
-    BLUE;
+    BLUE
 
 }

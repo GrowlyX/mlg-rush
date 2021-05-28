@@ -10,4 +10,5 @@ public enum ScoreboardType {
 	IN_GAME,
 	GAME_STARTING,
 	GAME_WAITING
+
 }
