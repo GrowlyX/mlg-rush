@@ -21,7 +21,6 @@ public class PlayerHandler {
 
     public GamePlayer setupPlayer(UUID uuid, String name) {
         final GamePlayer gamePlayer = new GamePlayer(uuid, name);
-
         this.playerList.put(uuid, gamePlayer);
 
         return gamePlayer;
@@ -50,12 +49,6 @@ public class PlayerHandler {
      * @return A profile with the name {@param uuid}
      */
     public GamePlayer getByUuid(UUID uuid) {
-        final Player player = Bukkit.getPlayer(uuid);
-
-        if (player == null) {
-            return null;
-        }
-
-        return this.playerList.getOrDefault(player.getUniqueId(), null);
+        return this.playerList.getOrDefault(uuid, null);
     }
 }

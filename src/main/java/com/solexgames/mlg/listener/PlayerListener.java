@@ -123,6 +123,13 @@ public class PlayerListener implements Listener {
                     }
 
                     player.teleport(arena.getSpawnFromTeam(arena.getByPlayer(player).getArenaTeam()));
+
+                    final ArenaPlayer arenaPlayer = arena.getByPlayer(player);
+                    final GamePlayer gamePlayer = CorePlugin.getInstance().getPlayerHandler().getByUuid(player.getUniqueId());
+
+                    gamePlayer.setDeaths(gamePlayer.getDeaths() + 1);
+                    arenaPlayer.setDeaths(arenaPlayer.getDeaths() + 1);
+
                     arena.broadcastMessage(ChatColor.RED + player.getName() + Color.SECONDARY + " fell into the void!");
 
                     this.plugin.getHotbarHandler().setupArenaInGameHotbar(player);

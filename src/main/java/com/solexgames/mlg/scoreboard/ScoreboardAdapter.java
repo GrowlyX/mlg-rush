@@ -2,6 +2,7 @@ package com.solexgames.mlg.scoreboard;
 
 import com.solexgames.mlg.CorePlugin;
 import com.solexgames.mlg.cache.StatusCache;
+import com.solexgames.mlg.enums.ArenaTeam;
 import com.solexgames.mlg.state.impl.Arena;
 import com.solexgames.mlg.player.ArenaPlayer;
 import com.solexgames.mlg.player.GamePlayer;
@@ -9,10 +10,12 @@ import com.solexgames.mlg.util.CoreConstants;
 import io.github.nosequel.scoreboard.element.ScoreboardElement;
 import io.github.nosequel.scoreboard.element.ScoreboardElementHandler;
 import javafx.util.Pair;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.Map;
+import java.util.StringJoiner;
 
 public class ScoreboardAdapter implements ScoreboardElementHandler {
 
@@ -74,6 +77,7 @@ public class ScoreboardAdapter implements ScoreboardElementHandler {
 
         return input.replace("%player%", player.getName())
                 .replace("%displayname%", player.getDisplayName())
+                .replace("%fancy%", arenaPlayer != null ? this.getFancyPoints(arenaPlayer) : "%fancy%")
                 .replace("%player1%", spectatingArena != null ? spectatingArena.getGamePlayerList().get(0).getPlayer().getDisplayName() : "%player1%")
                 .replace("%player2%", spectatingArena != null ? spectatingArena.getGamePlayerList().get(1).getPlayer().getDisplayName() : "%player2%")
                 .replace("%arena%", spectatingArena != null ? spectatingArena.getName() : "%arena%")
@@ -86,5 +90,19 @@ public class ScoreboardAdapter implements ScoreboardElementHandler {
                 .replace("%more%", boardType.equals(ScoreboardType.GAME_WAITING) && arena != null ? arena.getMaxPlayers() - arena.getAllPlayerList().size() + "" : "%more%")
                 .replace("%lobby%", StatusCache.LOBBY + "")
                 .replace("%playing%", StatusCache.PLAYING + "");
+    }
+
+    private String getFancyPoints(ArenaPlayer arenaPlayer) {
+        final StringJoiner joiner = new StringJoiner("");
+
+        for (int i = 0; i <= arenaPlayer.getPoints(); i++) {
+            joiner.add((arenaPlayer.getArenaTeam().equals(ArenaTeam.BLUE) ? ChatColor.BLUE : ChatColor.RED) + "■");
+        }
+
+        for (int i = 0; i <= Arena.WINNER_POINT_AMOUNT - arenaPlayer.getPoints(); i++) {
+            joiner.add(ChatColor.GRAY + "■");
+        }
+
+        return joiner.toString();
     }
 }

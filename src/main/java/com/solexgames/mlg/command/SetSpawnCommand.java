@@ -1,5 +1,6 @@
 package com.solexgames.mlg.command;
 
+import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandPermission;
 import com.solexgames.mlg.CorePlugin;
@@ -12,10 +13,10 @@ import org.bukkit.entity.Player;
  * @since 5/28/2021
  */
 
-@CommandAlias("setspawn")
-@CommandPermission("mlgrush.command.setspawn")
-public class SetSpawnCommand {
+public class SetSpawnCommand extends BaseCommand {
 
+    @CommandAlias("setspawn")
+    @CommandPermission("mlgrush.command.setspawn")
     public void execute(Player player) {
         final LocationHandler locationHandler = CorePlugin.getInstance().getLocationHandler();
 

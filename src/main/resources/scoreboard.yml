@@ -24,6 +24,8 @@ IN_GAME:
   title: "&6&lMLG Rush"
   lines:
     - "&7&m----------------"
+    - "%fancy%"
+    - " "
     - "Points: &6%points%"
     - "Kills: &6%kills%"
     - "Deaths: &6%deaths%"

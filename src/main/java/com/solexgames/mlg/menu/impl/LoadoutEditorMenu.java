@@ -23,7 +23,7 @@ public class LoadoutEditorMenu extends AbstractMenu {
     @Override
     public Map<Integer, Button> getButtons(Player player) {
         final Map<Integer, Button> buttonMap = new HashMap<>();
-        final GamePlayer gamePlayer = CorePlugin.getInstance().getPlayerHandler().getByName(player.getName());
+        final GamePlayer gamePlayer = CorePlugin.getInstance().getPlayerHandler().getByUuid(player.getUniqueId());
         final ItemStack[] itemStacks = gamePlayer.getLayout().getItemStacks() == null ? CorePlugin.getInstance().getHotbarHandler().getDefaultInventory() : gamePlayer.getLayout().getItemStacks();
 
         for (int i = 0; i <= 8; i++) {
