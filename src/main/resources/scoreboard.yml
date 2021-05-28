@@ -1,0 +1,48 @@
+# AVAILABLE PLACEHOLDERS
+#
+# %player%, %displayname%, %wins%, %losses%, %kills%,
+# %deaths%, %kdr%, %points%, %more%, %lobby%, %playing%
+
+LOBBY:
+  title: "&6&lMLG Rush"
+  lines:
+    - "----------------"
+    - "Wins: &6%wins%"
+    - "Losses: &6%losses%"
+    - ""
+    - "Kills: &6%kills%"
+    - "Deaths: &6%deaths%"
+    - "KDR: &6%kdr%"
+    - ""
+    - "&7&omlg.rush"
+    - "----------------"
+
+IN_GAME:
+  title: "&6&lMLG Rush"
+  lines:
+    - "----------------"
+    - "Points: &6%points%"
+    - "Kills: &6%kills%"
+    - "Deaths: &6%deaths%"
+    - ""
+    - "&7&omlg.rush"
+    - "----------------"
+
+GAME_STARTING:
+  title: "&6&lMLG Rush"
+  lines:
+    - "----------------"
+    - "&eStarting match..."
+    - ""
+    - "&7&omlg.rush"
+    - "----------------"
+
+GAME_WAITING:
+  title: "&6&lMLG Rush"
+  lines:
+    - "----------------"
+    - "&eWaiting for players..."
+    - "&6%more% &eplayers."
+    - ""
+    - "&7&omlg.rush"
+    - "----------------"
