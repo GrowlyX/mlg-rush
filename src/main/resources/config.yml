@@ -2,8 +2,6 @@
 #  MLG Rush - created by GrowlyX & puugz (SolexGames)
 #
 settings:
-  # the server ip used on the scoreboard
-  server-ip: "solexgames.com"
   # should we enable the npc command
   enable-npcs: true
   # what should the amount of points be for a player to win a match
@@ -17,10 +15,6 @@ settings:
   spawn-protection: false
 mongodb:
   url: ""
-# List of all arenas
-arenas:
-  # for debug; keep this here
-  test: ""
 language:
   primary-color: "GOLD"
   secondary-color: "YELLOW"
