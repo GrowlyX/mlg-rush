@@ -19,7 +19,10 @@ public class DuelRequestExpirationTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        if ((System.currentTimeMillis() - this.duelRequest.getIssuingTime()) > DuelRequest.EXPIRATION_MILLI && CorePlugin.getInstance().getArenaHandler().getDuelRequests().contains(this.duelRequest)) {
+        final boolean isActive = CorePlugin.getInstance().getArenaHandler().getDuelRequests().contains(this.duelRequest);
+        final boolean isExpired = (System.currentTimeMillis() - this.duelRequest.getIssuingTime()) > DuelRequest.EXPIRATION_MILLI;
+
+        if (isExpired && isActive) {
             final Player issuer = Bukkit.getPlayer(this.duelRequest.getIssuer());
             final Player target = Bukkit.getPlayer(this.duelRequest.getTarget());
 
@@ -27,14 +30,14 @@ public class DuelRequestExpirationTask extends BukkitRunnable {
                 issuer.sendMessage(Color.SECONDARY + "You're duel request to " + this.duelRequest.getTargetDisplay() + Color.SECONDARY + " has expired.");
             }
 
-            if (issuer != null) {
+            if (target != null) {
                 target.sendMessage(Color.SECONDARY + "The duel request from " + this.duelRequest.getIssuerDisplay() + Color.SECONDARY + " has expired.");
             }
 
             CorePlugin.getInstance().getArenaHandler().getDuelRequests().remove(this.duelRequest);
 
             this.cancel();
-        } else if (!CorePlugin.getInstance().getArenaHandler().getDuelRequests().contains(this.duelRequest)) {
+        } else if (!isActive) {
             this.cancel();
         }
     }

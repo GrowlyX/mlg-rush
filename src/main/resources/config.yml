@@ -3,9 +3,18 @@
 #
 settings:
   # the server ip used on the scoreboard
-  server-ip: "nigeria.live.ng"
+  server-ip: "solexgames.com"
   # should we enable the npc command
   enable-npcs: true
+  # what should the amount of points be for a player to win a match
+  winner-point-amount: 5
+  # should we enable a 5 second cooldown between bed breaks
+  round-cooldown: false
+  # should we make the game start countdown 20 seconds instead of 5
+  long-match-start: false
+  # should we enable spawn protection near beds so players can't
+  # place blocks their or the opponent's beds
+  spawn-protection: false
 mongodb:
   url: ""
 # List of all arenas
