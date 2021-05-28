@@ -6,6 +6,7 @@ import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -13,6 +14,7 @@ import java.util.Random;
  * @author puugz
  * @since 28/05/2021 20:39
  */
+
 public class VoidWorldGenerator extends ChunkGenerator {
 
 	@Override
@@ -27,7 +29,7 @@ public class VoidWorldGenerator extends ChunkGenerator {
 
 	@Override
 	public List<BlockPopulator> getDefaultPopulators(World world) {
-		return Arrays.asList(new BlockPopulator[0]);
+		return Collections.emptyList();
 	}
 
 	@Override

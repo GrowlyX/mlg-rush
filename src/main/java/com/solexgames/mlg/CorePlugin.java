@@ -47,9 +47,7 @@ public final class CorePlugin extends JavaPlugin {
         instance = this;
 
         this.saveDefaultConfig();
-
-        Color.PRIMARY = ChatColor.valueOf(this.getConfig().getString("language.primary-color"));
-        Color.SECONDARY = ChatColor.valueOf(this.getConfig().getString("language.secondary-color"));
+        this.setupTheming();
 
         this.arenaHandler = new ArenaHandler();
         this.arenaHandler.loadArenas();
@@ -58,19 +56,7 @@ public final class CorePlugin extends JavaPlugin {
         this.playerHandler = new PlayerHandler();
         this.hotbarHandler = new HotbarHandler();
 
-        if (this.getServer().getWorld("mlg") == null) {
-            this.getLogger().info("[World] Creating new 'mlg' world...");
-
-            World world = this.getServer().createWorld(new WorldCreator("mlg").generator(new VoidWorldGenerator()));
-
-            world.setSpawnLocation(0, 62, 0);
-
-            Block block = world.getBlockAt(0, 61, 0);
-            block.setType(Material.BEDROCK);
-            block.getState().update();
-
-            this.getLogger().info("[World] Created 'mlg' world.");
-        }
+        this.createDefaultWorld();
 
         this.getServer().getWorlds().forEach(world -> {
             world.setDifficulty(Difficulty.NORMAL);
@@ -95,6 +81,27 @@ public final class CorePlugin extends JavaPlugin {
         manager.enableUnstableAPI("help");
 
         new ScoreboardHandler(this, new ScoreboardAdapter(), 5L);
+    }
+
+    private void setupTheming() {
+        Color.PRIMARY = ChatColor.valueOf(this.getConfig().getString("language.primary-color"));
+        Color.SECONDARY = ChatColor.valueOf(this.getConfig().getString("language.secondary-color"));
+    }
+
+    private void createDefaultWorld() {
+        if (this.getServer().getWorld("mlg") == null) {
+            this.getLogger().info("[World] Creating new 'mlg' world...");
+
+            final World world = this.getServer().createWorld(new WorldCreator("mlg").generator(new VoidWorldGenerator()));
+
+            world.setSpawnLocation(0, 62, 0);
+
+            final Block block = world.getBlockAt(0, 61, 0);
+            block.setType(Material.BEDROCK);
+            block.getState().update();
+
+            this.getLogger().info("[World] Created 'mlg' world.");
+        }
     }
 
     @Override
