@@ -4,10 +4,9 @@ import com.google.gson.annotations.SerializedName;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
 import com.solexgames.mlg.CorePlugin;
-import com.solexgames.mlg.adapter.factory.GsonFactory;
+import com.solexgames.mlg.factory.GsonFactory;
 import com.solexgames.mlg.model.Layout;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.bson.Document;
 

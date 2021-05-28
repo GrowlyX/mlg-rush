@@ -32,11 +32,10 @@ public class ScoreboardAdapter implements ScoreboardElementHandler {
             return element;
         }
 
-        Arena arena;
         ScoreboardType boardType = ScoreboardType.LOBBY;
 
         if (this.isInArena(player)) {
-            arena = this.getArena(player);
+            final Arena arena = this.getArena(player);
 
             switch (arena.getState()) {
                 case AVAILABLE:
@@ -48,13 +47,11 @@ public class ScoreboardAdapter implements ScoreboardElementHandler {
             }
         }
 
-
-
         return element;
     }
 
     private String placeholder(Arena arena, Player player, String input, ScoreboardType boardType) {
-        boolean inGame = boardType.equals(ScoreboardType.IN_GAME);
+        final boolean inGame = boardType.equals(ScoreboardType.IN_GAME);
 
         final GamePlayer gamePlayer = CorePlugin.getInstance().getPlayerHandler().getByName(player.getName());
         final ArenaPlayer arenaPlayer = arena != null ? arena.getByPlayer(player) : null;
@@ -68,11 +65,9 @@ public class ScoreboardAdapter implements ScoreboardElementHandler {
                 .replace("%deaths%", (inGame && arena != null ? arenaPlayer.getDeaths() : gamePlayer.getDeaths()) + "")
                 .replace("%points%", inGame && arena != null ? arenaPlayer.getPoints() + "" : "%points%")
                 .replace("%kdr%", String.valueOf((gamePlayer.getKills() == 0 || gamePlayer.getDeaths() == 0) ? "0.0" : (gamePlayer.getKills() / gamePlayer.getDeaths())))
-                .replace("%more%", boardType.equals(ScoreboardType.GAME_WAITING) ?
-                        String.valueOf(arena.getMaxPlayers() - arena.getAllPlayerList().size()) : "%more%")
+                .replace("%more%", boardType.equals(ScoreboardType.GAME_WAITING) && arena != null ? arena.getMaxPlayers() - arena.getAllPlayerList().size() + "" : "%more%")
                 .replace("%lobby%", StatusCache.LOBBY + "")
-                .replace("%playing%", StatusCache.PLAYING + "")
-                ;
+                .replace("%playing%", StatusCache.PLAYING + "");
     }
 
     private boolean isInArena(Player player) {

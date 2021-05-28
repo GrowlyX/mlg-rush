@@ -1,6 +1,6 @@
 package com.solexgames.mlg.util.cuboid;
 
-import com.solexgames.mlg.adapter.factory.GsonFactory;
+import com.solexgames.mlg.factory.GsonFactory;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
