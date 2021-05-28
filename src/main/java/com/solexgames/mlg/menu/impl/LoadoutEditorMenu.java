@@ -13,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LayoutEditorMenu extends AbstractMenu {
+public class LoadoutEditorMenu extends AbstractMenu {
 
     @Override
     public String getTitle(Player player) {
@@ -49,6 +49,9 @@ public class LayoutEditorMenu extends AbstractMenu {
     @Override
     public void onOpen(Player player) {
         player.getInventory().clear();
+
+        player.sendMessage(ChatColor.GREEN + "Welcome to the loadout editor!");
+        player.sendMessage(ChatColor.GRAY + " * " + Color.SECONDARY + "To save your loadout, close your inventory.");
     }
 
     @Override
@@ -60,8 +63,8 @@ public class LayoutEditorMenu extends AbstractMenu {
         }
 
         player.sendMessage(new String[]{
-                Color.SECONDARY + "You've modified your layout!",
-                ChatColor.GRAY.toString() + ChatColor.ITALIC + "If you need to reset your layout, try " + Color.SECONDARY + "/resetloadout" + ChatColor.GRAY.toString() + ChatColor.ITALIC + "."
+                Color.SECONDARY + "You've modified your loadout!",
+                ChatColor.GRAY.toString() + ChatColor.ITALIC + "If you need to reset your loadout, try " + Color.SECONDARY + "/resetloadout" + ChatColor.GRAY.toString() + ChatColor.ITALIC + "."
         });
 
         CorePlugin.getInstance().getHotbarHandler().setupLobbyHotbar(player);

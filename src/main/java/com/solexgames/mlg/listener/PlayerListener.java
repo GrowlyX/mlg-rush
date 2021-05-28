@@ -3,7 +3,7 @@ package com.solexgames.mlg.listener;
 import com.solexgames.mlg.CorePlugin;
 import com.solexgames.mlg.enums.ArenaTeam;
 import com.solexgames.mlg.handler.ArenaHandler;
-import com.solexgames.mlg.menu.impl.LayoutEditorMenu;
+import com.solexgames.mlg.menu.impl.LoadoutEditorMenu;
 import com.solexgames.mlg.menu.impl.MatchSpectateMenu;
 import com.solexgames.mlg.menu.impl.SelectGameMenu;
 import com.solexgames.mlg.model.Arena;
@@ -71,7 +71,7 @@ public class PlayerListener implements Listener {
                     new SelectGameMenu().openMenu(player);
                     break;
                 case BOOK:
-                    new LayoutEditorMenu().openMenu(player);
+                    new LoadoutEditorMenu().openMenu(player);
                     break;
                 case ENDER_CHEST:
                     new MatchSpectateMenu().openMenu(player);
