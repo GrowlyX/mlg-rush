@@ -15,6 +15,7 @@ settings:
   spawn-protection: false
 mongodb:
   url: ""
+  database: ""
 language:
   primary-color: "GOLD"
   secondary-color: "YELLOW"
