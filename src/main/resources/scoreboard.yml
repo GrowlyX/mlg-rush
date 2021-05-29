@@ -4,21 +4,20 @@
 #  %player%, %displayname%, %wins%, %losses%, %kills%,
 #  %deaths%, %kdr%, %points%, %more%, %lobby%, %playing%,
 #  %fancy%, %opponentFancy%, %yourPrefix%, %theirPrefix%,
-#  %timeLeft%.
+#  %timeLeft%, %online%, %maxOnline%, %loading%.
 #
 DEFAULT_SCOREBOARD_TITLE: "&6&lMLG Rush"
 LOBBY:
   title: "&6&lMLG Rush"
   lines:
     - "&7&m----------------"
+    - "Online: &6%online%"
+    - "Playing: &6%playing%"
+    - ""
     - "Wins: &6%wins%"
     - "Losses: &6%losses%"
     - ""
-    - "Kills: &6%kills%"
-    - "Deaths: &6%deaths%"
-    - "KDR: &6%kdr%"
-    - ""
-    - "&7&omlg.rush"
+    - "&6mlg.rush"
     - "&7&m----------------"
 
 IN_GAME:
@@ -28,21 +27,21 @@ IN_GAME:
     - "%yourPrefix% %fancy%"
     - "%theirPrefix% %opponentFancy%"
     - ""
-    - "&6Time left: &f%timeLeft%"
+    - "Time left: &6%timeLeft%"
     - ""
     - "Kills: &6%kills%"
     - "Deaths: &6%deaths%"
     - ""
-    - "&7&omlg.rush"
+    - "&6mlg.rush"
     - "&7&m----------------"
 
 GAME_STARTING:
   title: "&6&lMLG Rush"
   lines:
     - "&7&m----------------"
-    - "&eStarting match..."
+    - "Starting match%loading%"
     - ""
-    - "&7&omlg.rush"
+    - "&6mlg.rush"
     - "&7&m----------------"
 
 SPECTATING:
@@ -55,15 +54,15 @@ SPECTATING:
     - ""
     - "Arena: &6%arena%"
     - ""
-    - "&7&omlg.rush"
+    - "&6mlg.rush"
     - "&7&m----------------"
 
 GAME_WAITING:
   title: "&6&lMLG Rush"
   lines:
-    - "&7&m----------------"
-    - "&eWaiting for players..."
-    - "&6%more% &eplayers."
+    - "&7&m------------------"
+    - "Waiting for players%loading%"
+    - "&6%more% &fplayers."
     - ""
-    - "&7&omlg.rush"
-    - "&7&m----------------"
+    - "&6mlg.rush"
+    - "&7&m------------------"

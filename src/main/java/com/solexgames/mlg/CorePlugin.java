@@ -41,6 +41,8 @@ public final class CorePlugin extends JavaPlugin {
     private ConfigHandler configHandler;
     private LocationHandler locationHandler;
 
+    private String loadingString;
+
     private final ConversationFactory conversationFactory = new ConversationFactory(this);
 
     @Override
@@ -108,6 +110,14 @@ public final class CorePlugin extends JavaPlugin {
         new StatusCache().runTaskTimerAsynchronously(this, 20L, 20L);
         new DuelExpireTask().runTaskTimerAsynchronously(this, 20L, 20L);
         new GameEndTask().runTaskTimerAsynchronously(this, 20L, 20L);
+
+        this.loadingString = "";
+        this.getServer().getScheduler().runTaskTimerAsynchronously(this, () -> {
+            this.loadingString =
+                    this.loadingString.equals("") ? "." :
+                    this.loadingString.equals(".") ? ".." :
+                    this.loadingString.equals("..") ? "..." : "";
+        }, 10L, 10L);
     }
 
     private void setupTheming() {

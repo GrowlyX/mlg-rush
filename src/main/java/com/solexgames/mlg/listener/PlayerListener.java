@@ -271,6 +271,11 @@ public class PlayerListener implements Listener {
     }
 
     @EventHandler
+    public void onSleep(PlayerBedEnterEvent event) {
+        event.setCancelled(true);
+    }
+
+    @EventHandler
     public void onHunger(FoodLevelChangeEvent event) {
         event.setCancelled(true);
     }

@@ -98,7 +98,11 @@ public class ScoreboardAdapter implements ScoreboardElementHandler {
                 .replace("%kdr%", String.valueOf((gamePlayer.getKills() == 0 || gamePlayer.getDeaths() == 0) ? "0.0" : Math.abs(gamePlayer.getKills() / gamePlayer.getDeaths())))
                 .replace("%more%", boardType.equals(ScoreboardType.GAME_WAITING) && arena != null ? arena.getMaxPlayers() - arena.getAllPlayerList().size() + "" : "%more%")
                 .replace("%lobby%", StatusCache.LOBBY + "")
-                .replace("%playing%", StatusCache.PLAYING + "");
+                .replace("%playing%", StatusCache.PLAYING + "")
+                .replace("%online%", plugin.getServer().getOnlinePlayers().size() + "")
+                .replace("%maxOnline%", plugin.getServer().getMaxPlayers() + "")
+                .replace("%loading%", plugin.getLoadingString() + "")
+                ;
     }
 
     private String getFancyPoints(ArenaPlayer arenaPlayer) {
