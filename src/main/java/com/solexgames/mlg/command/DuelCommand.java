@@ -21,10 +21,6 @@ import java.util.UUID;
 public class DuelCommand extends BaseCommand {
 
     @Default
-    public void onDefault(CommandSender sender) {
-        sender.sendMessage(ChatColor.RED + "Usage: /duel player <playerName>");
-    }
-
     public void onDuel(Player player, OnlinePlayer target) {
         new DuelArenaSelectMenu(target.getPlayer()).openMenu(player);
     }
