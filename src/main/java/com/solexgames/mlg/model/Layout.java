@@ -27,7 +27,7 @@ public class Layout {
 
     public void setupDefaultInventory() {
         if (this.itemStacks == null) {
-            this.itemStacks = CorePlugin.getInstance().getHotbarHandler().getDefaultInventory();
+            this.itemStacks = CorePlugin.getInstance().getHotbarHandler().getDefaultInventory().clone();
         }
     }
 
@@ -35,7 +35,7 @@ public class Layout {
         player.getInventory().clear();
 
         if (this.itemStacks == null) {
-            this.itemStacks = CorePlugin.getInstance().getHotbarHandler().getDefaultInventory();
+            this.itemStacks = CorePlugin.getInstance().getHotbarHandler().getDefaultInventory().clone();
         }
 
         for (int i = 0; i <= 8; i++) {
@@ -52,6 +52,6 @@ public class Layout {
     }
 
     public void resetLayout() {
-        this.itemStacks = CorePlugin.getInstance().getHotbarHandler().getDefaultInventory();
+        this.itemStacks = CorePlugin.getInstance().getHotbarHandler().getDefaultInventory().clone();
     }
 }
