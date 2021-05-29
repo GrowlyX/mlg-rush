@@ -7,7 +7,9 @@ import com.solexgames.mlg.state.impl.Arena;
 import com.solexgames.mlg.player.ArenaPlayer;
 import com.solexgames.mlg.player.GamePlayer;
 import com.solexgames.mlg.task.GameEndTask;
+import com.solexgames.mlg.util.Color;
 import com.solexgames.mlg.util.CoreConstants;
+import com.solexgames.mlg.util.PlayerUtil;
 import io.github.nosequel.scoreboard.element.ScoreboardElement;
 import io.github.nosequel.scoreboard.element.ScoreboardElementHandler;
 import javafx.util.Pair;
@@ -85,8 +87,8 @@ public class ScoreboardAdapter implements ScoreboardElementHandler {
                 .replace("%fancy%", arenaPlayer != null ? this.getFancyPoints(arenaPlayer) : "%fancy%")
                 .replace("%opponentFancy%", arenaPlayer != null ? this.getFancyPoints(arena.getOpponentPlayer(player)) : "%opponentFancy%")
                 .replace("%timeLeft%", arena != null ? DurationFormatUtils.formatDuration((arena.getStart() + GameEndTask.FIFTEEN_MINUTE) - System.currentTimeMillis(), "mm:ss") : "%timeLeft%")
-                .replace("%player1%", spectatingArena != null ? spectatingArena.getGamePlayerList().get(0).getPlayer().getDisplayName() : "%player1%")
-                .replace("%player2%", spectatingArena != null ? spectatingArena.getGamePlayerList().get(1).getPlayer().getDisplayName() : "%player2%")
+                .replace("%player1%", spectatingArena != null ? spectatingArena.getGamePlayerList().get(0).getPlayer().getDisplayName() + " " + ChatColor.GRAY + "(" + PlayerUtil.getPing(spectatingArena.getGamePlayerList().get(0).getPlayer()) + "ms)" : "%player1%")
+                .replace("%player2%", spectatingArena != null ? spectatingArena.getGamePlayerList().get(1).getPlayer().getDisplayName() + " " + ChatColor.GRAY + "(" + PlayerUtil.getPing(spectatingArena.getGamePlayerList().get(1).getPlayer()) + "ms)" : "%player2%")
                 .replace("%arena%", spectatingArena != null ? spectatingArena.getName() : "%arena%")
                 .replace("%wins%", gamePlayer.getWins() + "")
                 .replace("%losses%", gamePlayer.getLosses() + "")

@@ -5,8 +5,43 @@ import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+
 @UtilityClass
 public class PlayerUtil {
+
+    private static Method getHandleMethod;
+    private static Field pingField;
+
+    /**
+     * Gets a player's connection ping via reflection
+     * From https://www.spigotmc.org/threads/get-player-ping-with-reflection.147773/
+     *
+     * @param player specified player
+     * @return the player's ping
+     */
+    public static int getPing(Player player) {
+        try {
+            if (getHandleMethod == null) {
+                getHandleMethod = player.getClass().getDeclaredMethod("getHandle");
+                getHandleMethod.setAccessible(true);
+            }
+
+            final Object entityPlayer = getHandleMethod.invoke(player);
+
+            if (pingField == null) {
+                pingField = entityPlayer.getClass().getDeclaredField("ping");
+                pingField.setAccessible(true);
+            }
+
+            final int ping = pingField.getInt(entityPlayer);
+
+            return Math.max(ping, 0);
+        } catch (Exception e) {
+            return 1;
+        }
+    }
 
     /**
      * Resets player related functions
