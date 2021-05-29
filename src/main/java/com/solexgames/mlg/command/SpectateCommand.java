@@ -26,17 +26,23 @@ public class SpectateCommand extends BaseCommand {
 
     public void execute(Player player, OnlinePlayer target) {
         final Arena arena = CorePlugin.getInstance().getArenaHandler().getByPlayer(target.getPlayer());
+        final Arena targetArena = CorePlugin.getInstance().getArenaHandler().getByPlayer(target.getPlayer());
 
-        if (arena == null) {
+        if (arena != null) {
+            player.sendMessage(ChatColor.RED + "Error: You are already in an arena.");
+            return;
+        }
+
+        if (targetArena == null) {
             player.sendMessage(ChatColor.RED + "Error: That player is not in a match.");
             return;
         }
 
-        if (!arena.getState().equals(ArenaState.IN_GAME)) {
+        if (!targetArena.getState().equals(ArenaState.IN_GAME)) {
             player.sendMessage(ChatColor.RED + "Error: That match has not started yet or the arena bound to it is regenerating.");
             return;
         }
 
-        CorePlugin.getInstance().getArenaHandler().startSpectating(player, arena);
+        CorePlugin.getInstance().getArenaHandler().startSpectating(player, targetArena);
     }
 }
