@@ -314,11 +314,6 @@ public class PlayerListener implements Listener {
     public void onDisconnect(PlayerQuitEvent event) {
         final Player player = event.getPlayer();
         final GamePlayer gamePlayer = this.plugin.getPlayerHandler().getByUuid(player.getUniqueId());
-
-        if (gamePlayer != null) {
-            gamePlayer.savePlayerData(true);
-        }
-
         final Arena arena = this.getArena(player);
 
         if (this.isSpectating(player)) {
@@ -328,9 +323,14 @@ public class PlayerListener implements Listener {
         if (arena != null) {
             if (arena.getState().equals(ArenaState.IN_GAME)) {
                 arena.end(arena.getOpponentPlayer(player));
+                gamePlayer.setLosses(gamePlayer.getLosses() + 1);
             } else {
                 this.plugin.getArenaHandler().leaveGame(player, arena);
             }
+        }
+
+        if (gamePlayer != null) {
+            gamePlayer.savePlayerData(true);
         }
 
         event.setQuitMessage(null);
