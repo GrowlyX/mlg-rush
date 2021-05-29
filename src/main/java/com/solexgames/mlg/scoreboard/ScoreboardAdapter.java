@@ -60,7 +60,7 @@ public class ScoreboardAdapter implements ScoreboardElementHandler {
             boardType = ScoreboardType.SPECTATING;
         }
 
-        final Map<String, Pair<String, List<String>>> scoreboardMap = CorePlugin.getInstance().getConfigHandler().getScoreboardMap();
+        final Map<String, Map.Entry<String, List<String>>> scoreboardMap = CorePlugin.getInstance().getConfigHandler().getScoreboardMap();
 
         element.setTitle(scoreboardMap.get(boardType.toString()).getKey());
 

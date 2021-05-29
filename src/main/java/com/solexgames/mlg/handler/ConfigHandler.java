@@ -7,6 +7,7 @@ import javafx.util.Pair;
 import lombok.Getter;
 import org.bukkit.configuration.ConfigurationSection;
 
+import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +22,7 @@ public class ConfigHandler {
 
 	private final CorePlugin plugin = CorePlugin.getInstance();
 
-	private final Map<String, Pair<String, List<String>>> scoreboardMap = new HashMap<>();
+	private final Map<String, Map.Entry<String, List<String>>> scoreboardMap = new HashMap<>();
 
 	private final Config config;
 	private final Config scoreboardConfig;
@@ -42,7 +43,7 @@ public class ConfigHandler {
 			final ConfigurationSection section = this.scoreboardConfig.getConfig().getConfigurationSection(key);
 
 			if (section != null && section.get("lines") != null) {
-				this.scoreboardMap.put(key, new Pair<>(Color.translate(section.getString("title")), Color.translate(section.getStringList("lines"))));
+				this.scoreboardMap.put(key, new AbstractMap.SimpleEntry<>(Color.translate(section.getString("title")), Color.translate(section.getStringList("lines"))));
 			}
 		}
 	}
