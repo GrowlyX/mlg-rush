@@ -79,6 +79,10 @@ public class ArenaHandler {
                 arena.setSpawnOne(LocationUtil.getLocationFromString(configurationSection.getString(path + ".spawn-one")).orElse(null));
                 arena.setSpawnTwo(LocationUtil.getLocationFromString(configurationSection.getString(path + ".spawn-two")).orElse(null));
 
+                System.out.println("--------------------------------------------");
+                System.out.println("spawnOne for arena " + arena.getName() + ": " + arena.getSpawnOne());
+                System.out.println("spawnTwo for arena " + arena.getName() + ": " + arena.getSpawnTwo());
+
                 CorePlugin.getInstance().getLogger().info("[Arena] Loaded arena " + arena.getName() + "!");
             } catch (Exception exception) {
                 CorePlugin.getInstance().getLogger().info("[Arena] An arena was not loaded because it is corrupted. (" + path + ")");
@@ -123,7 +127,11 @@ public class ArenaHandler {
 
             PlayerUtil.restorePlayer(player);
 
-            player.teleport(arena.getSpawnFromTeam(arena.getByPlayer(player).getArenaTeam()));
+            player.teleport(
+                    arena.getSpawnFromTeam(
+                            arena.getByPlayer(
+                                    player)
+                                    .getArenaTeam()));
 
             CorePlugin.getInstance().getHotbarHandler().setupArenaWaitingHotbar(player);
 

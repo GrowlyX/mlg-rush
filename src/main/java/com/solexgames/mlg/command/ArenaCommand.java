@@ -45,6 +45,7 @@ public class ArenaCommand extends BaseCommand {
         final Config config = CorePlugin.getInstance().getConfigHandler().getArenasConfig();
 
         config.getConfig().set("arenas." + arena.getConfigPath(), null);
+        config.save();
 
         if (arena.getState().equals(ArenaState.IN_GAME)) {
             arena.broadcastMessage(ChatColor.RED + "This game has been shut down due to it being deleted by an administrator.");

@@ -35,11 +35,11 @@ public class RoundStartTask extends BukkitRunnable {
         final int finalSeconds = this.seconds - this.ticks;
 
         switch (finalSeconds) {
-            case 5: case 4: case 3:
-            case 2:
-                this.arena.broadcastMessage(Color.SECONDARY + "The round will be starting in " + Color.PRIMARY + finalSeconds + Color.SECONDARY + " " + (finalSeconds == 1 ? "second" : "second") + "!");
-                break;
+            case 5: case 4: case 3: case 2:
             case 1:
+                this.arena.broadcastMessage(Color.SECONDARY + "The round will be starting in " + Color.PRIMARY + finalSeconds + Color.SECONDARY + " " + (finalSeconds == 1 ? "second" : "seconds") + "!");
+                break;
+            case 0:
                 this.arena.getAllPlayerList().forEach(player -> {
                     player.removeMetadata("frozen", CorePlugin.getInstance());
                     CorePlugin.getInstance().getHotbarHandler().setupArenaInGameHotbar(player);

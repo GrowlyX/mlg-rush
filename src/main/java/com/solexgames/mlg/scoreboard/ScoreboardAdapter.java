@@ -95,12 +95,12 @@ public class ScoreboardAdapter implements ScoreboardElementHandler {
     private String getFancyPoints(ArenaPlayer arenaPlayer) {
         final StringJoiner joiner = new StringJoiner("");
 
-        for (int i = 0; i <= arenaPlayer.getPoints(); i++) {
-            joiner.add((arenaPlayer.getArenaTeam().equals(ArenaTeam.BLUE) ? ChatColor.BLUE : ChatColor.RED) + "■");
+        for (int i = 0; i < arenaPlayer.getPoints(); i++) {
+            joiner.add((arenaPlayer.getArenaTeam().equals(ArenaTeam.BLUE) ? ChatColor.BLUE : ChatColor.RED) + "⬤");
         }
 
-        for (int i = 0; i <= Arena.WINNER_POINT_AMOUNT - arenaPlayer.getPoints(); i++) {
-            joiner.add(ChatColor.GRAY + "■");
+        for (int i = 0; i < Arena.WINNER_POINT_AMOUNT - arenaPlayer.getPoints(); i++) {
+            joiner.add(ChatColor.GRAY + "⬤"); //■
         }
 
         return joiner.toString();

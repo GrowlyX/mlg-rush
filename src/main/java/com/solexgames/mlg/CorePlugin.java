@@ -48,9 +48,6 @@ public final class CorePlugin extends JavaPlugin {
 
         this.configHandler = new ConfigHandler();
 
-        this.arenaHandler = new ArenaHandler();
-        this.arenaHandler.loadArenas();
-
         this.locationHandler = new LocationHandler();
         this.locationHandler.loadSpawn();
 
@@ -60,6 +57,9 @@ public final class CorePlugin extends JavaPlugin {
 
         this.setupTheming();
         this.createDefaultWorld();
+
+        this.arenaHandler = new ArenaHandler();
+        this.arenaHandler.loadArenas();
 
         this.getServer().getWorlds().forEach(world -> {
             world.setDifficulty(Difficulty.NORMAL);

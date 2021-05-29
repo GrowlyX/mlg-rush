@@ -29,6 +29,8 @@ import org.bukkit.event.player.*;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
+
 /**
  * @author GrowlyX
  * @since 4/30/2021
@@ -107,6 +109,13 @@ public class PlayerListener implements Listener {
     public void onMove(PlayerMoveEvent event) {
         final Player player = event.getPlayer();
 
+//        todo: fix yes
+//        if (event.getFrom().getBlockX() == event.getTo().getBlockX() ||
+//                event.getFrom().getBlockY() == event.getTo().getBlockY() ||
+//                event.getFrom().getBlockZ() == event.getTo().getBlockZ()) {
+//            return;
+//        }
+
         if (player.hasMetadata("frozen")) {
             player.teleport(event.getFrom());
             return;
@@ -131,6 +140,9 @@ public class PlayerListener implements Listener {
                     arenaPlayer.setDeaths(arenaPlayer.getDeaths() + 1);
 
                     arena.broadcastMessage(ChatColor.RED + player.getName() + Color.SECONDARY + " fell into the void!");
+
+                    PlayerDeathEvent playerDeathEvent = new PlayerDeathEvent(player, new ArrayList<>(), 0, null);
+                    this.plugin.getServer().getPluginManager().callEvent(playerDeathEvent);
 
                     this.plugin.getHotbarHandler().setupArenaInGameHotbar(player);
                 }

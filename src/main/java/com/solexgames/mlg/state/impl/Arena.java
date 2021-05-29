@@ -133,6 +133,19 @@ public class Arena implements StateBasedModel<ArenaState, ArenaPlayer> {
     }
 
     /**
+     * Broadcasts a message to the whole arena with a sound
+     * <p></p>
+     *
+     * @param message Message to broadcast
+     */
+    public void broadcastMessage(String message, Sound sound) {
+        this.getGamePlayerList().forEach(arenaPlayer -> {
+            arenaPlayer.getPlayer().sendMessage(Color.translate(message));
+            arenaPlayer.getPlayer().playSound(arenaPlayer.getPlayer().getLocation(), sound, 5, 1);
+        });
+    }
+
+    /**
      * Adds a point to the {@param player} parameter and starts a new round
      * <p></p>
      *
@@ -148,7 +161,7 @@ public class Arena implements StateBasedModel<ArenaState, ArenaPlayer> {
             return;
         }
 
-        this.broadcastMessage(Color.PRIMARY + player.getName() + Color.SECONDARY + " has scored a point! " + ChatColor.GRAY + "(" + ChatColor.BLUE + this.getPoints(ArenaTeam.BLUE) + ChatColor.GRAY + "/" + ChatColor.RED + this.getPoints(ArenaTeam.RED) + ChatColor.GRAY + ")");
+        this.broadcastMessage(Color.PRIMARY + player.getName() + Color.SECONDARY + " has scored a point! " + ChatColor.GRAY + "(" + ChatColor.BLUE + this.getPoints(ArenaTeam.BLUE) + ChatColor.GRAY + "/" + ChatColor.RED + this.getPoints(ArenaTeam.RED) + ChatColor.GRAY + ")", Sound.SUCCESSFUL_HIT);
         this.resetAndSetupGameSystem();
     }
 
