@@ -8,6 +8,7 @@ import com.solexgames.mlg.cache.StatusCache;
 import com.solexgames.mlg.command.*;
 import com.solexgames.mlg.handler.*;
 import com.solexgames.mlg.listener.MenuListener;
+import com.solexgames.mlg.listener.NPCListener;
 import com.solexgames.mlg.listener.PlayerListener;
 import com.solexgames.mlg.player.GamePlayer;
 import com.solexgames.mlg.scoreboard.ScoreboardAdapter;
@@ -87,8 +88,9 @@ public final class CorePlugin extends JavaPlugin {
             this.getLogger().info("[World] Updated world settings for: " + world.getName());
         });
 
-        Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
-        Bukkit.getPluginManager().registerEvents(new MenuListener(), this);
+        this.getServer().getPluginManager().registerEvents(new PlayerListener(), this);
+        this.getServer().getPluginManager().registerEvents(new MenuListener(), this);
+        this.getServer().getPluginManager().registerEvents(new NPCListener(), this);
 
         final PaperCommandManager manager = new PaperCommandManager(this);
 

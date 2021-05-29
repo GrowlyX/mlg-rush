@@ -23,6 +23,7 @@ public class NPCModel {
     private Location location;
     private Skin skin;
     private NPC npc;
+    private String action;
 
     public NPC build() {
         final NPC npc = CorePlugin.getInstance().getNpcHandler().getLibrary().createNPC(this.lines);

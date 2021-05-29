@@ -10,6 +10,7 @@ import com.solexgames.mlg.util.LocationUtil;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import net.jitse.npclib.NPCLib;
+import net.jitse.npclib.api.NPC;
 import net.jitse.npclib.api.skin.Skin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -61,6 +62,12 @@ public class NPCHandler {
         return this.npcModelMap.getOrDefault(name, null);
     }
 
+    public NPCModel getModelByNPC(NPC npc) {
+        return this.npcModelMap.values().stream()
+                .filter(npcModel -> npcModel.getNpc().equals(npc))
+                .findFirst().orElse(null);
+    }
+
     public void saveNpcModels() {
         final Config npcConfig = CorePlugin.getInstance().getConfigHandler().getNpcsConfig();
 
@@ -71,6 +78,7 @@ public class NPCHandler {
 
             npcConfig.getConfig().set(endpoint + ".skin", CorePlugin.GSON.toJson(model.getSkin()));
             npcConfig.getConfig().set(endpoint + ".name", model.getName());
+            npcConfig.getConfig().set(endpoint + ".action", model.getAction());
             npcConfig.getConfig().set(endpoint + ".location", LocationUtil.getStringFromLocation(model.getLocation()).orElse(null));
         }
 
