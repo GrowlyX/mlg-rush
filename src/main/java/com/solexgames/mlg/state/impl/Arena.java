@@ -281,10 +281,13 @@ public class Arena implements StateBasedModel<ArenaState, ArenaPlayer> {
             player.sendMessage(Color.PRIMARY + profile.getPlayer().getName() + Color.SECONDARY + " has won the game!");
 
             Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> {
+                CorePlugin.getInstance().getArenaHandler().getSpectatorWeakHashMap().remove(player);
+
                 player.teleport(CorePlugin.getInstance().getLocationHandler().getSpawnLocation());
 
-                PlayerUtil.resetPlayer(player);
+                this.allPlayerList.forEach(player1 -> player1.showPlayer(player));
 
+                PlayerUtil.resetPlayer(player);
                 CorePlugin.getInstance().getHotbarHandler().setupLobbyHotbar(player);
             }, 30L);
         });
