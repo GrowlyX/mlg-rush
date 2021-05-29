@@ -10,6 +10,7 @@ import com.solexgames.mlg.listener.PlayerListener;
 import com.solexgames.mlg.scoreboard.ScoreboardAdapter;
 import com.solexgames.mlg.state.impl.Arena;
 import com.solexgames.mlg.task.DuelExpireTask;
+import com.solexgames.mlg.task.GameEndTask;
 import com.solexgames.mlg.util.Color;
 import com.solexgames.mlg.util.CoreConstants;
 import com.solexgames.mlg.util.world.VoidWorldGenerator;
@@ -105,6 +106,7 @@ public final class CorePlugin extends JavaPlugin {
         new ScoreboardHandler(this, new ScoreboardAdapter(), 5L);
         new StatusCache().runTaskTimerAsynchronously(this, 20L, 20L);
         new DuelExpireTask().runTaskTimerAsynchronously(this, 20L, 20L);
+        new GameEndTask().runTaskTimerAsynchronously(this, 20L, 20L);
     }
 
     private void setupTheming() {

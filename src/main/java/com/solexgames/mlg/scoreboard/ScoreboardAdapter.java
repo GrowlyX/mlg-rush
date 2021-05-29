@@ -6,15 +6,18 @@ import com.solexgames.mlg.enums.ArenaTeam;
 import com.solexgames.mlg.state.impl.Arena;
 import com.solexgames.mlg.player.ArenaPlayer;
 import com.solexgames.mlg.player.GamePlayer;
+import com.solexgames.mlg.task.GameEndTask;
 import com.solexgames.mlg.util.CoreConstants;
 import io.github.nosequel.scoreboard.element.ScoreboardElement;
 import io.github.nosequel.scoreboard.element.ScoreboardElementHandler;
 import javafx.util.Pair;
+import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.StringJoiner;
 
 public class ScoreboardAdapter implements ScoreboardElementHandler {
@@ -77,13 +80,17 @@ public class ScoreboardAdapter implements ScoreboardElementHandler {
 
         return input.replace("%player%", player.getName())
                 .replace("%displayname%", player.getDisplayName())
+                .replace("%yourPrefix%", arenaPlayer != null ? this.getTeamPrefix(arenaPlayer) : "%yourPrefix%")
+                .replace("%theirPrefix%", arenaPlayer != null ? this.getTeamPrefix(arena.getOpponentPlayer(player)) : "%theirPrefix%")
                 .replace("%fancy%", arenaPlayer != null ? this.getFancyPoints(arenaPlayer) : "%fancy%")
+                .replace("%opponentFancy%", arenaPlayer != null ? this.getFancyPoints(arena.getOpponentPlayer(player)) : "%opponentFancy%")
+                .replace("%timeLeft%", arena != null ? DurationFormatUtils.formatDuration((arena.getStart() + GameEndTask.FIFTEEN_MINUTE) - System.currentTimeMillis(), "mm:ss") : "%timeLeft%")
                 .replace("%player1%", spectatingArena != null ? spectatingArena.getGamePlayerList().get(0).getPlayer().getDisplayName() : "%player1%")
                 .replace("%player2%", spectatingArena != null ? spectatingArena.getGamePlayerList().get(1).getPlayer().getDisplayName() : "%player2%")
                 .replace("%arena%", spectatingArena != null ? spectatingArena.getName() : "%arena%")
                 .replace("%wins%", gamePlayer.getWins() + "")
                 .replace("%losses%", gamePlayer.getLosses() + "")
-                .replace("%kills%", (inGame && arena != null ? arenaPlayer.getKills() : gamePlayer.getKills()) + "")
+                .replace("%kills%", (inGame && arena != null ? Objects.requireNonNull(arenaPlayer).getKills() : gamePlayer.getKills()) + "")
                 .replace("%deaths%", (inGame && arena != null ? arenaPlayer.getDeaths() : gamePlayer.getDeaths()) + "")
                 .replace("%points%", inGame && arena != null ? arenaPlayer.getPoints() + "" : "%points%")
                 .replace("%kdr%", String.valueOf((gamePlayer.getKills() == 0 || gamePlayer.getDeaths() == 0) ? "0.0" : Math.abs(gamePlayer.getKills() / gamePlayer.getDeaths())))
@@ -100,9 +107,13 @@ public class ScoreboardAdapter implements ScoreboardElementHandler {
         }
 
         for (int i = 0; i < Arena.WINNER_POINT_AMOUNT - arenaPlayer.getPoints(); i++) {
-            joiner.add(ChatColor.GRAY + "⬤"); //■
+            joiner.add(ChatColor.GRAY + "⬤");
         }
 
         return joiner.toString();
+    }
+
+    public String getTeamPrefix(ArenaPlayer arenaPlayer) {
+        return (arenaPlayer.getArenaTeam().equals(ArenaTeam.BLUE) ? ChatColor.BLUE : ChatColor.RED) + "[" + (arenaPlayer.getArenaTeam().equals(ArenaTeam.BLUE) ? "B" : "R") + "]";
     }
 }

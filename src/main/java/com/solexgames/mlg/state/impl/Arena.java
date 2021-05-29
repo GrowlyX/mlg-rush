@@ -71,6 +71,8 @@ public class Arena implements StateBasedModel<ArenaState, ArenaPlayer> {
 
     private ArenaState arenaState = ArenaState.AVAILABLE;
 
+    private long start;
+
     /**
      * Creates a new instance of {@link Arena}
      * <p>
@@ -232,6 +234,7 @@ public class Arena implements StateBasedModel<ArenaState, ArenaPlayer> {
     @Override
     public void start() {
         this.arenaState = ArenaState.IN_GAME;
+        this.start = System.currentTimeMillis();
 
         this.resetAndSetupGameSystem();
     }

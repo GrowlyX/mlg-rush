@@ -109,54 +109,55 @@ public class PlayerListener implements Listener {
     public void onMove(PlayerMoveEvent event) {
         final Player player = event.getPlayer();
 
-//        todo: fix yes
-//        if (event.getFrom().getBlockX() == event.getTo().getBlockX() ||
-//                event.getFrom().getBlockY() == event.getTo().getBlockY() ||
-//                event.getFrom().getBlockZ() == event.getTo().getBlockZ()) {
-//            return;
-//        }
-
         if (player.hasMetadata("frozen")) {
             player.teleport(event.getFrom());
             return;
         }
 
-        if (this.isInArena(player)) {
-            final Arena arena = this.getArena(player);
+        final Integer toX = event.getTo().getBlock().getX();
+        final Integer toY = event.getTo().getBlock().getY();
+        final Integer toZ = event.getTo().getBlock().getZ();
 
-            if (arena.getState().equals(ArenaState.IN_GAME)) {
-                if ((int) player.getLocation().getY() <= arena.getCuboid().getYMin()) {
-                    if (this.isSpectating(player)) {
-                        player.teleport(arena.getSpawnOne());
-                        return;
+        final Integer fromX = event.getFrom().getBlock().getX();
+        final Integer fromY = event.getFrom().getBlock().getY();
+        final Integer fromZ = event.getFrom().getBlock().getZ();
+
+        if (toX != fromX && toY != fromY && toZ != fromZ) {
+            if (this.isInArena(player)) {
+                final Arena arena = this.getArena(player);
+
+                if (arena.getState().equals(ArenaState.IN_GAME)) {
+                    if ((int) player.getLocation().getY() <= arena.getCuboid().getYMin()) {
+                        if (this.isSpectating(player)) {
+                            player.teleport(arena.getSpawnOne());
+                            return;
+                        }
+
+                        player.teleport(arena.getSpawnFromTeam(arena.getByPlayer(player).getArenaTeam()));
+
+                        final ArenaPlayer arenaPlayer = arena.getByPlayer(player);
+                        final GamePlayer gamePlayer = CorePlugin.getInstance().getPlayerHandler().getByUuid(player.getUniqueId());
+
+                        gamePlayer.setDeaths(gamePlayer.getDeaths() + 1);
+                        arenaPlayer.setDeaths(arenaPlayer.getDeaths() + 1);
+
+                        PlayerDeathEvent playerDeathEvent = new PlayerDeathEvent(player, new ArrayList<>(), 0, null);
+                        this.plugin.getServer().getPluginManager().callEvent(playerDeathEvent);
+
+                        this.plugin.getHotbarHandler().setupArenaInGameHotbar(player);
                     }
+                } else if (arena.getState().equals(ArenaState.AVAILABLE)) {
+                    if ((int) player.getLocation().getY() <= arena.getCuboid().getYMin()) {
+                        if (this.isSpectating(player)) {
+                            player.teleport(arena.getSpawnOne());
+                            return;
+                        }
 
-                    player.teleport(arena.getSpawnFromTeam(arena.getByPlayer(player).getArenaTeam()));
-
-                    final ArenaPlayer arenaPlayer = arena.getByPlayer(player);
-                    final GamePlayer gamePlayer = CorePlugin.getInstance().getPlayerHandler().getByUuid(player.getUniqueId());
-
-                    gamePlayer.setDeaths(gamePlayer.getDeaths() + 1);
-                    arenaPlayer.setDeaths(arenaPlayer.getDeaths() + 1);
-
-                    arena.broadcastMessage(ChatColor.RED + player.getName() + Color.SECONDARY + " fell into the void!");
-
-                    PlayerDeathEvent playerDeathEvent = new PlayerDeathEvent(player, new ArrayList<>(), 0, null);
-                    this.plugin.getServer().getPluginManager().callEvent(playerDeathEvent);
-
-                    this.plugin.getHotbarHandler().setupArenaInGameHotbar(player);
-                }
-            } else if (arena.getState().equals(ArenaState.AVAILABLE)) {
-                if ((int) player.getLocation().getY() <= arena.getCuboid().getYMin()) {
-                    if (this.isSpectating(player)) {
-                        player.teleport(arena.getSpawnOne());
-                        return;
+                        player.teleport(arena.getSpawnFromTeam(arena.getByPlayer(player).getArenaTeam()));
                     }
-
-                    player.teleport(arena.getSpawnFromTeam(arena.getByPlayer(player).getArenaTeam()));
+                } else {
+                    player.teleport(CorePlugin.getInstance().getLocationHandler().getSpawnLocation());
                 }
-            } else {
-                player.teleport(CorePlugin.getInstance().getLocationHandler().getSpawnLocation());
             }
         }
     }
