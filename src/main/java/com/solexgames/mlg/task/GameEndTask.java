@@ -2,6 +2,8 @@ package com.solexgames.mlg.task;
 
 import com.solexgames.mlg.CorePlugin;
 import com.solexgames.mlg.state.impl.Arena;
+import com.solexgames.mlg.state.impl.ArenaState;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -23,11 +25,13 @@ public class GameEndTask extends BukkitRunnable {
         final List<Arena> finalArenas = new ArrayList<>(arenas);
 
         finalArenas.stream()
-                .filter(arena -> arena.getStart() + GameEndTask.FIFTEEN_MINUTE <= System.currentTimeMillis())
+                .filter(arena -> arena.getArenaState().equals(ArenaState.IN_GAME) && arena.getStart() + GameEndTask.FIFTEEN_MINUTE <= System.currentTimeMillis())
                 .forEach(arena -> {
                     arena.broadcastMessage(ChatColor.RED + "This game has been force ended by ArenaBot as you've been playing for more than fifteen minutes.");
-                    // TODO: make this end with player with most kills or beds
-                    arena.end(arena.getGamePlayerList().get(0));
+
+                    Bukkit.getScheduler().runTask(CorePlugin.getInstance(), () -> {
+                        arena.end(arena.getGamePlayerList().get(0));
+                    });
                 });
     }
 }
