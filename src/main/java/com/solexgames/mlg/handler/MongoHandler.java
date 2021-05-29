@@ -27,12 +27,12 @@ public class MongoHandler {
     public MongoHandler() {
         try {
             this.client = new MongoClient(new MongoClientURI(CorePlugin.getInstance().getConfigHandler().getConfig().getString("mongodb.url")));
-            this.database = this.client.getDatabase(CorePlugin.getInstance().getConfigHandler().getConfig().getString("mongo.database"));
+            this.database = this.client.getDatabase(CorePlugin.getInstance().getConfigHandler().getConfig().getString("mongodb.database"));
 
             this.playerCollection = this.database.getCollection("MLGRush");
         } catch (Exception exception) {
             System.out.println("[MLGRush] Couldn't connect to the mongo database.");
-            Bukkit.getPluginManager().disablePlugin(CorePlugin.getInstance());
+            Bukkit.shutdown();
         }
     }
 }
