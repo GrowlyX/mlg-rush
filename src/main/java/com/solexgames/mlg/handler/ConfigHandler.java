@@ -30,6 +30,10 @@ public class ConfigHandler {
 		this.scoreboardConfig = new Config("scoreboard", CorePlugin.getInstance());
 		this.arenasConfig = new Config("arenas", CorePlugin.getInstance());
 
+		load();
+	}
+
+	public void load() {
 		for (String key : this.scoreboardConfig.getConfig().getKeys(false)) {
 			final ConfigurationSection section = this.scoreboardConfig.getConfig().getConfigurationSection(key);
 
@@ -37,5 +41,13 @@ public class ConfigHandler {
 				this.scoreboardMap.put(key, new Pair<>(Color.translate(section.getString("title")), Color.translate(section.getStringList("lines"))));
 			}
 		}
+	}
+
+	public void reload() {
+		this.config.reload();
+		this.scoreboardConfig.reload();
+		this.arenasConfig.reload();
+
+		load();
 	}
 }

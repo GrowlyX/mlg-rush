@@ -30,7 +30,6 @@ IN_GAME:
     - ""
     - "&6Time left: &f%timeLeft%"
     - ""
-    - "Points: &6%points%"
     - "Kills: &6%kills%"
     - "Deaths: &6%deaths%"
     - ""
