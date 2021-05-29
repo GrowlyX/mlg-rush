@@ -211,54 +211,52 @@ public class PlayerListener implements Listener {
     public void onBuild(BlockPlaceEvent event) {
         final Player player = event.getPlayer();
         final Location blockLocation = event.getBlock().getLocation();
+        final Arena arena = this.getArena(player);
 
-        if (!this.isInArena(player)) {
-            if (!player.isOp()) {
-                event.setCancelled(true);
-            }
-        } else {
-            final Arena arena = this.getArena(player);
+        if (arena == null) {
+            event.setCancelled(true);
+            return;
+        }
 
-            if (this.isSpectating(player)) {
-                event.setCancelled(true);
-                return;
-            }
+        if (this.isSpectating(player)) {
+            event.setCancelled(true);
+            return;
+        }
 
-            if (!arena.getCuboid().isIn(blockLocation) || !arena.getBuildableCuboid().isIn(blockLocation)) {
-                player.sendMessage(ChatColor.RED + "You cannot place blocks here.");
-                event.setCancelled(true);
-                return;
-            }
+        if (!arena.getCuboid().isIn(blockLocation) || !arena.getBuildableCuboid().isIn(blockLocation)) {
+            player.sendMessage(ChatColor.RED + "You cannot place blocks here.");
+            event.setCancelled(true);
+            return;
+        }
 
-            if (arena.getState().equals(ArenaState.IN_GAME)) {
-                if (Arena.SPAWN_PROTECTION) {
-                    if (arena.isCloseToSpawn(blockLocation, arena.getByPlayer(player).getArenaTeam())) {
-                        event.setCancelled(true);
-                        return;
-                    }
-
-                    if (arena.isCloseToSpawn(blockLocation, arena.getOpposingTeam(arena.getByPlayer(player)))) {
-                        event.setCancelled(true);
-                        return;
-                    }
-                }
-
-                if (blockLocation.getX() == arena.getSpawnOne().getX() && blockLocation.getZ() == arena.getSpawnOne().getZ()) {
+        if (arena.getState().equals(ArenaState.IN_GAME)) {
+            if (Arena.SPAWN_PROTECTION) {
+                if (arena.isCloseToSpawn(blockLocation, arena.getByPlayer(player).getArenaTeam())) {
                     event.setCancelled(true);
                     return;
                 }
 
-                if (blockLocation.getX() == arena.getSpawnTwo().getX() && blockLocation.getZ() == arena.getSpawnTwo().getZ()) {
+                if (arena.isCloseToSpawn(blockLocation, arena.getOpposingTeam(arena.getByPlayer(player)))) {
                     event.setCancelled(true);
                     return;
                 }
-
-                arena.getBlockLocationList().add(blockLocation);
-
-                event.setCancelled(false);
-            } else if (arena.getState().equals(ArenaState.AVAILABLE)) {
-                event.setCancelled(true);
             }
+
+            if (blockLocation.getX() == arena.getSpawnOne().getX() && blockLocation.getZ() == arena.getSpawnOne().getZ()) {
+                event.setCancelled(true);
+                return;
+            }
+
+            if (blockLocation.getX() == arena.getSpawnTwo().getX() && blockLocation.getZ() == arena.getSpawnTwo().getZ()) {
+                event.setCancelled(true);
+                return;
+            }
+
+            arena.getBlockLocationList().add(blockLocation);
+
+            event.setCancelled(false);
+        } else if (arena.getState().equals(ArenaState.AVAILABLE)) {
+            event.setCancelled(true);
         }
     }
 
