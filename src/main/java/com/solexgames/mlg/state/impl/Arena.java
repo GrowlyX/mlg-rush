@@ -134,18 +134,28 @@ public class Arena implements StateBasedModel<ArenaState, ArenaPlayer> {
         this.getGamePlayerList().forEach(arenaPlayer -> arenaPlayer.getPlayer().sendMessage(Color.translate(message)));
     }
 
-    /**
-     * Broadcasts a message to the whole arena with a sound
-     * <p></p>
-     *
-     * @param message Message to broadcast
-     */
-    public void broadcastMessage(String message, Sound sound) {
-        this.getGamePlayerList().forEach(arenaPlayer -> {
-            arenaPlayer.getPlayer().sendMessage(Color.translate(message));
-            arenaPlayer.getPlayer().playSound(arenaPlayer.getPlayer().getLocation(), sound, 5, 1);
-        });
-    }
+	/**
+	 * Broadcasts a message to the whole arena with a sound
+	 * <p></p>
+	 *
+	 * @param message Message to broadcast
+	 */
+	public void broadcastMessage(String message, Sound sound) {
+		this.broadcastMessage(message, sound, 1f);
+	}
+
+	/**
+	 * Broadcasts a message to the whole arena with a sound
+	 * <p></p>
+	 *
+	 * @param message Message to broadcast
+	 */
+	public void broadcastMessage(String message, Sound sound, float pitch) {
+		this.getGamePlayerList().forEach(arenaPlayer -> {
+			arenaPlayer.getPlayer().sendMessage(Color.translate(message));
+			arenaPlayer.getPlayer().playSound(arenaPlayer.getPlayer().getLocation(), sound, 5f, pitch);
+		});
+	}
 
     /**
      * Adds a point to the {@param player} parameter and starts a new round

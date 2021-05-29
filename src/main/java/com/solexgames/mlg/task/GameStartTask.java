@@ -5,6 +5,7 @@ import com.solexgames.mlg.state.impl.Arena;
 import com.solexgames.mlg.util.Color;
 import lombok.Getter;
 import org.bukkit.ChatColor;
+import org.bukkit.Sound;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
@@ -40,10 +41,10 @@ public class GameStartTask extends BukkitRunnable {
         switch (finalSeconds) {
             case 20: case 15: case 10: case 5: case 4: case 3: case 2:
             case 1:
-                this.arena.broadcastMessage(Color.SECONDARY + "The game will be starting in " + Color.PRIMARY + finalSeconds + Color.SECONDARY + " " + (finalSeconds == 1 ? "second" : "seconds") + "!");
+                this.arena.broadcastMessage(Color.SECONDARY + "The game will be starting in " + Color.PRIMARY + finalSeconds + Color.SECONDARY + " " + (finalSeconds == 1 ? "second" : "seconds") + "!", Sound.NOTE_STICKS);
                 break;
             case 0:
-                this.arena.broadcastMessage(Color.PRIMARY + "The game has started! " + ChatColor.GREEN + "Good luck and have fun!");
+                this.arena.broadcastMessage(Color.PRIMARY + "The game has started! " + ChatColor.GREEN + "Good luck and have fun!", Sound.NOTE_PLING, 2f);
                 this.arena.start();
                 break;
             default:
