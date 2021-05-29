@@ -7,6 +7,7 @@ import com.solexgames.mlg.command.*;
 import com.solexgames.mlg.handler.*;
 import com.solexgames.mlg.listener.MenuListener;
 import com.solexgames.mlg.listener.PlayerListener;
+import com.solexgames.mlg.player.GamePlayer;
 import com.solexgames.mlg.scoreboard.ScoreboardAdapter;
 import com.solexgames.mlg.state.impl.Arena;
 import com.solexgames.mlg.task.DuelExpireTask;
@@ -87,10 +88,21 @@ public final class CorePlugin extends JavaPlugin {
                     .findFirst().orElse(null);
 
             if (arena == null) {
-                throw new InvalidCommandArgument(ChatColor.RED + "No arena matching " + ChatColor.YELLOW + bukkitCommandExecutionContext.popFirstArg() + ChatColor.RED + " was found.", false);
+                throw new InvalidCommandArgument(ChatColor.RED + "No arena matching " + ChatColor.YELLOW + joinedString + ChatColor.RED + " was found.", false);
             }
 
             return arena;
+        });
+
+        manager.getCommandContexts().registerContext(GamePlayer.class, bukkitCommandExecutionContext -> {
+            final String joinedString = String.join(" ", bukkitCommandExecutionContext.getArgs());
+            final GamePlayer gamePlayer = this.playerHandler.getByName(joinedString);
+
+            if (gamePlayer == null) {
+                throw new InvalidCommandArgument(ChatColor.RED + "No player matching " + ChatColor.YELLOW + joinedString + ChatColor.RED + " was found.", false);
+            }
+
+            return gamePlayer;
         });
 
         manager.registerCommand(new ArenaCommand());
@@ -102,6 +114,7 @@ public final class CorePlugin extends JavaPlugin {
         manager.registerCommand(new DuelCommand());
         manager.registerCommand(new SpectateCommand());
         manager.registerCommand(new SetSpawnCommand());
+        manager.registerCommand(new StatsResetCommand());
 
         manager.enableUnstableAPI("help");
 
