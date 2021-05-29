@@ -114,50 +114,37 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        final Integer toX = event.getTo().getBlock().getX();
-        final Integer toY = event.getTo().getBlock().getY();
-        final Integer toZ = event.getTo().getBlock().getZ();
+        if (event.getFrom().getBlockX() == event.getTo().getBlockX()
+                && event.getFrom().getBlockZ() == event.getTo().getBlockZ()
+                && event.getFrom().getBlockY() == event.getTo().getBlockY())
+            return;
 
-        final Integer fromX = event.getFrom().getBlock().getX();
-        final Integer fromY = event.getFrom().getBlock().getY();
-        final Integer fromZ = event.getFrom().getBlock().getZ();
+        if (this.isInArena(player)) {
+            final Arena arena = this.getArena(player);
 
-        if (toX != fromX && toY != fromY && toZ != fromZ) {
-            if (this.isInArena(player)) {
-                final Arena arena = this.getArena(player);
-
-                if (arena.getState().equals(ArenaState.IN_GAME)) {
-                    if ((int) player.getLocation().getY() <= arena.getCuboid().getYMin()) {
-                        if (this.isSpectating(player)) {
-                            player.teleport(arena.getSpawnOne());
-                            return;
-                        }
-
-                        player.teleport(arena.getSpawnFromTeam(arena.getByPlayer(player).getArenaTeam()));
-
-                        final ArenaPlayer arenaPlayer = arena.getByPlayer(player);
-                        final GamePlayer gamePlayer = CorePlugin.getInstance().getPlayerHandler().getByUuid(player.getUniqueId());
-
-                        gamePlayer.setDeaths(gamePlayer.getDeaths() + 1);
-                        arenaPlayer.setDeaths(arenaPlayer.getDeaths() + 1);
-
-                        PlayerDeathEvent playerDeathEvent = new PlayerDeathEvent(player, new ArrayList<>(), 0, null);
-                        this.plugin.getServer().getPluginManager().callEvent(playerDeathEvent);
-
-                        this.plugin.getHotbarHandler().setupArenaInGameHotbar(player);
+            if (arena.getState().equals(ArenaState.IN_GAME)) {
+                if (player.getLocation().getBlockY() <= arena.getCuboid().getYMin()) {
+                    if (this.isSpectating(player)) {
+                        player.teleport(arena.getSpawnOne());
+                        return;
                     }
-                } else if (arena.getState().equals(ArenaState.AVAILABLE)) {
-                    if ((int) player.getLocation().getY() <= arena.getCuboid().getYMin()) {
-                        if (this.isSpectating(player)) {
-                            player.teleport(arena.getSpawnOne());
-                            return;
-                        }
 
-                        player.teleport(arena.getSpawnFromTeam(arena.getByPlayer(player).getArenaTeam()));
-                    }
-                } else {
-                    player.teleport(CorePlugin.getInstance().getLocationHandler().getSpawnLocation());
+                    player.teleport(arena.getSpawnFromTeam(arena.getByPlayer(player).getArenaTeam()));
+
+                    final PlayerDeathEvent playerDeathEvent = new PlayerDeathEvent(player, new ArrayList<>(), 0, null);
+                    this.plugin.getServer().getPluginManager().callEvent(playerDeathEvent);
                 }
+            } else if (arena.getState().equals(ArenaState.AVAILABLE)) {
+                if (player.getLocation().getBlockY() <= arena.getCuboid().getYMin()) {
+                    if (this.isSpectating(player)) {
+                        player.teleport(arena.getSpawnOne());
+                        return;
+                    }
+
+                    player.teleport(arena.getSpawnFromTeam(arena.getByPlayer(player).getArenaTeam()));
+                }
+            } else {
+                player.teleport(CorePlugin.getInstance().getLocationHandler().getSpawnLocation());
             }
         }
     }
@@ -204,16 +191,23 @@ public class PlayerListener implements Listener {
             final Player damagingPlayer = event.getEntity().getKiller();
 
             if (damagingPlayer != null) {
+//                final GamePlayer damagingGamePlayer = this.plugin.getPlayerHandler().getByName(damagingPlayer.getName());
+//
+//                if (damagingGamePlayer != null) {
+//                    final ArenaPlayer damagingArenaPlayer = arena.getByPlayer(damagingPlayer);
+//
+//                    damagingGamePlayer.setKills(damagingGamePlayer.getKills() + 1);
+//                    damagingArenaPlayer.setKills(damagingArenaPlayer.getDeaths() + 1);
+//                }
                 final GamePlayer damagingGamePlayer = this.plugin.getPlayerHandler().getByName(damagingPlayer.getName());
+                final ArenaPlayer damagingArenaPlayer = arena.getByPlayer(damagingPlayer);
 
-                if (damagingGamePlayer != null) {
-                    final ArenaPlayer damagingArenaPlayer = arena.getByPlayer(damagingPlayer);
-
-                    damagingGamePlayer.setKills(damagingGamePlayer.getKills() + 1);
-                    damagingArenaPlayer.setKills(damagingArenaPlayer.getDeaths() + 1);
-                }
+                damagingGamePlayer.setKills(damagingGamePlayer.getKills() + 1);
+                damagingArenaPlayer.setKills(damagingArenaPlayer.getDeaths() + 1);
 
                 arena.broadcastMessage(ChatColor.RED + player.getName() + Color.SECONDARY + " was killed by " + ChatColor.GREEN + damagingPlayer.getName() + Color.SECONDARY + "!");
+            } else {
+                arena.broadcastMessage(ChatColor.RED + player.getName() + Color.SECONDARY + " died.");
             }
         }
 
