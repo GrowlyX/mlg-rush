@@ -2,6 +2,8 @@ package com.solexgames.mlg;
 
 import co.aikar.commands.InvalidCommandArgument;
 import co.aikar.commands.PaperCommandManager;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.solexgames.mlg.cache.StatusCache;
 import com.solexgames.mlg.command.*;
 import com.solexgames.mlg.handler.*;
@@ -32,9 +34,15 @@ import org.bukkit.plugin.java.JavaPlugin;
 @Getter
 public final class CorePlugin extends JavaPlugin {
 
+    public static final Gson GSON = new GsonBuilder()
+            .disableHtmlEscaping()
+            .setPrettyPrinting()
+            .create();
+
     @Getter
     private static CorePlugin instance;
 
+    private NPCHandler npcHandler;
     private ArenaHandler arenaHandler;
     private MongoHandler mongoHandler;
     private PlayerHandler playerHandler;
@@ -64,6 +72,9 @@ public final class CorePlugin extends JavaPlugin {
 
         this.arenaHandler = new ArenaHandler();
         this.arenaHandler.loadArenas();
+
+        this.npcHandler = new NPCHandler();
+        this.npcHandler.setupLibrary(this);
 
         this.getServer().getWorlds().forEach(world -> {
             world.setDifficulty(Difficulty.NORMAL);

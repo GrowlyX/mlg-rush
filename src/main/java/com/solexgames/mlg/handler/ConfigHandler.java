@@ -19,21 +19,25 @@ import java.util.Map;
 @Getter
 public class ConfigHandler {
 
+	private final CorePlugin plugin = CorePlugin.getInstance();
+
 	private final Map<String, Pair<String, List<String>>> scoreboardMap = new HashMap<>();
 
 	private final Config config;
 	private final Config scoreboardConfig;
 	private final Config arenasConfig;
+	private final Config npcsConfig;
 
 	public ConfigHandler() {
-		this.config = new Config("config", CorePlugin.getInstance());
-		this.scoreboardConfig = new Config("scoreboard", CorePlugin.getInstance());
-		this.arenasConfig = new Config("arenas", CorePlugin.getInstance());
+		this.config = new Config("config", this.plugin);
+		this.scoreboardConfig = new Config("scoreboard", this.plugin);
+		this.arenasConfig = new Config("arenas", this.plugin);
+		this.npcsConfig = new Config("npcs", this.plugin);
 
-		this.load();
+		this.loadScoreboards();
 	}
 
-	public void load() {
+	public void loadScoreboards() {
 		for (String key : this.scoreboardConfig.getConfig().getKeys(false)) {
 			final ConfigurationSection section = this.scoreboardConfig.getConfig().getConfigurationSection(key);
 
@@ -48,6 +52,6 @@ public class ConfigHandler {
 		this.scoreboardConfig.reload();
 		this.arenasConfig.reload();
 
-		this.load();
+		this.loadScoreboards();
 	}
 }
