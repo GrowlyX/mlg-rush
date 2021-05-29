@@ -71,7 +71,7 @@ public class Arena implements StateBasedModel<ArenaState, ArenaPlayer> {
 
     private ArenaState arenaState = ArenaState.AVAILABLE;
 
-    private long start;
+    private long start = 0L;
 
     /**
      * Creates a new instance of {@link Arena}

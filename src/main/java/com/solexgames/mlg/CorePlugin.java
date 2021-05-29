@@ -104,6 +104,7 @@ public final class CorePlugin extends JavaPlugin {
         manager.enableUnstableAPI("help");
 
         new ScoreboardHandler(this, new ScoreboardAdapter(), 5L);
+
         new StatusCache().runTaskTimerAsynchronously(this, 20L, 20L);
         new DuelExpireTask().runTaskTimerAsynchronously(this, 20L, 20L);
         new GameEndTask().runTaskTimerAsynchronously(this, 20L, 20L);

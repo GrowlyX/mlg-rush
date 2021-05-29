@@ -23,7 +23,7 @@ public class GameEndTask extends BukkitRunnable {
         final List<Arena> finalArenas = new ArrayList<>(arenas);
 
         finalArenas.stream()
-                .filter(arena -> arena.getStart() + GameEndTask.FIFTEEN_MINUTE >= System.currentTimeMillis())
+                .filter(arena -> arena.getStart() + GameEndTask.FIFTEEN_MINUTE <= System.currentTimeMillis())
                 .forEach(arena -> {
                     arena.broadcastMessage(ChatColor.RED + "This game has been force ended by ArenaBot as you've been playing for more than fifteen minutes.");
                     // TODO: make this end with player with most kills or beds
