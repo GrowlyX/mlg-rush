@@ -1,6 +1,7 @@
 package com.solexgames.mlg.model;
 
 import com.solexgames.mlg.CorePlugin;
+import com.solexgames.mlg.enums.NPCAction;
 import lombok.Data;
 import net.jitse.npclib.api.NPC;
 import net.jitse.npclib.api.skin.Skin;
@@ -23,7 +24,7 @@ public class NPCModel {
     private Location location;
     private Skin skin;
     private NPC npc;
-    private String action;
+    private NPCAction action;
 
     public NPC build() {
         final NPC npc = CorePlugin.getInstance().getNpcHandler().getLibrary().createNPC(this.lines);

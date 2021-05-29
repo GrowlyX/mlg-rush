@@ -76,6 +76,7 @@ public final class CorePlugin extends JavaPlugin {
 
         this.npcHandler = new NPCHandler();
         this.npcHandler.setupLibrary(this);
+        this.npcHandler.loadNpcModels();
 
         this.getServer().getWorlds().forEach(world -> {
             world.setDifficulty(Difficulty.NORMAL);

@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mojang.authlib.GameProfile;
 import com.solexgames.mlg.CorePlugin;
+import com.solexgames.mlg.enums.NPCAction;
 import com.solexgames.mlg.model.NPCModel;
 import com.solexgames.mlg.util.Config;
 import com.solexgames.mlg.util.LocationUtil;
@@ -12,6 +13,7 @@ import lombok.NoArgsConstructor;
 import net.jitse.npclib.NPCLib;
 import net.jitse.npclib.api.NPC;
 import net.jitse.npclib.api.skin.Skin;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.InputStreamReader;
@@ -68,6 +70,21 @@ public class NPCHandler {
                 .findFirst().orElse(null);
     }
 
+    public void loadNpcModels() {
+        final Config npcConfig = CorePlugin.getInstance().getConfigHandler().getNpcsConfig();
+        final ConfigurationSection section = npcConfig.getConfig().getConfigurationSection("npcs");
+
+        for (String key : section.getKeys(false)) {
+            final NPCModel model = new NPCModel(key, section.getString(key + ".name"), section.getStringList(key + ".lines"));
+
+            model.setSkin(CorePlugin.GSON.fromJson(section.getString(key + ".skin"), Skin.class));
+            model.setAction(NPCAction.valueOf(section.getString(key + ".action")));
+            model.setLocation(LocationUtil.getLocationFromString(section.getString(key + ".location")).orElse(null));
+
+            this.npcModelMap.put(key, model);
+        }
+    }
+
     public void saveNpcModels() {
         final Config npcConfig = CorePlugin.getInstance().getConfigHandler().getNpcsConfig();
 
@@ -78,8 +95,9 @@ public class NPCHandler {
 
             npcConfig.getConfig().set(endpoint + ".skin", CorePlugin.GSON.toJson(model.getSkin()));
             npcConfig.getConfig().set(endpoint + ".name", model.getName());
-            npcConfig.getConfig().set(endpoint + ".action", model.getAction());
+            npcConfig.getConfig().set(endpoint + ".action", model.getAction().toString());
             npcConfig.getConfig().set(endpoint + ".location", LocationUtil.getStringFromLocation(model.getLocation()).orElse(null));
+            npcConfig.getConfig().set(endpoint + ".lines", model.getLines());
         }
 
         npcConfig.save();
