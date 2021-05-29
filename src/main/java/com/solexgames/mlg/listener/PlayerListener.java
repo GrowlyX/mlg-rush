@@ -191,14 +191,6 @@ public class PlayerListener implements Listener {
             final Player damagingPlayer = event.getEntity().getKiller();
 
             if (damagingPlayer != null) {
-//                final GamePlayer damagingGamePlayer = this.plugin.getPlayerHandler().getByName(damagingPlayer.getName());
-//
-//                if (damagingGamePlayer != null) {
-//                    final ArenaPlayer damagingArenaPlayer = arena.getByPlayer(damagingPlayer);
-//
-//                    damagingGamePlayer.setKills(damagingGamePlayer.getKills() + 1);
-//                    damagingArenaPlayer.setKills(damagingArenaPlayer.getDeaths() + 1);
-//                }
                 final GamePlayer damagingGamePlayer = this.plugin.getPlayerHandler().getByName(damagingPlayer.getName());
                 final ArenaPlayer damagingArenaPlayer = arena.getByPlayer(damagingPlayer);
 
@@ -378,6 +370,11 @@ public class PlayerListener implements Listener {
             final Player player = (Player) event.getDamager();
 
             if (this.isInArena(player)) {
+                if (this.isSpectating(player)) {
+                    event.setCancelled(true);
+                    return;
+                }
+
                 final Arena arena = this.getArena(player);
 
                 if (arena.getState().equals(ArenaState.AVAILABLE)) {

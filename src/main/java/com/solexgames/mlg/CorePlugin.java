@@ -112,12 +112,10 @@ public final class CorePlugin extends JavaPlugin {
         new GameEndTask().runTaskTimerAsynchronously(this, 20L, 20L);
 
         this.loadingString = "";
-        this.getServer().getScheduler().runTaskTimerAsynchronously(this, () -> {
-            this.loadingString =
-                    this.loadingString.equals("") ? "." :
-                    this.loadingString.equals(".") ? ".." :
-                    this.loadingString.equals("..") ? "..." : "";
-        }, 10L, 10L);
+        this.getServer().getScheduler().runTaskTimerAsynchronously(this, () -> this.loadingString =
+                this.loadingString.equals("") ? "." :
+                this.loadingString.equals(".") ? ".." :
+                this.loadingString.equals("..") ? "..." : "", 10L, 10L);
     }
 
     private void setupTheming() {

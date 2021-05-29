@@ -30,7 +30,7 @@ public class ConfigHandler {
 		this.scoreboardConfig = new Config("scoreboard", CorePlugin.getInstance());
 		this.arenasConfig = new Config("arenas", CorePlugin.getInstance());
 
-		load();
+		this.load();
 	}
 
 	public void load() {
@@ -48,6 +48,6 @@ public class ConfigHandler {
 		this.scoreboardConfig.reload();
 		this.arenasConfig.reload();
 
-		load();
+		this.load();
 	}
 }

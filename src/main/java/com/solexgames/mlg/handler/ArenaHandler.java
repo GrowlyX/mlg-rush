@@ -3,8 +3,8 @@ package com.solexgames.mlg.handler;
 import com.solexgames.mlg.CorePlugin;
 import com.solexgames.mlg.duel.DuelRequest;
 import com.solexgames.mlg.enums.ArenaTeam;
-import com.solexgames.mlg.state.impl.Arena;
 import com.solexgames.mlg.player.ArenaPlayer;
+import com.solexgames.mlg.state.impl.Arena;
 import com.solexgames.mlg.state.impl.ArenaState;
 import com.solexgames.mlg.task.GameStartTask;
 import com.solexgames.mlg.util.Color;
@@ -18,7 +18,6 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketPlayOutTitle;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
@@ -37,7 +36,7 @@ public class ArenaHandler {
 
     private final static Packet<?>[] WINNER_OUT_PACKETS = new Packet[]{
             new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, IChatBaseComponent.ChatSerializer
-                    .a("{\"text\": \"" + "VICTORY" + "\",color:" + ChatColor.BOLD.name().toLowerCase() + "\",color:" + ChatColor.GOLD.name().toLowerCase() + "}")
+                    .a("{\"text\": \"" + "VICTORY" + "\",color:" + ChatColor.GOLD.name().toLowerCase() + "\",color:" + ChatColor.BOLD.name().toLowerCase() + "}")
             ),
             new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, IChatBaseComponent.ChatSerializer
                     .a("{\"text\": \"" + "You've won the game!" + "\",color:" + ChatColor.GRAY.name().toLowerCase() + "}")
@@ -46,7 +45,7 @@ public class ArenaHandler {
 
     private final static Packet<?>[] LOSER_OUT_PACKETS = new Packet[]{
             new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, IChatBaseComponent.ChatSerializer
-                    .a("{\"text\": \"" + "YOU LOST" + "\",color:" + ChatColor.BOLD.name().toLowerCase() + "\",color:" + ChatColor.RED.name().toLowerCase() + "}")
+                    .a("{\"text\": \"" + "YOU LOST" + "\",color:" + ChatColor.RED.name().toLowerCase() + "\",color:" + ChatColor.BOLD.name().toLowerCase() + "}")
             ),
             new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, IChatBaseComponent.ChatSerializer
                     .a("{\"text\": \"" + "You lost the game!" + "\",color:" + ChatColor.GRAY.name().toLowerCase() + "}")
@@ -166,6 +165,8 @@ public class ArenaHandler {
 
     public void startSpectating(Player player, Arena arena) {
         arena.broadcastMessage(Color.PRIMARY + player.getDisplayName() + Color.SECONDARY + " has started spectating the match.");
+        player.sendMessage(Color.PRIMARY + player.getDisplayName() + Color.SECONDARY + " has started spectating the match.");
+
         arena.getSpectatorList().add(player);
 
         this.spectatorWeakHashMap.put(player, arena);
@@ -183,6 +184,9 @@ public class ArenaHandler {
 
     public void stopSpectating(Player player, Arena arena) {
         arena.broadcastMessage(Color.PRIMARY + player.getDisplayName() + Color.SECONDARY + " has stopped spectating the match.");
+        player.sendMessage(Color.PRIMARY + player.getDisplayName() + Color.SECONDARY + " has stopped spectating the match.");
+
+
         arena.getSpectatorList().remove(player);
 
         player.teleport(CorePlugin.getInstance().getLocationHandler().getSpawnLocation());
