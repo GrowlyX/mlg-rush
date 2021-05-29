@@ -26,6 +26,7 @@ public class LocationHandler {
 
     public void saveSpawn() {
         CorePlugin.getInstance().getConfigHandler().getConfig().getConfig().set("locations.spawn", LocationUtil.getStringFromLocation(this.spawnLocation));
+        CorePlugin.getInstance().getConfigHandler().getConfig().save();
     }
 
     public Location getSpawnLocation() {
