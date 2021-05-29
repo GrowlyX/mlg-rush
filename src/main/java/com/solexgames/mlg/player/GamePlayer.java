@@ -29,7 +29,6 @@ public class GamePlayer {
     private final UUID uuid;
     private final String name;
 
-    private double kdr;
     private int kills;
     private int deaths;
 
@@ -59,7 +58,6 @@ public class GamePlayer {
         document.put("uuid", this.uuid.toString());
         document.put("name", this.name);
 
-        document.put("kdr", this.kdr);
         document.put("kills", this.kills);
         document.put("deaths", this.deaths);
 
@@ -81,9 +79,6 @@ public class GamePlayer {
 
                 CorePlugin.getInstance().getServer().getScheduler().runTaskLaterAsynchronously(CorePlugin.getInstance(), () -> this.savePlayerData(false), 20L);
             } else {
-                if (document.getDouble("kdr") != null) {
-                    this.kdr = document.getDouble("kdr");
-                }
                 if (document.getInteger("kills") != null) {
                     this.kills = document.getInteger("kills");
                 }
