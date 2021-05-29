@@ -81,7 +81,7 @@ public class ScoreboardAdapter implements ScoreboardElementHandler {
         return input.replace("%player%", player.getName())
                 .replace("%displayname%", player.getDisplayName())
                 .replace("%yourPrefix%", inGame ? this.getTeamPrefix(Objects.requireNonNull(arenaPlayer)) : "%yourPrefix%")
-                .replace("%theirPrefix%", arenaPlayer != null ? this.getTeamPrefix(arena.getOpponentPlayer(player)) : "%theirPrefix%")
+                .replace("%theirPrefix%", inGame ? this.getTeamPrefix(arena.getOpponentPlayer(player)) : "%theirPrefix%")
                 .replace("%fancy%", arenaPlayer != null ? this.getFancyPoints(arenaPlayer) : "%fancy%")
                 .replace("%opponentFancy%", arenaPlayer != null ? this.getFancyPoints(arena.getOpponentPlayer(player)) : "%opponentFancy%")
                 .replace("%timeLeft%", arena != null ? DurationFormatUtils.formatDuration((arena.getStart() + GameEndTask.FIFTEEN_MINUTE) - System.currentTimeMillis(), "mm:ss") : "%timeLeft%")
