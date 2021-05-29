@@ -9,6 +9,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author GrowlyX
@@ -17,7 +18,7 @@ import java.util.List;
 
 public class GameEndTask extends BukkitRunnable {
 
-    public static final long FIFTEEN_MINUTE = (20L * 60L) * 15L;
+    public static final long FIFTEEN_MINUTE = TimeUnit.MINUTES.toMillis(15L);
 
     @Override
     public void run() {
