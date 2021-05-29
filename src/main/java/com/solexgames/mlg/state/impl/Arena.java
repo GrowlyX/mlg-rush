@@ -264,6 +264,8 @@ public class Arena implements StateBasedModel<ArenaState, ArenaPlayer> {
         this.getGamePlayerList().forEach(arenaPlayer -> {
             arenaPlayer.getPlayer().setGameMode(GameMode.SPECTATOR);
 
+            this.getSpectatorList().forEach(spectator -> arenaPlayer.getPlayer().showPlayer(spectator));
+
             Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> {
                 arenaPlayer.getPlayer().teleport(CorePlugin.getInstance().getLocationHandler().getSpawnLocation());
 
