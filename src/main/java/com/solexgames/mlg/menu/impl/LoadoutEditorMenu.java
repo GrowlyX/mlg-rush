@@ -18,7 +18,15 @@ import java.util.Map;
 public class LoadoutEditorMenu extends AbstractMenu {
 
     private static final ItemStack RED_GLASS = new ItemBuilder(Material.STAINED_GLASS_PANE)
-            .setDurability(14).create();
+            .setDurability(14)
+            .setDisplayName(ChatColor.RED + "Do not touch!")
+            .addLore(
+                    "&7You shouldn't be able",
+                    "&7to add items to your",
+                    "&7own inventory while",
+                    "&7editing loadouts!"
+            )
+            .create();
 
     @Override
     public String getTitle(Player player) {

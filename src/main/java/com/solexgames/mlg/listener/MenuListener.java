@@ -72,6 +72,10 @@ public class MenuListener implements Listener {
                 }
             }
         } else if (openMenu != null && openMenu.getInventory().getTitle().contains("Editing Loadout")) {
+            if (event.getClickedInventory().equals(player.getInventory())) {
+                event.setCancelled(true);
+            }
+
             if ((event.getClick() == ClickType.SHIFT_LEFT || event.getClick() == ClickType.SHIFT_RIGHT)) {
                 event.setCancelled(true);
             }
