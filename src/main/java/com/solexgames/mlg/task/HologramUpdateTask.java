@@ -11,6 +11,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author GrowlyX
@@ -49,40 +51,30 @@ public class HologramUpdateTask extends BukkitRunnable {
 
 			this.time = 10;
 			this.leaderboard = CorePlugin.getInstance().getLeaderboardHandler().getLeaderboards().get(this.stage - 1);
+
 			holo.clearLines();
 
-			holo.appendTextLine(CC.B_PRIMARY + "MLG Rush");
-			holo.appendTextLine(CC.B_PRIMARY + "Leaderboards");
-			holo.appendTextLine("");
-			holo.appendTextLine(CC.PRIMARY + "Top " + leaderboard.getAmount() + " " + leaderboard.getName());
-			holo.appendTextLine("");
-			int i = 1;
-			for (Map.Entry<String, Integer> entry : leaderboard.getLeaderboard().entrySet()) {
-				try {
-					holo.appendTextLine(Locale.LEADERBOARD_FORMAT.format(i, entry.getKey(), entry.getValue()));
-				} catch (NullPointerException ex) {
-					holo.appendTextLine(CC.RED + "N/A");
+			for (final String line : Locale.LEADERBOARD_HOLOGRAM.formatLines("{0}", "{1}", "{2}")) {
+				if (line.contains("{1}")) {
+					final AtomicInteger atomicInteger = new AtomicInteger(1);
+
+					for (Map.Entry<String, Integer> entry : this.leaderboard.getLeaderboard().entrySet()) {
+						if (entry != null) {
+							holo.appendTextLine(Locale.LEADERBOARD_FORMAT.format(atomicInteger.getAndIncrement(), entry.getKey(), entry.getValue()));
+						}
+					}
+				} else {
+					holo.appendTextLine(line
+							.replace("{0}", "Top " + this.leaderboard.getAmount() + " " + this.leaderboard.getName())
+							.replace("{2}", TimeUtil.secondsToRoundedTime(this.time))
+					);
 				}
-				i++;
 			}
-			holo.appendTextLine("");
 		}
 
-		((TextLine)holo.getLine(holo.size() - 1)).setText(CC.GRAY + "Cycling in " + TimeUtil.secondsToRoundedTime(this.time) + ".");
+		final TextLine textLine = (TextLine) holo.getLine(holo.size() - 1);
 
-//		for (String s : Locale.LEADERBOARD_HOLOGRAM.formatLines("{0}", "{1}", "{2}")) {
-//			if (s.contains("{1}")) {
-//				int i = 1;
-//				for (Map.Entry<String, Integer> entry : leaderboard.getLeaderboard().entrySet()) {
-//					holo.appendTextLine(Locale.LEADERBOARD_FORMAT.format(i, entry.getKey(), entry.getValue()));
-//					i++;
-//				}
-//			} else {
-//				holo.appendTextLine(s
-//						.replace("{0}", "Top " + leaderboard.getAmount() + " " + leaderboard.getName())
-//						.replace("{2}", TimeUtil.secondsToRoundedTime(this.time)));
-//			}
-//		}
+		textLine.setText(CC.GRAY + "Cycling in " + CC.WHITE + TimeUtil.secondsToRoundedTime(this.time) + CC.GRAY + ".");
 
 		this.time--;
 	}
