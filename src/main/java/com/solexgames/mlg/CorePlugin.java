@@ -15,6 +15,7 @@ import com.solexgames.mlg.scoreboard.ScoreboardAdapter;
 import com.solexgames.mlg.state.impl.Arena;
 import com.solexgames.mlg.task.DuelExpireTask;
 import com.solexgames.mlg.task.GameEndTask;
+import com.solexgames.mlg.task.LeaderboardUpdateTask;
 import com.solexgames.mlg.util.CC;
 import com.solexgames.mlg.util.Color;
 import com.solexgames.mlg.util.CoreConstants;
@@ -27,6 +28,8 @@ import org.bukkit.conversations.ConversationFactory;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author GrowlyX
@@ -51,6 +54,7 @@ public final class CorePlugin extends JavaPlugin {
     private HotbarHandler hotbarHandler;
     private ConfigHandler configHandler;
     private LocationHandler locationHandler;
+    private LeaderboardHandler leaderboardHandler;
 
     private String loadingString = ".";
 
@@ -74,6 +78,8 @@ public final class CorePlugin extends JavaPlugin {
 
         this.arenaHandler = new ArenaHandler();
         this.arenaHandler.loadArenas();
+
+        this.leaderboardHandler = new LeaderboardHandler();
 
 //        this.npcHandler = new NPCHandler();
 //        this.npcHandler.setupLibrary(this);
@@ -130,6 +136,7 @@ public final class CorePlugin extends JavaPlugin {
         manager.registerCommand(new SpectateCommand());
         manager.registerCommand(new SetSpawnCommand());
         manager.registerCommand(new StatsResetCommand());
+        manager.registerCommand(new LeaderboardCommand());
 
         manager.enableUnstableAPI("help");
 
@@ -138,6 +145,7 @@ public final class CorePlugin extends JavaPlugin {
         new StatusCache().runTaskTimerAsynchronously(this, 20L, 20L);
         new DuelExpireTask().runTaskTimerAsynchronously(this, 20L, 20L);
         new GameEndTask().runTaskTimerAsynchronously(this, 20L, 20L);
+        new LeaderboardUpdateTask().runTaskTimerAsynchronously(this, 20L, TimeUnit.MINUTES.toMillis(5L));
 
         this.getServer().getScheduler().runTaskTimerAsynchronously(this, () -> this.loadingString =
                 this.loadingString.equals(".") ? ".." :
