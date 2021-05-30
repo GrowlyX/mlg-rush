@@ -68,3 +68,11 @@ prompt:
 plugin:
   reloaded: "&6MLGRush &ehas been reloaded!"
   set-spawn: "&eYou''ve set the world spawn!"
+leaderboard:
+  updated: "&aYou've updated all of the leaderboards."
+  format: "&7({0}) &e{1}: &6{2}"
+  message:
+    - "&7&m-------------------------"
+    - "&6&lTop {0} {1}:"
+    - "{2}"
+    - "&7&m-------------------------"

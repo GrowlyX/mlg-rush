@@ -84,6 +84,11 @@ public enum Locale {
 	PROMPT_SPAWN_TWO("prompt.spawn-two", CC.SECONDARY + "Please type " + CC.PRIMARY + "'here'" + CC.SECONDARY + " when you are at the arena " + CC.RED + "Red" + CC.SECONDARY + " location! " + CC.GRAY + "(" + CC.PRIMARY + "Type 'cancel' to exit at any time!" + CC.GRAY + ")"),
 	PROMPT_TEAM_SIZE("prompt.team-size", CC.SECONDARY + "What do you want the arena team size to be? " + CC.GRAY + "(" + CC.PRIMARY + "Type 'cancel' to exit at any time!" + CC.GRAY + ")"),
 
+	//  Leaderboard
+	LEADERBOARD_UPDATED("leaderboard.updated", CC.GREEN + "You've updated all of the leaderboards."),
+	LEADERBOARD_FORMAT("leaderboard.format", CC.GRAY + "({0}) " + CC.SECONDARY + "{1}: " + CC.PRIMARY + "{2}"),
+	LEADERBOARD_MESSAGE("leaderboard.message", CC.GRAY + CC.S + "-------------------------", CC.B_PRIMARY + "Top {0} {1}:", "{2}", CC.GRAY + CC.S + "-------------------------"),
+
 	//  MLG Rush
 	PLUGIN_RELOADED("plugin.reloaded", CC.PRIMARY + "MLGRush " + CC.SECONDARY + "has been reloaded!"),
 	SET_WORLD_SPAWN("plugin.set-spawn", CC.SECONDARY + "You've set the world spawn!");

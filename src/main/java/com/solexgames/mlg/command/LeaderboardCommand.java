@@ -5,7 +5,7 @@ import co.aikar.commands.annotation.*;
 import com.solexgames.mlg.CorePlugin;
 import com.solexgames.mlg.leaderboard.Leaderboard;
 import com.solexgames.mlg.util.CC;
-import org.apache.commons.lang.StringUtils;
+import com.solexgames.mlg.util.Locale;
 import org.bukkit.command.CommandSender;
 
 import java.util.Map;
@@ -18,6 +18,7 @@ import java.util.Map;
 public class LeaderboardCommand extends BaseCommand {
 
 	@Default
+	@CommandCompletion("@leaderboards")
 	public void onDefault(CommandSender sender, @Optional Leaderboard leaderboard) {
 		this.sendMessage(sender, leaderboard == null ? CorePlugin.getInstance().getLeaderboardHandler().getLeaderboards().get(0) : leaderboard);
 	}
@@ -26,19 +27,20 @@ public class LeaderboardCommand extends BaseCommand {
 	@CommandPermission("mlgrush.admin")
 	public void onUpdate(CommandSender sender) {
 		CorePlugin.getInstance().getLeaderboardHandler().updateLeaderboards();
-		sender.sendMessage(CC.GREEN + "Updated all leaderboards.");
+		sender.sendMessage(Locale.LEADERBOARD_UPDATED.format());
 	}
 
 	public void sendMessage(CommandSender sender, Leaderboard leaderboard) {
-		sender.sendMessage(CC.GRAY + CC.STRIKE_THROUGH + StringUtils.repeat("-", 20));
-		sender.sendMessage(CC.B_PRIMARY + "Top " + leaderboard.getAmount() + " " + leaderboard.getName() + ":");
-
-		int i = 1;
-		for (Map.Entry<String, Integer> entry : leaderboard.getLeaderboard().entrySet()) {
-			sender.sendMessage(CC.GRAY + "(" + i + ") " + CC.SECONDARY + entry.getKey() + ": " + CC.PRIMARY + entry.getValue());
-			i++;
+		for (String line : Locale.LEADERBOARD_MESSAGE.formatLines(leaderboard.getAmount(), leaderboard.getName(), "{2}")) {
+			if (line.contains("{2}")) {
+				int i = 1;
+				for (Map.Entry<String, Integer> entry : leaderboard.getLeaderboard().entrySet()) {
+					sender.sendMessage(Locale.LEADERBOARD_FORMAT.format(i, entry.getKey(), entry.getValue()));
+					i++;
+				}
+			} else {
+				sender.sendMessage(line);
+			}
 		}
-
-		sender.sendMessage(CC.GRAY + CC.STRIKE_THROUGH + StringUtils.repeat("-", 20));
 	}
 }
