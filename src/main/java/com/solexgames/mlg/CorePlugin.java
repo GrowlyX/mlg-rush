@@ -58,15 +58,19 @@ public final class CorePlugin extends JavaPlugin {
     private HotbarHandler hotbarHandler;
     private ConfigHandler configHandler;
     private LocationHandler locationHandler;
+    private HologramHandler hologramHandler;
     private LeaderboardHandler leaderboardHandler;
 
     private String loadingString = ".";
+    private boolean hologramsEnabled;
 
     private final ConversationFactory conversationFactory = new ConversationFactory(this);
 
     @Override
     public void onEnable() {
         instance = this;
+
+        this.hologramsEnabled = this.getServer().getPluginManager().isPluginEnabled("HolographicDisplays");
 
         this.configHandler = new ConfigHandler();
 
@@ -84,6 +88,11 @@ public final class CorePlugin extends JavaPlugin {
         this.arenaHandler.loadArenas();
 
         this.leaderboardHandler = new LeaderboardHandler();
+
+        if (this.hologramsEnabled) {
+            this.hologramHandler = new HologramHandler();
+            this.hologramHandler.setupHologram();
+        }
 
 //        this.npcHandler = new NPCHandler();
 //        this.npcHandler.setupLibrary(this);
@@ -141,7 +150,9 @@ public final class CorePlugin extends JavaPlugin {
             return gamePlayer;
         });
 
-        manager.getCommandCompletions().registerAsyncCompletion("leaderboards", context -> this.leaderboardHandler.getLeaderboards().stream().map(leaderboard -> leaderboard.getName().toLowerCase()).collect(Collectors.toList()));
+        manager.getCommandCompletions().registerAsyncCompletion("leaderboards", context ->
+                this.leaderboardHandler.getLeaderboards().stream().map(leaderboard -> leaderboard.getName().toLowerCase()).collect(Collectors.toList())
+        );
 
         manager.registerCommand(new ArenaCommand());
         manager.registerCommand(new JoinGameCommand());
@@ -159,9 +170,9 @@ public final class CorePlugin extends JavaPlugin {
 
         new ScoreboardHandler(this, new ScoreboardAdapter(), 5L);
 
-        new StatusCache().runTaskTimerAsynchronously(this, 20L, 20L);
-        new DuelExpireTask().runTaskTimerAsynchronously(this, 20L, 20L);
-        new GameEndTask().runTaskTimerAsynchronously(this, 20L, 20L);
+        new StatusCache().runTaskTimerAsynchronously(this, 20L, TimeUnit.SECONDS.toMillis(1L));
+        new DuelExpireTask().runTaskTimerAsynchronously(this, 20L, TimeUnit.SECONDS.toMillis(1L));
+        new GameEndTask().runTaskTimerAsynchronously(this, 20L, TimeUnit.SECONDS.toMillis(1L));
         new LeaderboardUpdateTask().runTaskTimerAsynchronously(this, 20L, TimeUnit.MINUTES.toMillis(5L));
 
         this.getServer().getScheduler().runTaskTimerAsynchronously(this, () -> this.loadingString =

@@ -4,3 +4,5 @@ main: com.solexgames.mlg.CorePlugin
 
 author: SolexGames
 website: https://www.solexgames.com
+
+softdepend: [HolographicDisplays]
