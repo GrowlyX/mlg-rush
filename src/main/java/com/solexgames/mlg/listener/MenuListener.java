@@ -71,6 +71,10 @@ public class MenuListener implements Listener {
                     event.setCancelled(true);
                 }
             }
+        } else if (openMenu != null && openMenu.getInventory().getTitle().contains("Editing Loadout")) {
+            if ((event.getClick() == ClickType.SHIFT_LEFT || event.getClick() == ClickType.SHIFT_RIGHT)) {
+                event.setCancelled(true);
+            }
         }
     }
 
@@ -104,7 +108,7 @@ public class MenuListener implements Listener {
         final Player player = (Player) event.getInitiator().getViewers().get(0);
 
         if (openMenu != null && openMenu.getTitle(player).contains("Editing Loadout")) {
-            if (event.getDestination().equals(player.getInventory())) {
+            if (event.getDestination().equals(player.getInventory()) || event.getDestination().equals(openMenu.getInventory())) {
                 event.setCancelled(true);
             }
         }

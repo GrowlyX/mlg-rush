@@ -6,6 +6,7 @@ import com.solexgames.mlg.menu.button.Button;
 import com.solexgames.mlg.player.GamePlayer;
 import com.solexgames.mlg.util.Color;
 import com.solexgames.mlg.util.Locale;
+import com.solexgames.mlg.util.builder.ItemBuilder;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -15,6 +16,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LoadoutEditorMenu extends AbstractMenu {
+
+    private static final ItemStack RED_GLASS = new ItemBuilder(Material.STAINED_GLASS_PANE)
+            .setDurability(14).create();
 
     @Override
     public String getTitle(Player player) {
@@ -50,8 +54,13 @@ public class LoadoutEditorMenu extends AbstractMenu {
     @Override
     public void onOpen(Player player) {
         player.getInventory().clear();
-
         player.sendMessage(Locale.LAYOUT_OPEN_EDITOR.formatLinesArray());
+
+        while (player.getInventory().firstEmpty() != -1) {
+            final int firstEmpty = player.getInventory().firstEmpty();
+
+            player.getInventory().setItem(firstEmpty, LoadoutEditorMenu.RED_GLASS);
+        }
     }
 
     @Override
@@ -63,6 +72,7 @@ public class LoadoutEditorMenu extends AbstractMenu {
         }
 
         player.sendMessage(Locale.LAYOUT_MODIFIED.formatLinesArray());
+
         CorePlugin.getInstance().getHotbarHandler().setupLobbyHotbar(player);
     }
 }

@@ -83,12 +83,10 @@ public enum Locale {
 	PROMPT_SPAWN_ONE("prompt.spawn-one", CC.SECONDARY + "Please type " + CC.PRIMARY + "'here'" + CC.SECONDARY + " when you are at the arena " + ChatColor.BLUE + "Blue" + CC.SECONDARY + " location! " + CC.GRAY + "(" + CC.PRIMARY + "Type 'cancel' to exit at any time!" + CC.GRAY + ")"),
 	PROMPT_SPAWN_TWO("prompt.spawn-two", CC.SECONDARY + "Please type " + CC.PRIMARY + "'here'" + CC.SECONDARY + " when you are at the arena " + CC.RED + "Red" + CC.SECONDARY + " location! " + CC.GRAY + "(" + CC.PRIMARY + "Type 'cancel' to exit at any time!" + CC.GRAY + ")"),
 	PROMPT_TEAM_SIZE("prompt.team-size", CC.SECONDARY + "What do you want the arena team size to be? " + CC.GRAY + "(" + CC.PRIMARY + "Type 'cancel' to exit at any time!" + CC.GRAY + ")"),
-	
+
 	//  MLG Rush
 	PLUGIN_RELOADED("plugin.reloaded", CC.PRIMARY + "MLGRush " + CC.SECONDARY + "has been reloaded!"),
-	SET_WORLD_SPAWN("plugin.set-spawn", CC.SECONDARY + "You've set the world spawn!")
-
-	;
+	SET_WORLD_SPAWN("plugin.set-spawn", CC.SECONDARY + "You've set the world spawn!");
 
 	private final String path;
 	private final String[] defaultMessages;
