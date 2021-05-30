@@ -2,6 +2,7 @@ package com.solexgames.mlg.handler;
 
 import com.solexgames.mlg.CorePlugin;
 import com.solexgames.mlg.util.LocationUtil;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.bukkit.Bukkit;
@@ -17,14 +18,20 @@ import org.bukkit.Location;
 public class LocationHandler {
 
     private Location spawnLocation;
+    @Getter private Location hologramLocation;
 
     public void loadSpawn() {
-        this.spawnLocation = LocationUtil.getLocationFromString(CorePlugin.getInstance().getConfigHandler().getConfig().getString("locations.spawn"))
-                .orElse(null);
+        this.spawnLocation = LocationUtil.getLocationFromString(CorePlugin.getInstance().getConfigHandler().getConfig().getString("locations.spawn")).orElse(null);
+        this.hologramLocation = LocationUtil.getLocationFromString(CorePlugin.getInstance().getConfigHandler().getConfig().getString("locations.spawn")).orElse(null);
     }
 
     public void saveSpawn() {
         CorePlugin.getInstance().getConfigHandler().getConfig().getConfig().set("locations.spawn", LocationUtil.getStringFromLocation(this.spawnLocation).orElse(null));
+        CorePlugin.getInstance().getConfigHandler().getConfig().save();
+    }
+
+    public void saveHolo() {
+        CorePlugin.getInstance().getConfigHandler().getConfig().getConfig().set("locations.holo", LocationUtil.getStringFromLocation(this.hologramLocation).orElse(null));
         CorePlugin.getInstance().getConfigHandler().getConfig().save();
     }
 

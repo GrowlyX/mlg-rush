@@ -6,6 +6,8 @@ import com.solexgames.mlg.CorePlugin;
 import com.solexgames.mlg.task.HologramUpdateTask;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.bukkit.Location;
 
 import java.util.concurrent.TimeUnit;
 
@@ -18,14 +20,17 @@ import java.util.concurrent.TimeUnit;
 @NoArgsConstructor
 public class HologramHandler {
 
+    @Setter
     private Hologram rotatingHologram;
     private HologramUpdateTask updateTask;
 
     public void setupHologram() {
-        this.rotatingHologram = HologramsAPI.getHolograms(CorePlugin.getInstance()).stream()
-                .findFirst().orElse(null);
+        final Location location = CorePlugin.getInstance().getLocationHandler().getHologramLocation();
+        if (location != null) {
+            this.rotatingHologram = HologramsAPI.createHologram(CorePlugin.getInstance(), location);
+        }
 
         this.updateTask = new HologramUpdateTask();
-        this.updateTask.runTaskTimerAsynchronously(CorePlugin.getInstance(), 20L, TimeUnit.SECONDS.toMillis(10L));
+        this.updateTask.runTaskTimer(CorePlugin.getInstance(), 20L, 20L);
     }
 }

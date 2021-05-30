@@ -165,6 +165,7 @@ public final class CorePlugin extends JavaPlugin {
         manager.registerCommand(new SetSpawnCommand());
         manager.registerCommand(new StatsResetCommand());
         manager.registerCommand(new LeaderboardCommand());
+        manager.registerCommand(new SetHologramCommand());
 
         manager.enableUnstableAPI("help");
 

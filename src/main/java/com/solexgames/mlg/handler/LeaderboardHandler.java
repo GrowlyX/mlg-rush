@@ -1,8 +1,5 @@
 package com.solexgames.mlg.handler;
 
-import com.gmail.filoghost.holographicdisplays.api.Hologram;
-import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
-import com.solexgames.mlg.CorePlugin;
 import com.solexgames.mlg.leaderboard.Leaderboard;
 import lombok.Getter;
 
