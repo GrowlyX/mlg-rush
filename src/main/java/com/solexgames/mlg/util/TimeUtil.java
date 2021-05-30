@@ -6,6 +6,7 @@ import org.apache.commons.lang.time.DurationFormatUtils;
  * @author puugz
  * @since 30/05/2021 13:29
  */
+
 public class TimeUtil {
 
 	public static String millisToRoundedTime(long millis) {
@@ -13,6 +14,6 @@ public class TimeUtil {
 	}
 
 	public static String secondsToRoundedTime(int seconds) {
-		return millisToRoundedTime(seconds * 1000L);
+		return TimeUtil.millisToRoundedTime(seconds * 1000L);
 	}
 }

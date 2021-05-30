@@ -223,7 +223,7 @@ public class Arena implements StateBasedModel<ArenaState, ArenaPlayer> {
     public boolean isCloseToSpawn(Location location, ArenaTeam arenaTeam) {
         final Location spawn = arenaTeam == ArenaTeam.BLUE ? this.spawnOne : this.spawnTwo;
 
-        return location.getBlock().getLocation().distance(spawn) <= 2.0D;
+        return location.getBlock().getLocation().distance(spawn) <= 5.0D;
     }
 
     public ArenaTeam getOpposingTeam(ArenaPlayer arenaPlayer) {

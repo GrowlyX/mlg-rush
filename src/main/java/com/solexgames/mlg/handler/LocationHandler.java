@@ -2,7 +2,6 @@ package com.solexgames.mlg.handler;
 
 import com.solexgames.mlg.CorePlugin;
 import com.solexgames.mlg.util.LocationUtil;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.bukkit.Bukkit;

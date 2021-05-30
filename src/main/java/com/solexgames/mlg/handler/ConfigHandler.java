@@ -34,22 +34,6 @@ public class ConfigHandler {
 		this.npcsConfig = new Config("npcs", this.plugin);
 		this.langConfig = new Config("lang", this.plugin);
 
-		// i used this to generate the lang file because i didn't want to write everything in it myself
-//		if (this.langConfig.isWasCreated()) {
-//			this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> {
-//				for (Locale value : Locale.values()) {
-//					final String[] lines = value.getDefaultMessages();
-//
-//					if (lines.length == 1) {
-//						this.langConfig.getConfig().set(value.getPath(), lines[0]);
-//					} else {
-//						this.langConfig.getConfig().set(value.getPath(), Arrays.asList(lines));
-//					}
-//				}
-//				this.langConfig.save();
-//			}, 3L);
-//		}
-
 		this.loadScoreboards();
 	}
 

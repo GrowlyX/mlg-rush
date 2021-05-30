@@ -111,6 +111,14 @@ public class MenuListener implements Listener {
             if (event.getDestination().equals(player.getInventory()) || event.getDestination().equals(openMenu.getInventory())) {
                 event.setCancelled(true);
             }
+
+            if (event.getSource().equals(player.getInventory()) || event.getSource().equals(openMenu.getInventory())) {
+                event.setCancelled(true);
+            }
+
+            if (event.getInitiator().equals(player.getInventory()) || event.getInitiator().equals(openMenu.getInventory())) {
+                event.setCancelled(true);
+            }
         }
     }
 }
