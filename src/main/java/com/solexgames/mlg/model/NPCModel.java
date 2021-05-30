@@ -33,7 +33,6 @@ public class NPCModel {
         npc.setSkin(this.skin);
         npc.setLocation(this.location);
 
-        this.npc = npc;
-        return this.npc;
+        return this.npc = npc;
     }
 }

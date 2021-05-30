@@ -3,6 +3,7 @@ package com.solexgames.mlg.listener;
 import com.solexgames.mlg.CorePlugin;
 import com.solexgames.mlg.menu.impl.LoadoutEditorMenu;
 import com.solexgames.mlg.menu.impl.MatchSpectateMenu;
+import com.solexgames.mlg.menu.impl.SelectGameMenu;
 import com.solexgames.mlg.model.NPCModel;
 import com.solexgames.mlg.state.impl.Arena;
 import com.solexgames.mlg.util.Locale;
@@ -25,16 +26,15 @@ public class NPCListener implements Listener {
         final NPCModel model = CorePlugin.getInstance().getNpcHandler().getModelByNPC(event.getNPC());
 
         if (model != null && model.getAction() != null) {
-            // TODO: 5/29/2021 add logic here
             switch (model.getAction()) {
                 case JOIN_GAME:
-                    player.chat("/join");
+                    new SelectGameMenu().openMenu(player);
                     break;
                 case SPECTATE:
-                    player.chat("/spec");
+                    new MatchSpectateMenu().openMenu(player);
                     break;
                 case EDIT_LAYOUT:
-                    player.chat("/layout");
+                    new LoadoutEditorMenu().openMenu(player);
                     break;
             }
         }

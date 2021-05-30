@@ -70,35 +70,34 @@ public class GamePlayer {
     }
 
     private void loadPlayerData() {
-        CompletableFuture.runAsync(() -> {
-            final Document document = CorePlugin.getInstance().getMongoHandler().getPlayerCollection().find(Filters.eq("uuid", this.uuid.toString())).first();
+        CompletableFuture.supplyAsync(() -> CorePlugin.getInstance().getMongoHandler().getPlayerCollection().find(Filters.eq("uuid", this.uuid.toString())).first())
+                .thenAccept(document -> {
+                    if (document == null) {
+                        this.layout = new Layout(this.uuid);
+                        this.layout.setupDefaultInventory();
 
-            if (document == null) {
-                this.layout = new Layout(this.uuid);
-                this.layout.setupDefaultInventory();
+                        CorePlugin.getInstance().getServer().getScheduler().runTaskLaterAsynchronously(CorePlugin.getInstance(), () -> this.savePlayerData(false), 20L);
+                    } else {
+                        if (document.getInteger("kills") != null) {
+                            this.kills = document.getInteger("kills");
+                        }
+                        if (document.getInteger("deaths") != null) {
+                            this.deaths = document.getInteger("deaths");
+                        }
+                        if (document.getInteger("totalWins") != null) {
+                            this.wins = document.getInteger("totalWins");
+                        }
+                        if (document.getInteger("totalLosses") != null) {
+                            this.losses = document.getInteger("totalLosses");
+                        }
+                        if (document.getString("layout") != null) {
+                            this.layout = GsonFactory.getPrettyGson().fromJson(document.getString("layout"), Layout.class);
+                        } else {
+                            this.layout = new Layout(this.uuid);
+                        }
 
-                CorePlugin.getInstance().getServer().getScheduler().runTaskLaterAsynchronously(CorePlugin.getInstance(), () -> this.savePlayerData(false), 20L);
-            } else {
-                if (document.getInteger("kills") != null) {
-                    this.kills = document.getInteger("kills");
-                }
-                if (document.getInteger("deaths") != null) {
-                    this.deaths = document.getInteger("deaths");
-                }
-                if (document.getInteger("totalWins") != null) {
-                    this.wins = document.getInteger("totalWins");
-                }
-                if (document.getInteger("totalLosses") != null) {
-                    this.losses = document.getInteger("totalLosses");
-                }
-                if (document.getString("layout") != null) {
-                    this.layout = GsonFactory.getPrettyGson().fromJson(document.getString("layout"), Layout.class);
-                } else {
-                    this.layout = new Layout(this.uuid);
-                }
-
-                this.layout.setupDefaultInventory();
-            }
-        });
+                        this.layout.setupDefaultInventory();
+                    }
+                });
     }
 }

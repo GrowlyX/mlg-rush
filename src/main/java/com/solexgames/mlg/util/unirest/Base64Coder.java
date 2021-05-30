@@ -1,8 +1,7 @@
 package com.solexgames.mlg.util.unirest;
 
 /**
- * @author GrowlyX
- * @since 5/28/2021
+ * From unirest
  */
 
 public class Base64Coder {
