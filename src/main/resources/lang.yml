@@ -52,8 +52,7 @@ layout:
     - "&7 * &eTo save your loadout, close your inventory."
   modified:
     - "&eYou''ve modified your loadout!"
-    - "&7&oIf you need to reset your loadout, try &e/resetloadout&7&\
-    o."
+    - "&7&oIf you need to reset your loadout, try &e/resetloadout&7&o."
   reset: "&aYou''ve reset your layout!"
 prompt:
   cancelled: "&cCancelled arena creation procedure."
