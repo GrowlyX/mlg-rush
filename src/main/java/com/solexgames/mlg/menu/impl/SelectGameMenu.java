@@ -5,6 +5,7 @@ import com.solexgames.mlg.menu.button.Button;
 import com.solexgames.mlg.menu.paginated.AbstractPaginatedMenu;
 import com.solexgames.mlg.state.impl.Arena;
 import com.solexgames.mlg.state.impl.ArenaState;
+import com.solexgames.mlg.util.CC;
 import com.solexgames.mlg.util.Color;
 import com.solexgames.mlg.util.builder.ItemBuilder;
 import lombok.RequiredArgsConstructor;
@@ -54,10 +55,10 @@ public class SelectGameMenu extends AbstractPaginatedMenu {
         public ItemStack getButtonItem(Player player) {
             return new ItemBuilder(Material.WOOL)
                     .setDurability(this.getDurability())
-                    .setDisplayName(Color.PRIMARY + ChatColor.BOLD.toString() + this.arena.getName())
+                    .setDisplayName(CC.PRIMARY + CC.BOLD + this.arena.getName())
                     .addLore(
-                            ChatColor.GRAY + "State: " + this.getStateString(),
-                            ChatColor.GRAY + "Players: " + Color.PRIMARY + this.arena.getGamePlayerList().size() + "/" + this.arena.getMaxPlayers(),
+                            CC.GRAY + "State: " + this.getStateString(),
+                            CC.GRAY + "Players: " + CC.PRIMARY + this.arena.getGamePlayerList().size() + "/" + this.arena.getMaxPlayers(),
                             "",
                             this.getJoinableString()
                     )
@@ -89,9 +90,9 @@ public class SelectGameMenu extends AbstractPaginatedMenu {
                 case AVAILABLE:
                     return ChatColor.GREEN + "Available";
                 case REGENERATING:
-                    return ChatColor.GOLD + "Regenerating";
+                    return CC.GOLD + "Regenerating";
                 default:
-                    return ChatColor.RED + "Offline";
+                    return CC.RED + "Offline";
             }
         }
 
@@ -99,7 +100,7 @@ public class SelectGameMenu extends AbstractPaginatedMenu {
             if (this.arena.getArenaState() == ArenaState.AVAILABLE) {
                 return ChatColor.GREEN + "[Click to join this game]";
             }
-            return ChatColor.RED + "[Cannot join right now]";
+            return CC.RED + "[Cannot join right now]";
         }
     }
 }

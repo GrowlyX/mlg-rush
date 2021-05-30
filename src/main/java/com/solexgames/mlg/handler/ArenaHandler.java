@@ -7,9 +7,8 @@ import com.solexgames.mlg.player.ArenaPlayer;
 import com.solexgames.mlg.state.impl.Arena;
 import com.solexgames.mlg.state.impl.ArenaState;
 import com.solexgames.mlg.task.GameStartTask;
-import com.solexgames.mlg.util.Color;
-import com.solexgames.mlg.util.LocationUtil;
-import com.solexgames.mlg.util.PlayerUtil;
+import com.solexgames.mlg.util.*;
+import com.solexgames.mlg.util.Locale;
 import com.solexgames.mlg.util.clickable.Clickable;
 import com.solexgames.mlg.util.cuboid.Cuboid;
 import lombok.Getter;
@@ -33,24 +32,6 @@ import java.util.*;
 @Getter
 @NoArgsConstructor
 public class ArenaHandler {
-
-    private final static Packet<?>[] WINNER_OUT_PACKETS = new Packet[]{
-            new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, IChatBaseComponent.ChatSerializer
-                    .a("{\"text\": \"" + "VICTORY" + "\",color:" + ChatColor.GOLD.name().toLowerCase() + "\",color:" + ChatColor.BOLD.name().toLowerCase() + "}")
-            ),
-            new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, IChatBaseComponent.ChatSerializer
-                    .a("{\"text\": \"" + "You've won the game!" + "\",color:" + ChatColor.GRAY.name().toLowerCase() + "}")
-            ),
-    };
-
-    private final static Packet<?>[] LOSER_OUT_PACKETS = new Packet[]{
-            new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, IChatBaseComponent.ChatSerializer
-                    .a("{\"text\": \"" + "YOU LOST" + "\",color:" + ChatColor.RED.name().toLowerCase() + "\",color:" + ChatColor.BOLD.name().toLowerCase() + "}")
-            ),
-            new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, IChatBaseComponent.ChatSerializer
-                    .a("{\"text\": \"" + "You lost the game!" + "\",color:" + ChatColor.GRAY.name().toLowerCase() + "}")
-            ),
-    };
 
     private final WeakHashMap<Player, Arena> arenaWeakHashMap = new WeakHashMap<>();
     private final WeakHashMap<Player, Arena> spectatorWeakHashMap = new WeakHashMap<>();
@@ -94,23 +75,23 @@ public class ArenaHandler {
      */
     public void addToGame(Player player, Arena arena) {
         if (arena.getState().equals(ArenaState.IN_GAME) || arena.getState().equals(ArenaState.REGENERATING)) {
-            player.sendMessage(ChatColor.RED + "You cannot join this arena at the moment.");
+            player.sendMessage(Locale.ARENA_REGENERATING.format());
             return;
         }
 
         if (this.isInArena(player)) {
-            player.sendMessage(ChatColor.RED + "You're already in an arena!");
+            player.sendMessage(Locale.ALREADY_IN_ARENA.format());
             return;
         }
 
         if (arena.getAllPlayerList().contains(player)) {
-            player.sendMessage(ChatColor.RED + "You're already in an arena!");
+            player.sendMessage(Locale.ALREADY_IN_ARENA.format());
             return;
         }
 
         if (arena.getTeamSize() == 1) {
             if (arena.getGamePlayerList().size() == 2) {
-                player.sendMessage(ChatColor.RED + "This arena is currently at max capacity!");
+                player.sendMessage(Locale.ARENA_MAX_PLAYERS.format());
                 return;
             }
 
@@ -118,7 +99,7 @@ public class ArenaHandler {
 
             arena.getAllPlayerList().add(player);
             arena.getGamePlayerList().add(new ArenaPlayer(arena, (arena.getGamePlayerList().size() == 0 ? ArenaTeam.BLUE : (arena.getGamePlayerList().get(0).getArenaTeam() == ArenaTeam.BLUE ? ArenaTeam.RED : ArenaTeam.BLUE)), player));
-            arena.broadcastMessage(Color.PRIMARY + player.getName() + Color.SECONDARY + " has joined the arena. " + ChatColor.GRAY + "(" + arena.getGamePlayerList().size() + "/" + arena.getMaxPlayers() + ")");
+            arena.broadcastMessage(Locale.PLAYER_JOIN_ARENA.format(player.getDisplayName(), arena.getGamePlayerList().size(), arena.getMaxPlayers()));
 
             PlayerUtil.restorePlayer(player);
 
@@ -130,7 +111,7 @@ public class ArenaHandler {
                 new GameStartTask(Arena.LONG_START ? 20 : 5, arena);
             }
         } else {
-            player.sendMessage(ChatColor.RED + "MLG Rush Teams mode is currently in development!");
+            player.sendMessage(CC.RED + "MLG Rush Teams mode is currently in development!");
         }
     }
 
@@ -144,16 +125,16 @@ public class ArenaHandler {
     public void leaveGame(Player player, Arena arena) {
         if (arena == null) {
             player.teleport(CorePlugin.getInstance().getLocationHandler().getSpawnLocation());
-            player.sendMessage(ChatColor.RED + "You aren't currently in an arena.");
+            player.sendMessage(Locale.CURRENTLY_NOT_IN_ARENA.format());
             return;
         }
 
         if (arena.getState().equals(ArenaState.AVAILABLE)) {
             this.arenaWeakHashMap.remove(player);
 
+            arena.broadcastMessage(Locale.PLAYER_LEAVE_ARENA.format(player.getDisplayName(), arena.getGamePlayerList().size(), arena.getMaxPlayers()));
             arena.getAllPlayerList().remove(player);
             arena.getGamePlayerList().remove(arena.getByPlayer(player));
-            arena.broadcastMessage(Color.PRIMARY + player.getName() + Color.SECONDARY + " has left the arena. " + ChatColor.GRAY + "(" + arena.getGamePlayerList().size() + "/" + arena.getMaxPlayers() + ")");
 
             player.teleport(CorePlugin.getInstance().getLocationHandler().getSpawnLocation());
 
@@ -164,8 +145,8 @@ public class ArenaHandler {
     }
 
     public void startSpectating(Player player, Arena arena) {
-        arena.broadcastMessage(Color.PRIMARY + player.getDisplayName() + Color.SECONDARY + " has started spectating the match.");
-        player.sendMessage(Color.PRIMARY + player.getDisplayName() + Color.SECONDARY + " has started spectating the match.");
+        arena.broadcastMessage(Locale.STARTED_SPECTATING.format(player.getDisplayName()));
+        player.sendMessage(Locale.STARTED_SPECTATING.format(player.getDisplayName()));
 
         arena.getSpectatorList().add(player);
 
@@ -183,8 +164,8 @@ public class ArenaHandler {
     }
 
     public void stopSpectating(Player player, Arena arena) {
-        arena.broadcastMessage(Color.PRIMARY + player.getDisplayName() + Color.SECONDARY + " has stopped spectating the match.");
-        player.sendMessage(Color.PRIMARY + player.getDisplayName() + Color.SECONDARY + " has stopped spectating the match.");
+        arena.broadcastMessage(Locale.STOPPED_SPECTATING.format(player.getDisplayName()));
+        player.sendMessage(Locale.STOPPED_SPECTATING.format(player.getDisplayName()));
 
 
         arena.getSpectatorList().remove(player);
@@ -206,11 +187,13 @@ public class ArenaHandler {
                 System.currentTimeMillis(), issuer.getDisplayName(),
                 target.getDisplayName(), selectedArena);
 
-        issuer.sendMessage(Color.SECONDARY + "You've sent out a duel request to " + target.getDisplayName() + Color.SECONDARY + " on the map " + Color.PRIMARY + selectedArena.getName() + Color.SECONDARY + "!");
+        // todo: put messages in Locale.java
+
+        issuer.sendMessage(Locale.REQUEST_SENT.format(target.getDisplayName(), selectedArena.getName()));
 
         final Clickable clickable = new Clickable("");
 
-        clickable.add(Color.SECONDARY + "You've received a duel request from " + issuer.getDisplayName() + Color.SECONDARY + "! ");
+        clickable.add(CC.SECONDARY + "You've received a duel request from " + issuer.getDisplayName() + CC.SECONDARY + "! ");
         clickable.add(ChatColor.GREEN + ChatColor.BOLD.toString() + "[Click to Accept]", ChatColor.GREEN + "Click to accept " + issuer.getDisplayName() + ChatColor.GREEN + "'s duel request.", "/duel accept " + duelRequest.getId().toString(), ClickEvent.Action.RUN_COMMAND);
 
         target.spigot().sendMessage(clickable.asComponents());
@@ -226,10 +209,11 @@ public class ArenaHandler {
      * @param winner If the title should be the victory title or not
      */
     public void sendEndTitle(Player player, boolean winner) {
-        final CraftPlayer craftPlayer = (CraftPlayer) player;
-
-        Arrays.asList(winner ? ArenaHandler.WINNER_OUT_PACKETS : ArenaHandler.LOSER_OUT_PACKETS)
-                .forEach(packet -> craftPlayer.getHandle().playerConnection.sendPacket(packet));
+        if (winner) {
+            PlayerUtil.sendTitle(player, Locale.WINNER_TITLE.format(), Locale.WINNER_SUBTITLE.format());
+        } else {
+            PlayerUtil.sendTitle(player, Locale.LOSER_TITLE.format(), Locale.LOSER_SUBTITLE.format());
+        }
     }
 
     /**

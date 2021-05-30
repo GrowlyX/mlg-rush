@@ -3,6 +3,7 @@ package com.solexgames.mlg.menu.paginated;
 import com.solexgames.mlg.menu.AbstractMenu;
 import com.solexgames.mlg.menu.button.Button;
 import com.solexgames.mlg.menu.button.impl.ViewPageButton;
+import com.solexgames.mlg.util.CC;
 import com.solexgames.mlg.util.Color;
 import com.solexgames.mlg.util.builder.ItemBuilder;
 import lombok.Getter;
@@ -28,7 +29,7 @@ public abstract class AbstractPaginatedMenu extends AbstractMenu {
 
     @Override
     public String getTitle(Player player) {
-        return getPrePaginatedTitle(player) + ChatColor.GRAY + " (" + Color.PRIMARY + page + ChatColor.GRAY + "/" + Color.PRIMARY + this.getPages(player) + ChatColor.GRAY + ")";
+        return getPrePaginatedTitle(player) + CC.GRAY + " (" + CC.PRIMARY + page + CC.GRAY + "/" + CC.PRIMARY + this.getPages(player) + CC.GRAY + ")";
     }
 
     /**

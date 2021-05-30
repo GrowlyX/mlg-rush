@@ -3,14 +3,11 @@ package com.solexgames.mlg.handler;
 import com.solexgames.mlg.CorePlugin;
 import com.solexgames.mlg.util.Color;
 import com.solexgames.mlg.util.Config;
-import javafx.util.Pair;
+import com.solexgames.mlg.util.Locale;
 import lombok.Getter;
 import org.bukkit.configuration.ConfigurationSection;
 
-import java.util.AbstractMap;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author puugz
@@ -28,12 +25,30 @@ public class ConfigHandler {
 	private final Config scoreboardConfig;
 	private final Config arenasConfig;
 	private final Config npcsConfig;
+	private final Config langConfig;
 
 	public ConfigHandler() {
 		this.config = new Config("config", this.plugin);
 		this.scoreboardConfig = new Config("scoreboard", this.plugin);
 		this.arenasConfig = new Config("arenas", this.plugin);
 		this.npcsConfig = new Config("npcs", this.plugin);
+		this.langConfig = new Config("lang", this.plugin);
+
+		// i used this to generate the lang file because i didn't want to write everything in it myself
+//		if (this.langConfig.isWasCreated()) {
+//			this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> {
+//				for (Locale value : Locale.values()) {
+//					final String[] lines = value.getDefaultMessages();
+//
+//					if (lines.length == 1) {
+//						this.langConfig.getConfig().set(value.getPath(), lines[0]);
+//					} else {
+//						this.langConfig.getConfig().set(value.getPath(), Arrays.asList(lines));
+//					}
+//				}
+//				this.langConfig.save();
+//			}, 3L);
+//		}
 
 		this.loadScoreboards();
 	}
@@ -51,7 +66,7 @@ public class ConfigHandler {
 	public void reload() {
 		this.config.reload();
 		this.scoreboardConfig.reload();
-		this.arenasConfig.reload();
+		this.langConfig.reload();
 
 		this.loadScoreboards();
 	}

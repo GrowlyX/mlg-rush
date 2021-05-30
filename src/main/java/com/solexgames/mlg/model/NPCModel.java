@@ -25,6 +25,7 @@ public class NPCModel {
     private Skin skin;
     private NPC npc;
     private NPCAction action;
+    private boolean updater;
 
     public NPC build() {
         final NPC npc = CorePlugin.getInstance().getNpcHandler().getLibrary().createNPC(this.lines);

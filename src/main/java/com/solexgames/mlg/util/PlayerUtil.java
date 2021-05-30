@@ -1,7 +1,11 @@
 package com.solexgames.mlg.util;
 
 import lombok.experimental.UtilityClass;
+import net.minecraft.server.v1_8_R3.IChatBaseComponent;
+import net.minecraft.server.v1_8_R3.PacketPlayOutTitle;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -75,5 +79,15 @@ public class PlayerUtil {
         player.getInventory().setHeldItemSlot(0);
 
         player.updateInventory();
+    }
+
+    public static void sendTitle(Player player, String title, String subtitle) {
+        final CraftPlayer craftPlayer = (CraftPlayer) player;
+
+        final PacketPlayOutTitle titlePacket = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + title + "\"}"));
+        final PacketPlayOutTitle subtitlePacket = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + subtitle + "\"}"));
+
+        craftPlayer.getHandle().playerConnection.sendPacket(titlePacket);
+        craftPlayer.getHandle().playerConnection.sendPacket(subtitlePacket);
     }
 }

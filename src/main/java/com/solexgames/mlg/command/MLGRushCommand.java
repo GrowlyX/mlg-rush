@@ -6,7 +6,9 @@ import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Default;
 import co.aikar.commands.annotation.Subcommand;
 import com.solexgames.mlg.CorePlugin;
+import com.solexgames.mlg.util.CC;
 import com.solexgames.mlg.util.Color;
+import com.solexgames.mlg.util.Locale;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -23,7 +25,7 @@ public class MLGRushCommand extends BaseCommand {
 
     @Default
     public void onDefault(Player player) {
-        player.sendMessage(Color.SECONDARY + "This server is running " + Color.PRIMARY + "MLGRush" + Color.SECONDARY + " created by " + Color.PRIMARY + String.join(Color.SECONDARY + ", " + Color.PRIMARY, AUTHORS) + Color.SECONDARY + ".");
+        player.sendMessage(CC.SECONDARY + "This server is running " + CC.PRIMARY + "MLGRush" + CC.SECONDARY + " created by " + CC.PRIMARY + String.join(CC.SECONDARY + ", " + CC.PRIMARY, AUTHORS) + CC.SECONDARY + ".");
     }
 
     @Subcommand("reload")
@@ -31,6 +33,6 @@ public class MLGRushCommand extends BaseCommand {
     public void reload(CommandSender sender) {
         CorePlugin.getInstance().getConfigHandler().reload();
 
-        sender.sendMessage(Color.PRIMARY + "MLGRush " + Color.SECONDARY + " has been reloaded!");
+        sender.sendMessage(Locale.PLUGIN_RELOADED.format());
     }
 }

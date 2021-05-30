@@ -6,6 +6,7 @@ import co.aikar.commands.annotation.CommandPermission;
 import com.solexgames.mlg.CorePlugin;
 import com.solexgames.mlg.handler.LocationHandler;
 import com.solexgames.mlg.util.Color;
+import com.solexgames.mlg.util.Locale;
 import org.bukkit.entity.Player;
 
 /**
@@ -23,6 +24,6 @@ public class SetSpawnCommand extends BaseCommand {
         locationHandler.setSpawnLocation(player.getLocation());
         locationHandler.saveSpawn();
 
-        player.sendMessage(Color.SECONDARY + "You've set the world spawn!");
+        player.sendMessage(Locale.SET_WORLD_SPAWN.format());
     }
 }

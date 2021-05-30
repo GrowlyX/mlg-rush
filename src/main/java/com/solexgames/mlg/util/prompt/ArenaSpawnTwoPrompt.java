@@ -1,7 +1,9 @@
 package com.solexgames.mlg.util.prompt;
 
 import com.solexgames.mlg.state.impl.Arena;
+import com.solexgames.mlg.util.CC;
 import com.solexgames.mlg.util.Color;
+import com.solexgames.mlg.util.Locale;
 import com.solexgames.mlg.util.cuboid.Cuboid;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.ChatColor;
@@ -35,13 +37,13 @@ public class ArenaSpawnTwoPrompt extends StringPrompt {
 
     @Override
     public String getPromptText(ConversationContext context) {
-        return Color.SECONDARY + "Please type " + Color.PRIMARY + "'here'" + Color.SECONDARY + " when you are at the arena " + ChatColor.RED + "Red" + Color.SECONDARY + " location! " + ChatColor.GRAY + "(" + Color.PRIMARY + "Type 'cancel' to exit at any time!" + ChatColor.GRAY + ")";
+        return Locale.PROMPT_SPAWN_TWO.format();
     }
 
     @Override
     public Prompt acceptInput(ConversationContext context, String input) {
         if (input.equalsIgnoreCase("cancel")) {
-            context.getForWhom().sendRawMessage(ChatColor.RED + "Cancelled arena creation procedure.");
+            context.getForWhom().sendRawMessage(Locale.PROMPT_CANCELLED.format());
             return END_OF_CONVERSATION;
         } else if (input.equalsIgnoreCase("here")) {
             final Arena arena = new Arena(UUID.randomUUID(), this.name);
@@ -59,11 +61,11 @@ public class ArenaSpawnTwoPrompt extends StringPrompt {
 
             arena.saveArenaData();
 
-            context.getForWhom().sendRawMessage(Color.PRIMARY + "Congrats!" + Color.SECONDARY + " You've just created a new arena!");
+            context.getForWhom().sendRawMessage(CC.PRIMARY + "Congrats!" + CC.SECONDARY + " You've just created a new arena!");
 
             return END_OF_CONVERSATION;
         } else {
-            context.getForWhom().sendRawMessage(Color.SECONDARY + "I couldn't understand what you said.");
+            context.getForWhom().sendRawMessage(Locale.PROMPT_ERROR.format());
 
             return this;
         }

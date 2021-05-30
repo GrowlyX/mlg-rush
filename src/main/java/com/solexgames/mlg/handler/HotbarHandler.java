@@ -2,6 +2,7 @@ package com.solexgames.mlg.handler;
 
 import com.solexgames.mlg.CorePlugin;
 import com.solexgames.mlg.player.GamePlayer;
+import com.solexgames.mlg.util.CC;
 import com.solexgames.mlg.util.Color;
 import com.solexgames.mlg.util.builder.ItemBuilder;
 import lombok.Getter;
@@ -36,19 +37,19 @@ public class HotbarHandler {
 
     public HotbarHandler() {
         this.joinGameItem = new ItemBuilder(Material.COMPASS)
-                .setDisplayName(Color.PRIMARY + "Join an Arena")
+                .setDisplayName(CC.PRIMARY + "Join an Arena")
                 .create();
         this.layoutEditorItem = new ItemBuilder(Material.BOOK)
-                .setDisplayName(Color.PRIMARY + "Edit layout")
+                .setDisplayName(CC.PRIMARY + "Edit layout")
                 .create();
         this.startSpectateItem = new ItemBuilder(Material.ENDER_CHEST)
-                .setDisplayName(Color.PRIMARY + "Spectate a match")
+                .setDisplayName(CC.PRIMARY + "Spectate a match")
                 .create();
         this.leaveGameItem = new ItemBuilder(Material.BED)
-                .setDisplayName(ChatColor.RED + ChatColor.BOLD.toString() + "Leave Arena")
+                .setDisplayName(CC.RED + ChatColor.BOLD.toString() + "Leave Arena")
                 .create();
         this.stopSpectateItem = new ItemBuilder(Material.BED)
-                .setDisplayName(ChatColor.RED + ChatColor.BOLD.toString() + "Stop Spectating")
+                .setDisplayName(CC.RED + ChatColor.BOLD.toString() + "Stop Spectating")
                 .create();
         this.sandStoneStack = new ItemBuilder(Material.SANDSTONE)
                 .setAmount(64)

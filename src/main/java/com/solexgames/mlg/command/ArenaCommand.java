@@ -8,6 +8,7 @@ import com.solexgames.mlg.state.impl.Arena;
 import com.solexgames.mlg.state.impl.ArenaState;
 import com.solexgames.mlg.util.Color;
 import com.solexgames.mlg.util.Config;
+import com.solexgames.mlg.util.Locale;
 import com.solexgames.mlg.util.prompt.ArenaNamePrompt;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -30,7 +31,7 @@ public class ArenaCommand extends BaseCommand {
     @Subcommand("create|arenabot")
     @CommandPermission("mlgrush.command.arena.subcommand.create")
     public void arenaCreate(Player player) {
-        player.sendMessage(Color.SECONDARY + "Starting " + Color.PRIMARY + "ArenaBot v1.0" + Color.SECONDARY + "...");
+        player.sendMessage(Locale.STARTING_ARENA_BOT.format());
 
         CorePlugin.getInstance().getConversationFactory()
                 .withFirstPrompt(new ArenaNamePrompt(player))
@@ -48,12 +49,12 @@ public class ArenaCommand extends BaseCommand {
         config.save();
 
         if (arena.getState().equals(ArenaState.IN_GAME)) {
-            arena.broadcastMessage(ChatColor.RED + "This game has been shut down due to it being deleted by an administrator.");
+            arena.broadcastMessage(Locale.GAME_SHUTDOWN.format());
             arena.end(arena.getGamePlayerList().get(0));
             arena.cleanup();
         }
 
-        player.sendMessage(Color.SECONDARY + "You've just deleted the arena with the name " + Color.PRIMARY + arena.getName() + Color.SECONDARY + ".");
+        player.sendMessage(Locale.ARENA_DELETED.format(arena.getName()));
 
         CorePlugin.getInstance().getArenaHandler().getAllArenas().remove(arena);
     }

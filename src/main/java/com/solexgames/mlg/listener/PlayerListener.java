@@ -10,8 +10,8 @@ import com.solexgames.mlg.player.ArenaPlayer;
 import com.solexgames.mlg.player.GamePlayer;
 import com.solexgames.mlg.state.impl.Arena;
 import com.solexgames.mlg.state.impl.ArenaState;
-import com.solexgames.mlg.util.Color;
 import com.solexgames.mlg.util.CoreConstants;
+import com.solexgames.mlg.util.Locale;
 import com.solexgames.mlg.util.PlayerUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -53,9 +53,6 @@ public class PlayerListener implements Listener {
 
         if (event.getAction().name().contains("RIGHT") && itemStack != null) {
             switch (itemStack.getType()) {
-                case EMERALD:
-                    player.sendMessage(ChatColor.RED + "Profiles are coming soon!");
-                    break;
                 case COMPASS:
                     new SelectGameMenu().openMenu(player);
                     break;
@@ -197,9 +194,9 @@ public class PlayerListener implements Listener {
                 damagingGamePlayer.setKills(damagingGamePlayer.getKills() + 1);
                 damagingArenaPlayer.setKills(damagingArenaPlayer.getDeaths() + 1);
 
-                arena.broadcastMessage(ChatColor.RED + player.getName() + Color.SECONDARY + " was killed by " + ChatColor.GREEN + damagingPlayer.getName() + Color.SECONDARY + "!");
+                arena.broadcastMessage(Locale.PLAYER_KILLED_BY.format(player.getName(), damagingPlayer.getName()));
             } else {
-                arena.broadcastMessage(ChatColor.RED + player.getName() + Color.SECONDARY + " died.");
+                arena.broadcastMessage(Locale.PLAYER_DIED.format(player.getName()));
             }
         }
 
@@ -224,7 +221,7 @@ public class PlayerListener implements Listener {
         }
 
         if (!arena.getCuboid().isIn(blockLocation) || !arena.getBuildableCuboid().isIn(blockLocation)) {
-            player.sendMessage(ChatColor.RED + "You cannot place blocks here.");
+            player.sendMessage(Locale.BLOCK_PLACE_DENY.format());
             event.setCancelled(true);
             return;
         }

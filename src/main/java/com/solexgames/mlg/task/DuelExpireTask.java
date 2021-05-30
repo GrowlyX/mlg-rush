@@ -3,6 +3,7 @@ package com.solexgames.mlg.task;
 import com.solexgames.mlg.CorePlugin;
 import com.solexgames.mlg.duel.DuelRequest;
 import com.solexgames.mlg.util.Color;
+import com.solexgames.mlg.util.Locale;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -29,11 +30,11 @@ public class DuelExpireTask extends BukkitRunnable {
                     final Player target = Bukkit.getPlayer(duelRequest.getTarget());
 
                     if (issuer != null) {
-                        issuer.sendMessage(Color.SECONDARY + "You're duel request to " + duelRequest.getTargetDisplay() + Color.SECONDARY + " has expired.");
+                        issuer.sendMessage(Locale.REQUEST_TO_EXPIRED.format(duelRequest.getTargetDisplay()));
                     }
 
                     if (target != null) {
-                        target.sendMessage(Color.SECONDARY + "The duel request from " + duelRequest.getIssuerDisplay() + Color.SECONDARY + " has expired.");
+                        target.sendMessage(Locale.REQUEST_FROM_EXPIRED.format(duelRequest.getIssuerDisplay()));
                     }
 
                     CorePlugin.getInstance().getArenaHandler().getDuelRequests().remove(duelRequest);

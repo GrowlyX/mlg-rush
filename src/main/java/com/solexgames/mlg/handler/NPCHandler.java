@@ -80,6 +80,7 @@ public class NPCHandler {
             model.setSkin(CorePlugin.GSON.fromJson(section.getString(key + ".skin"), Skin.class));
             model.setAction(NPCAction.valueOf(section.getString(key + ".action")));
             model.setLocation(LocationUtil.getLocationFromString(section.getString(key + ".location")).orElse(null));
+            model.setUpdater(section.getBoolean(key + ".updater"));
 
             this.npcModelMap.put(key, model);
         }
@@ -98,6 +99,7 @@ public class NPCHandler {
             npcConfig.getConfig().set(endpoint + ".action", model.getAction().toString());
             npcConfig.getConfig().set(endpoint + ".location", LocationUtil.getStringFromLocation(model.getLocation()).orElse(null));
             npcConfig.getConfig().set(endpoint + ".lines", model.getLines());
+            npcConfig.getConfig().set(endpoint + ".updater", model.isUpdater());
         }
 
         npcConfig.save();

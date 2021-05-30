@@ -5,6 +5,7 @@ import com.solexgames.mlg.menu.AbstractMenu;
 import com.solexgames.mlg.menu.button.Button;
 import com.solexgames.mlg.player.GamePlayer;
 import com.solexgames.mlg.util.Color;
+import com.solexgames.mlg.util.Locale;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -50,8 +51,7 @@ public class LoadoutEditorMenu extends AbstractMenu {
     public void onOpen(Player player) {
         player.getInventory().clear();
 
-        player.sendMessage(ChatColor.GREEN + "Welcome to the loadout editor!");
-        player.sendMessage(ChatColor.GRAY + " * " + Color.SECONDARY + "To save your loadout, close your inventory.");
+        player.sendMessage(Locale.LAYOUT_OPEN_EDITOR.formatLinesArray());
     }
 
     @Override
@@ -62,11 +62,7 @@ public class LoadoutEditorMenu extends AbstractMenu {
             gamePlayer.getLayout().getItemStacks()[i] = this.getInventory().getItem(i);
         }
 
-        player.sendMessage(new String[]{
-                Color.SECONDARY + "You've modified your loadout!",
-                ChatColor.GRAY.toString() + ChatColor.ITALIC + "If you need to reset your loadout, try " + Color.SECONDARY + "/resetloadout" + ChatColor.GRAY.toString() + ChatColor.ITALIC + "."
-        });
-
+        player.sendMessage(Locale.LAYOUT_MODIFIED.formatLinesArray());
         CorePlugin.getInstance().getHotbarHandler().setupLobbyHotbar(player);
     }
 }

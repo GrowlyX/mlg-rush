@@ -2,14 +2,13 @@ package com.solexgames.mlg.command;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
-import co.aikar.commands.annotation.Default;
 import co.aikar.commands.annotation.Optional;
 import co.aikar.commands.bukkit.contexts.OnlinePlayer;
 import com.solexgames.mlg.CorePlugin;
 import com.solexgames.mlg.menu.impl.MatchSpectateMenu;
 import com.solexgames.mlg.state.impl.Arena;
 import com.solexgames.mlg.state.impl.ArenaState;
-import org.bukkit.ChatColor;
+import com.solexgames.mlg.util.Locale;
 import org.bukkit.entity.Player;
 
 /**
@@ -25,7 +24,7 @@ public class SpectateCommand extends BaseCommand {
 
         if (target == null) {
             if (arena != null) {
-                player.sendMessage(ChatColor.RED + "Error: You are already in an arena.");
+                player.sendMessage(Locale.ALREADY_IN_ARENA.format());
                 return;
             }
             new MatchSpectateMenu().openMenu(player);
@@ -33,19 +32,19 @@ public class SpectateCommand extends BaseCommand {
         }
 
         if (arena != null) {
-            player.sendMessage(ChatColor.RED + "Error: You are already in an arena.");
+            player.sendMessage(Locale.ALREADY_IN_ARENA.format());
             return;
         }
 
         final Arena targetArena = CorePlugin.getInstance().getArenaHandler().getByPlayer(target.getPlayer());
 
         if (targetArena == null) {
-            player.sendMessage(ChatColor.RED + "Error: That player is not in a match.");
+            player.sendMessage(Locale.PLAYER_NOT_IN_MATCH.format());
             return;
         }
 
         if (!targetArena.getState().equals(ArenaState.IN_GAME)) {
-            player.sendMessage(ChatColor.RED + "Error: That match has not started yet or the arena bound to it is regenerating.");
+            player.sendMessage(Locale.MATCH_ERROR.format());
             return;
         }
 

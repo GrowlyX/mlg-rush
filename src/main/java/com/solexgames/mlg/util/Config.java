@@ -51,6 +51,10 @@ public class Config {
         }
     }
 
+    public Object get(final String path) {
+        return this.config.get(path);
+    }
+
     public double getDouble(final String path) {
         if (this.config.contains(path)) {
             return this.config.getDouble(path);
@@ -108,7 +112,7 @@ public class Config {
             }
             return toReturn;
         }
-        return null;
+        return new ArrayList<>();
     }
 
     public List<String> getStringList(final String path) {
@@ -119,7 +123,7 @@ public class Config {
             }
             return strings;
         }
-        return null;
+        return new ArrayList<>();
     }
 
     public List<String> getStringListOrDefault(final String path, final List<String> toReturn) {

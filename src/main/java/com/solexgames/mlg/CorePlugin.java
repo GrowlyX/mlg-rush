@@ -15,6 +15,7 @@ import com.solexgames.mlg.scoreboard.ScoreboardAdapter;
 import com.solexgames.mlg.state.impl.Arena;
 import com.solexgames.mlg.task.DuelExpireTask;
 import com.solexgames.mlg.task.GameEndTask;
+import com.solexgames.mlg.util.CC;
 import com.solexgames.mlg.util.Color;
 import com.solexgames.mlg.util.CoreConstants;
 import com.solexgames.mlg.util.world.VoidWorldGenerator;
@@ -102,7 +103,7 @@ public final class CorePlugin extends JavaPlugin {
                     .findFirst().orElse(null);
 
             if (arena == null) {
-                throw new InvalidCommandArgument(ChatColor.RED + "No arena matching " + ChatColor.YELLOW + joinedString + ChatColor.RED + " was found.", false);
+                throw new InvalidCommandArgument(CC.RED + "No arena matching " + ChatColor.YELLOW + joinedString + CC.RED + " was found.", false);
             }
 
             return arena;
@@ -113,7 +114,7 @@ public final class CorePlugin extends JavaPlugin {
             final GamePlayer gamePlayer = this.playerHandler.getByName(joinedString);
 
             if (gamePlayer == null) {
-                throw new InvalidCommandArgument(ChatColor.RED + "No player matching " + ChatColor.YELLOW + joinedString + ChatColor.RED + " was found.", false);
+                throw new InvalidCommandArgument(CC.RED + "No player matching " + ChatColor.YELLOW + joinedString + CC.RED + " was found.", false);
             }
 
             return gamePlayer;
@@ -144,8 +145,8 @@ public final class CorePlugin extends JavaPlugin {
     }
 
     private void setupTheming() {
-        Color.PRIMARY = ChatColor.valueOf(this.getConfig().getString("language.primary-color").toUpperCase().replace(" ", "_"));
-        Color.SECONDARY = ChatColor.valueOf(this.getConfig().getString("language.secondary-color").toUpperCase().replace(" ", "_"));
+        CC.PRIMARY = ChatColor.valueOf(this.getConfig().getString("language.primary-color").toUpperCase().replace(" ", "_")).toString();
+        CC.SECONDARY = ChatColor.valueOf(this.getConfig().getString("language.secondary-color").toUpperCase().replace(" ", "_")).toString();
 
         CoreConstants.DEFAULT_SCOREBOARD_TITLE = Color.translate(this.getConfigHandler().getScoreboardConfig().getString("DEFAULT_SCOREBOARD_TITLE"));
         CoreConstants.NPC_ENABLED = this.getConfig().getBoolean("settings.enable-npcs");

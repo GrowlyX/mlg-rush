@@ -6,6 +6,7 @@ import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Default;
 import com.solexgames.mlg.player.GamePlayer;
 import com.solexgames.mlg.util.Color;
+import com.solexgames.mlg.util.Locale;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -28,6 +29,6 @@ public class StatsResetCommand extends BaseCommand {
 
         final Player bukkitPlayer = Bukkit.getPlayer(player.getUuid());
 
-        sender.sendMessage(Color.SECONDARY + "Statistics have been reset for: " + bukkitPlayer.getDisplayName());
+        sender.sendMessage(Locale.STATS_RESET.format(bukkitPlayer.getDisplayName()));
     }
 }

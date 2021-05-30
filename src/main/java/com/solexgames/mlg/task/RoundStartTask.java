@@ -3,6 +3,8 @@ package com.solexgames.mlg.task;
 import com.solexgames.mlg.CorePlugin;
 import com.solexgames.mlg.state.impl.Arena;
 import com.solexgames.mlg.util.Color;
+import com.solexgames.mlg.util.Locale;
+import com.solexgames.mlg.util.TimeUtil;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -37,14 +39,14 @@ public class RoundStartTask extends BukkitRunnable {
         switch (finalSeconds) {
             case 5: case 4: case 3: case 2:
             case 1:
-                this.arena.broadcastMessage(Color.SECONDARY + "The round will be starting in " + Color.PRIMARY + finalSeconds + Color.SECONDARY + " " + (finalSeconds == 1 ? "second" : "seconds") + "!");
+                this.arena.broadcastMessage(Locale.ROUND_COUNTDOWN_END.format(TimeUtil.secondsToRoundedTime(finalSeconds)));
                 break;
             case 0:
                 this.arena.getAllPlayerList().forEach(player -> {
                     player.removeMetadata("frozen", CorePlugin.getInstance());
                     CorePlugin.getInstance().getHotbarHandler().setupArenaInGameHotbar(player);
                 });
-                this.arena.broadcastMessage(Color.PRIMARY + "The round has started! " + ChatColor.GREEN + "Good luck and have fun!");
+                this.arena.broadcastMessage(Locale.ROUND_COUNTDOWN_END.format());
 
                 this.cancel();
                 break;

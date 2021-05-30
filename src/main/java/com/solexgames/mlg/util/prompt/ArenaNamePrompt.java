@@ -1,5 +1,6 @@
 package com.solexgames.mlg.util.prompt;
 
+import com.solexgames.mlg.util.CC;
 import com.solexgames.mlg.util.Color;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.ChatColor;
@@ -20,7 +21,7 @@ public class ArenaNamePrompt extends StringPrompt {
 
     @Override
     public String getPromptText(ConversationContext context) {
-        return Color.SECONDARY + "Hello! My name is ArenaBot! What do you want the arena name to be? " + ChatColor.GRAY + "(" + Color.PRIMARY + "Type 'cancel' to exit at any time!" + ChatColor.GRAY + ")";
+        return CC.SECONDARY + "Hello! My name is ArenaBot! What do you want the arena name to be? " + CC.GRAY + "(" + CC.PRIMARY + "Type 'cancel' to exit at any time!" + CC.GRAY + ")";
     }
 
     @Override

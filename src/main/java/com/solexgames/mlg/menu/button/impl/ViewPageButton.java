@@ -3,6 +3,7 @@ package com.solexgames.mlg.menu.button.impl;
 import com.solexgames.mlg.menu.button.Button;
 import com.solexgames.mlg.menu.impl.ViewAllPagesMenu;
 import com.solexgames.mlg.menu.paginated.AbstractPaginatedMenu;
+import com.solexgames.mlg.util.CC;
 import com.solexgames.mlg.util.Color;
 import com.solexgames.mlg.util.builder.ItemBuilder;
 import lombok.AllArgsConstructor;
@@ -28,7 +29,7 @@ public class ViewPageButton extends Button {
         }
 
         return new ItemBuilder(this.mod > 0 ? Material.SPECKLED_MELON : Material.MELON)
-                .setDisplayName((this.mod > 0 ? ChatColor.GREEN + "Next page" : ChatColor.RED + "Previous page") + ChatColor.GRAY + " (" + Color.PRIMARY + (menu.getPage() + mod) + ChatColor.GRAY + "/" + Color.PRIMARY + menu.getPages(player) + ChatColor.GRAY + ")")
+                .setDisplayName((this.mod > 0 ? ChatColor.GREEN + "Next page" : CC.RED + "Previous page") + CC.GRAY + " (" + CC.PRIMARY + (menu.getPage() + mod) + CC.GRAY + "/" + CC.PRIMARY + menu.getPages(player) + CC.GRAY + ")")
                 .addLore(
                         "&7Right Click to view all pages!"
                 ).create();

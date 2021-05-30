@@ -1,6 +1,8 @@
 package com.solexgames.mlg.util.prompt;
 
+import com.solexgames.mlg.util.CC;
 import com.solexgames.mlg.util.Color;
+import com.solexgames.mlg.util.Locale;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -23,18 +25,18 @@ public class ArenaBuildableTwoPrompt extends StringPrompt {
 
     @Override
     public String getPromptText(ConversationContext context) {
-        return Color.SECONDARY + "Please type " + Color.PRIMARY + "'here'" + Color.SECONDARY + " when you are at the BUILDING MAXIMUM location! " + ChatColor.GRAY + "(" + Color.PRIMARY + "Type 'cancel' to exit at any time!" + ChatColor.GRAY + ")";
+        return Locale.PROMPT_BUILDABLE_TWO.format();
     }
 
     @Override
     public Prompt acceptInput(ConversationContext context, String input) {
         if (input.equalsIgnoreCase("cancel")) {
-            context.getForWhom().sendRawMessage(ChatColor.RED + "Cancelled arena creation procedure.");
+            context.getForWhom().sendRawMessage(Locale.PROMPT_CANCELLED.format());
             return END_OF_CONVERSATION;
         } else if (input.equalsIgnoreCase("here")) {
             return new ArenaSpawnOnePrompt(this.player, this.name, this.size, this.location, this.locationTwo, this.buildable, this.player.getLocation());
         } else {
-            context.getForWhom().sendRawMessage(Color.SECONDARY + "I couldn't understand what you said.");
+            context.getForWhom().sendRawMessage(Locale.PROMPT_ERROR.format());
 
             return this;
         }

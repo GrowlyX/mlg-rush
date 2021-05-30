@@ -4,6 +4,7 @@ import com.solexgames.mlg.CorePlugin;
 import com.solexgames.mlg.menu.button.Button;
 import com.solexgames.mlg.menu.paginated.AbstractPaginatedMenu;
 import com.solexgames.mlg.state.impl.ArenaState;
+import com.solexgames.mlg.util.CC;
 import com.solexgames.mlg.util.Color;
 import com.solexgames.mlg.util.builder.ItemBuilder;
 import org.bukkit.Material;
@@ -44,9 +45,9 @@ public class DuelArenaSelectMenu extends AbstractPaginatedMenu {
             @Override
             public ItemStack getButtonItem(Player player) {
                 return new ItemBuilder(Material.WOOL)
-                        .setDisplayName(Color.PRIMARY + arena.getName())
+                        .setDisplayName(CC.PRIMARY + arena.getName())
                         .addLore(
-                                Color.SECONDARY + "[Click to select this map]"
+                                CC.SECONDARY + "[Click to select this map]"
                         )
                         .setDurability(5)
                         .create();

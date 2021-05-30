@@ -2,6 +2,7 @@ package com.solexgames.mlg.menu.button.impl;
 
 import com.solexgames.mlg.menu.button.Button;
 import com.solexgames.mlg.menu.paginated.AbstractPaginatedMenu;
+import com.solexgames.mlg.util.CC;
 import com.solexgames.mlg.util.builder.ItemBuilder;
 import lombok.AllArgsConstructor;
 import org.bukkit.ChatColor;
@@ -24,7 +25,7 @@ public class SelectPageButton extends Button {
     public ItemStack getButtonItem(Player player) {
         final List<String> stringList = new ArrayList<>();
 
-        stringList.add(ChatColor.GRAY + "Click to switch to this menu!");
+        stringList.add(CC.GRAY + "Click to switch to this menu!");
 
         if (this.current) {
             stringList.add("  ");

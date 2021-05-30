@@ -7,9 +7,8 @@ import com.solexgames.mlg.player.ArenaPlayer;
 import com.solexgames.mlg.player.GamePlayer;
 import com.solexgames.mlg.state.StateBasedModel;
 import com.solexgames.mlg.task.RoundStartTask;
+import com.solexgames.mlg.util.*;
 import com.solexgames.mlg.util.Color;
-import com.solexgames.mlg.util.LocationUtil;
-import com.solexgames.mlg.util.PlayerUtil;
 import com.solexgames.mlg.util.builder.ItemBuilder;
 import com.solexgames.mlg.util.cuboid.Cuboid;
 import lombok.Getter;
@@ -173,7 +172,7 @@ public class Arena implements StateBasedModel<ArenaState, ArenaPlayer> {
             return;
         }
 
-        this.broadcastMessage(Color.PRIMARY + player.getName() + Color.SECONDARY + " has scored a point! " + ChatColor.GRAY + "(" + ChatColor.BLUE + this.getPoints(ArenaTeam.BLUE) + ChatColor.GRAY + "/" + ChatColor.RED + this.getPoints(ArenaTeam.RED) + ChatColor.GRAY + ")", Sound.SUCCESSFUL_HIT);
+        this.broadcastMessage(Locale.PLAYER_POINT_SCORED.format(player.getName(), this.getPoints(ArenaTeam.BLUE), this.getPoints(ArenaTeam.RED)), Sound.SUCCESSFUL_HIT);
         this.resetAndSetupGameSystem();
     }
 
@@ -256,7 +255,12 @@ public class Arena implements StateBasedModel<ArenaState, ArenaPlayer> {
         if (gamePlayer != null) {
             gamePlayer.setWins(gamePlayer.getWins() + 1);
 
-            this.broadcastMessage(Color.PRIMARY + profile.getPlayer().getName() + Color.SECONDARY + " has won the game!");
+            if (this.teamSize == 1) {
+                this.broadcastMessage(Locale.PLAYER_WON.format(profile.getPlayer().getName()));
+            } else {
+                // TODO: get team winner name after teams are implemented
+                this.broadcastMessage(Locale.TEAM_WON.format("Blue/Red"));
+            }
         }
 
         this.arenaState = ArenaState.REGENERATING;
@@ -290,7 +294,12 @@ public class Arena implements StateBasedModel<ArenaState, ArenaPlayer> {
         });
 
         this.getSpectatorList().forEach(player -> {
-            player.sendMessage(Color.PRIMARY + profile.getPlayer().getName() + Color.SECONDARY + " has won the game!");
+            if (this.teamSize == 1) {
+                player.sendMessage(Locale.PLAYER_WON.format(profile.getPlayer().getName()));
+            } else {
+                // TODO: get team winner name after teams are implemented
+                player.sendMessage(Locale.TEAM_WON.format("Blue/Red"));
+            }
 
             Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> {
                 CorePlugin.getInstance().getArenaHandler().getSpectatorWeakHashMap().remove(player);

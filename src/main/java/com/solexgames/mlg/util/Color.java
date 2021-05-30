@@ -14,11 +14,6 @@ import java.util.List;
 @UtilityClass
 public class Color {
 
-    public static ChatColor PRIMARY = ChatColor.GOLD;
-    public static ChatColor SECONDARY = ChatColor.YELLOW;
-
-    public static String SB_LINE = ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + "----------------";
-
     public static String translate(String text) {
         return ChatColor.translateAlternateColorCodes('&', text);
     }

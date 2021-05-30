@@ -1,6 +1,8 @@
 package com.solexgames.mlg.util.prompt;
 
+import com.solexgames.mlg.util.CC;
 import com.solexgames.mlg.util.Color;
+import com.solexgames.mlg.util.Locale;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.conversations.ConversationContext;
@@ -21,7 +23,7 @@ public class ArenaTeamSizePrompt extends StringPrompt {
 
     @Override
     public String getPromptText(ConversationContext context) {
-        return Color.SECONDARY + "What do you want the arena team size to be? " + ChatColor.GRAY + "(" + Color.PRIMARY + "Type 'cancel' to exit at any time!" + ChatColor.GRAY + ")";
+        return Locale.PROMPT_TEAM_SIZE.format();
     }
 
     @Override
@@ -31,7 +33,7 @@ public class ArenaTeamSizePrompt extends StringPrompt {
 
             return new ArenaLocationOnePrompt(this.player, this.name, size);
         } catch (Exception ignored) {
-            context.getForWhom().sendRawMessage(ChatColor.RED + "Sorry, that's not a valid integer! Try again!");
+            context.getForWhom().sendRawMessage(Locale.PROMPT_INVALID_INT.format());
 
             return this;
         }

@@ -7,6 +7,7 @@ import com.solexgames.mlg.state.impl.Arena;
 import com.solexgames.mlg.player.ArenaPlayer;
 import com.solexgames.mlg.player.GamePlayer;
 import com.solexgames.mlg.task.GameEndTask;
+import com.solexgames.mlg.util.CC;
 import com.solexgames.mlg.util.Color;
 import com.solexgames.mlg.util.CoreConstants;
 import com.solexgames.mlg.util.PlayerUtil;
@@ -87,8 +88,8 @@ public class ScoreboardAdapter implements ScoreboardElementHandler {
                 .replace("%fancy%", arenaPlayer != null ? this.getFancyPoints(arenaPlayer) : "%fancy%")
                 .replace("%opponentFancy%", arenaPlayer != null ? this.getFancyPoints(arena.getOpponentPlayer(player)) : "%opponentFancy%")
                 .replace("%timeLeft%", arena != null ? DurationFormatUtils.formatDuration((arena.getStart() + GameEndTask.FIFTEEN_MINUTE) - System.currentTimeMillis(), "mm:ss") : "%timeLeft%")
-                .replace("%player1%", spectatingArena != null ? spectatingArena.getGamePlayerList().get(0).getPlayer().getDisplayName() + " " + ChatColor.GRAY + "(" + PlayerUtil.getPing(spectatingArena.getGamePlayerList().get(0).getPlayer()) + "ms)" : "%player1%")
-                .replace("%player2%", spectatingArena != null ? spectatingArena.getGamePlayerList().get(1).getPlayer().getDisplayName() + " " + ChatColor.GRAY + "(" + PlayerUtil.getPing(spectatingArena.getGamePlayerList().get(1).getPlayer()) + "ms)" : "%player2%")
+                .replace("%player1%", spectatingArena != null ? spectatingArena.getGamePlayerList().get(0).getPlayer().getDisplayName() + " " + CC.GRAY + "(" + PlayerUtil.getPing(spectatingArena.getGamePlayerList().get(0).getPlayer()) + "ms)" : "%player1%")
+                .replace("%player2%", spectatingArena != null ? spectatingArena.getGamePlayerList().get(1).getPlayer().getDisplayName() + " " + CC.GRAY + "(" + PlayerUtil.getPing(spectatingArena.getGamePlayerList().get(1).getPlayer()) + "ms)" : "%player2%")
                 .replace("%arena%", spectatingArena != null ? spectatingArena.getName() : "%arena%")
                 .replace("%wins%", gamePlayer.getWins() + "")
                 .replace("%losses%", gamePlayer.getLosses() + "")
@@ -110,15 +111,15 @@ public class ScoreboardAdapter implements ScoreboardElementHandler {
 
         if (arenaPlayer != null) {
             for (int i = 0; i < arenaPlayer.getPoints(); i++) {
-                joiner.add((arenaPlayer.getArenaTeam().equals(ArenaTeam.BLUE) ? ChatColor.BLUE : ChatColor.RED) + "⬤");
+                joiner.add((arenaPlayer.getArenaTeam().equals(ArenaTeam.BLUE) ? ChatColor.BLUE : CC.RED) + "⬤");
             }
 
             for (int i = 0; i < Arena.WINNER_POINT_AMOUNT - arenaPlayer.getPoints(); i++) {
-                joiner.add(ChatColor.GRAY + "⬤");
+                joiner.add(CC.GRAY + "⬤");
             }
         } else {
             for (int i = 0; i < Arena.WINNER_POINT_AMOUNT; i++) {
-                joiner.add(ChatColor.GRAY + "⬤");
+                joiner.add(CC.GRAY + "⬤");
             }
         }
 
@@ -126,6 +127,6 @@ public class ScoreboardAdapter implements ScoreboardElementHandler {
     }
 
     public String getTeamPrefix(ArenaPlayer arenaPlayer) {
-        return (arenaPlayer.getArenaTeam().equals(ArenaTeam.BLUE) ? ChatColor.BLUE : ChatColor.RED) + "[" + (arenaPlayer.getArenaTeam().equals(ArenaTeam.BLUE) ? "B" : "R") + "]";
+        return (arenaPlayer.getArenaTeam().equals(ArenaTeam.BLUE) ? ChatColor.BLUE : CC.RED) + "[" + (arenaPlayer.getArenaTeam().equals(ArenaTeam.BLUE) ? "B" : "R") + "]";
     }
 }
