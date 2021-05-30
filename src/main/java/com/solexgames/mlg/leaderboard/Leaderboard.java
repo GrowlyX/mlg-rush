@@ -39,7 +39,7 @@ public class Leaderboard {
 	}
 
 	public void load() {
-		CompletableFuture.supplyAsync(() -> CorePlugin.getInstance().getMongoHandler().getPlayerCollection().find().sort(Sorts.descending(this.object)).iterator())
+		CompletableFuture.supplyAsync(() -> CorePlugin.getInstance().getMongoHandler().getPlayerCollection().find().sort(new Document(this.object, -1)).limit(this.amount).iterator())
 				.thenAccept(cursor -> {
 					final Map<String, Integer> map = new HashMap<>();
 

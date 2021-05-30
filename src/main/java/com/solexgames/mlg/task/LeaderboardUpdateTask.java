@@ -13,6 +13,5 @@ public class LeaderboardUpdateTask extends BukkitRunnable {
 	@Override
 	public void run() {
 		CorePlugin.getInstance().getLeaderboardHandler().updateLeaderboards();
-		CorePlugin.getInstance().getServer().broadcastMessage(CC.SECONDARY + "Updated all leaderboards.");
 	}
 }

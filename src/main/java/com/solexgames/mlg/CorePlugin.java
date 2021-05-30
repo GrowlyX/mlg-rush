@@ -7,6 +7,7 @@ import com.google.gson.GsonBuilder;
 import com.solexgames.mlg.cache.StatusCache;
 import com.solexgames.mlg.command.*;
 import com.solexgames.mlg.handler.*;
+import com.solexgames.mlg.leaderboard.Leaderboard;
 import com.solexgames.mlg.listener.MenuListener;
 import com.solexgames.mlg.listener.NPCListener;
 import com.solexgames.mlg.listener.PlayerListener;
@@ -121,6 +122,17 @@ public final class CorePlugin extends JavaPlugin {
 
             if (gamePlayer == null) {
                 throw new InvalidCommandArgument(CC.RED + "No player matching " + ChatColor.YELLOW + joinedString + CC.RED + " was found.", false);
+            }
+
+            return gamePlayer;
+        });
+
+        manager.getCommandContexts().registerContext(Leaderboard.class, bukkitCommandExecutionContext -> {
+            final String joinedString = String.join(" ", bukkitCommandExecutionContext.getArgs());
+            final Leaderboard gamePlayer = this.leaderboardHandler.getByName(joinedString);
+
+            if (gamePlayer == null) {
+                throw new InvalidCommandArgument(CC.RED + "No leaderboard matching " + ChatColor.YELLOW + joinedString + CC.RED + " was found.", false);
             }
 
             return gamePlayer;
