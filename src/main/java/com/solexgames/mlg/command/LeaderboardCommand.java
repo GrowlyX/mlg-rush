@@ -4,7 +4,6 @@ import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
 import com.solexgames.mlg.CorePlugin;
 import com.solexgames.mlg.leaderboard.Leaderboard;
-import com.solexgames.mlg.util.CC;
 import com.solexgames.mlg.util.Locale;
 import org.bukkit.command.CommandSender;
 
