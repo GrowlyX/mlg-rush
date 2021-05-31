@@ -35,6 +35,7 @@ public class SetHologramCommand extends BaseCommand {
             rotatingHologram.delete();
         }
 
+        hologramHandler.getUpdateTask().cancel();
         hologramHandler.setRotatingHologram(HologramsAPI.createHologram(CorePlugin.getInstance(), location));
         hologramHandler.setupTasks();
 
