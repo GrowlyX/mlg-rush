@@ -13,16 +13,17 @@ import org.bukkit.Location;
  * @since 5/28/2021
  */
 
+@Getter
 @Setter
 @NoArgsConstructor
 public class LocationHandler {
 
     private Location spawnLocation;
-    @Getter private Location hologramLocation;
+    private Location hologramLocation;
 
     public void loadSpawn() {
         this.spawnLocation = LocationUtil.getLocationFromString(CorePlugin.getInstance().getConfigHandler().getConfig().getString("locations.spawn")).orElse(null);
-        this.hologramLocation = LocationUtil.getLocationFromString(CorePlugin.getInstance().getConfigHandler().getConfig().getString("locations.spawn")).orElse(null);
+        this.hologramLocation = LocationUtil.getLocationFromString(CorePlugin.getInstance().getConfigHandler().getConfig().getString("locations.holo")).orElse(null);
     }
 
     public void saveSpawn() {

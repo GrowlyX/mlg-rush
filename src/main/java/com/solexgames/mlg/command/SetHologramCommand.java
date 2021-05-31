@@ -26,9 +26,11 @@ public class SetHologramCommand extends BaseCommand {
         locationHandler.setHologramLocation(location);
         locationHandler.saveHolo();
 
-        if (CorePlugin.getInstance().getHologramHandler().getRotatingHologram() == null) {
-            CorePlugin.getInstance().getHologramHandler().setRotatingHologram(HologramsAPI.createHologram(CorePlugin.getInstance(), location));
+        if (CorePlugin.getInstance().getHologramHandler().getRotatingHologram() != null) {
+            CorePlugin.getInstance().getHologramHandler().getRotatingHologram().delete();
         }
+
+        CorePlugin.getInstance().getHologramHandler().setRotatingHologram(HologramsAPI.createHologram(CorePlugin.getInstance(), location));
 
         player.sendMessage(Locale.SET_HOLO_SPAWN.format());
     }

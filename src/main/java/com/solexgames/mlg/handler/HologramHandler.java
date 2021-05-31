@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.bukkit.Location;
 
-import java.util.concurrent.TimeUnit;
-
 /**
  * @author GrowlyX
  * @since 5/30/2021
@@ -26,6 +24,7 @@ public class HologramHandler {
 
     public void setupHologram() {
         final Location location = CorePlugin.getInstance().getLocationHandler().getHologramLocation();
+
         if (location != null) {
             this.rotatingHologram = HologramsAPI.createHologram(CorePlugin.getInstance(), location);
         }

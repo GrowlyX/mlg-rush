@@ -7,11 +7,13 @@ import com.solexgames.mlg.leaderboard.Leaderboard;
 import com.solexgames.mlg.util.CC;
 import com.solexgames.mlg.util.Locale;
 import com.solexgames.mlg.util.TimeUtil;
+import com.solexgames.mlg.util.comp.EntryComparator;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -20,6 +22,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 
 public class HologramUpdateTask extends BukkitRunnable {
+
+	private final static Comparator<Map.Entry<String, Integer>> ENTRY_COMPARATOR = new EntryComparator();
 
 	private Leaderboard leaderboard;
 	private final int leaderboardsCount;
@@ -58,11 +62,16 @@ public class HologramUpdateTask extends BukkitRunnable {
 				if (line.contains("{1}")) {
 					final AtomicInteger atomicInteger = new AtomicInteger(1);
 
-					for (Map.Entry<String, Integer> entry : this.leaderboard.getLeaderboard().entrySet()) {
-						if (entry != null) {
-							holo.appendTextLine(Locale.LEADERBOARD_FORMAT.format(atomicInteger.getAndIncrement(), entry.getKey(), entry.getValue()));
-						}
-					}
+					this.leaderboard.getLeaderboard().entrySet().stream()
+							.filter(Objects::nonNull)
+							.sorted(HologramUpdateTask.ENTRY_COMPARATOR)
+							.forEachOrdered(stringIntegerEntry -> {
+								holo.appendTextLine(Locale.LEADERBOARD_FORMAT.format(
+										atomicInteger.getAndIncrement(),
+										stringIntegerEntry.getKey(),
+										stringIntegerEntry.getValue()
+								));
+							});
 				} else {
 					holo.appendTextLine(line
 							.replace("{0}", "Top " + this.leaderboard.getAmount() + " " + this.leaderboard.getName())
