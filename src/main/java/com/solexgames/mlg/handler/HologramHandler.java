@@ -25,7 +25,7 @@ public class HologramHandler {
     public void setupHologram() {
         final Location location = CorePlugin.getInstance().getLocationHandler().getHologramLocation();
 
-        if (location != null) {
+        if (location != null && location.getWorld() != null) {
             this.rotatingHologram = HologramsAPI.createHologram(CorePlugin.getInstance(), location);
         }
 

@@ -3,6 +3,7 @@ package com.solexgames.mlg.command;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandPermission;
+import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
 import com.solexgames.mlg.CorePlugin;
 import com.solexgames.mlg.handler.LocationHandler;
@@ -26,8 +27,10 @@ public class SetHologramCommand extends BaseCommand {
         locationHandler.setHologramLocation(location);
         locationHandler.saveHolo();
 
-        if (CorePlugin.getInstance().getHologramHandler().getRotatingHologram() != null) {
-            CorePlugin.getInstance().getHologramHandler().getRotatingHologram().delete();
+        final Hologram rotatingHologram = CorePlugin.getInstance().getHologramHandler().getRotatingHologram();
+
+        if (rotatingHologram != null) {
+            rotatingHologram.delete();
         }
 
         CorePlugin.getInstance().getHologramHandler().setRotatingHologram(HologramsAPI.createHologram(CorePlugin.getInstance(), location));
