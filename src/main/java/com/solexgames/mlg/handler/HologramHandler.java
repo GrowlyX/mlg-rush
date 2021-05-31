@@ -29,6 +29,10 @@ public class HologramHandler {
             this.rotatingHologram = HologramsAPI.createHologram(CorePlugin.getInstance(), location);
         }
 
+        this.setupTasks();
+    }
+
+    public void setupTasks() {
         this.updateTask = new HologramUpdateTask();
         this.updateTask.runTaskTimer(CorePlugin.getInstance(), 20L, 20L);
     }

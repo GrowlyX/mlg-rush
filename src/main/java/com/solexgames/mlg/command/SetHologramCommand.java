@@ -6,6 +6,7 @@ import co.aikar.commands.annotation.CommandPermission;
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
 import com.solexgames.mlg.CorePlugin;
+import com.solexgames.mlg.handler.HologramHandler;
 import com.solexgames.mlg.handler.LocationHandler;
 import com.solexgames.mlg.util.Locale;
 import org.bukkit.Location;
@@ -21,19 +22,21 @@ public class SetHologramCommand extends BaseCommand {
     @CommandAlias("sethologram")
     @CommandPermission("mlgrush.command.sethologram")
     public void execute(Player player) {
+        final HologramHandler hologramHandler = CorePlugin.getInstance().getHologramHandler();
         final LocationHandler locationHandler = CorePlugin.getInstance().getLocationHandler();
         final Location location = player.getLocation();
 
         locationHandler.setHologramLocation(location);
         locationHandler.saveHolo();
 
-        final Hologram rotatingHologram = CorePlugin.getInstance().getHologramHandler().getRotatingHologram();
+        final Hologram rotatingHologram = hologramHandler.getRotatingHologram();
 
         if (rotatingHologram != null) {
             rotatingHologram.delete();
         }
 
-        CorePlugin.getInstance().getHologramHandler().setRotatingHologram(HologramsAPI.createHologram(CorePlugin.getInstance(), location));
+        hologramHandler.setRotatingHologram(HologramsAPI.createHologram(CorePlugin.getInstance(), location));
+        hologramHandler.setupTasks();
 
         player.sendMessage(Locale.SET_HOLO_SPAWN.format());
     }
