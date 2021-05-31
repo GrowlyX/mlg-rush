@@ -113,6 +113,47 @@ public final class CorePlugin extends JavaPlugin {
 
         final PaperCommandManager manager = new PaperCommandManager(this);
 
+        this.registerContexts(manager);
+        this.registerCommands(manager);
+        this.registerApis(manager);
+
+        new ScoreboardHandler(this, new ScoreboardAdapter(), 5L);
+
+        this.registerTasks();
+    }
+
+    private void registerTasks() {
+        new StatusCache().runTaskTimerAsynchronously(this, 20L, TimeUnit.SECONDS.toMillis(1L));
+        new DuelExpireTask().runTaskTimerAsynchronously(this, 20L, TimeUnit.SECONDS.toMillis(1L));
+        new GameEndTask().runTaskTimerAsynchronously(this, 20L, TimeUnit.SECONDS.toMillis(1L));
+        new LeaderboardUpdateTask().runTaskTimerAsynchronously(this, 20L, TimeUnit.MINUTES.toMillis(5L));
+
+        this.getServer().getScheduler().runTaskTimerAsynchronously(this, () -> this.loadingString =
+                this.loadingString.equals(".") ? ".." :
+                        this.loadingString.equals("..") ? "..." : ".", 10L, 10L);
+    }
+
+    private void registerApis(PaperCommandManager manager) {
+        manager.enableUnstableAPI("help");
+    }
+
+    private void registerCommands(PaperCommandManager manager) {
+        manager.registerCommand(new BuildCommand());
+        manager.registerCommand(new ArenaCommand());
+        manager.registerCommand(new JoinGameCommand());
+        manager.registerCommand(new MLGRushCommand());
+        manager.registerCommand(new LeaveCommand());
+        manager.registerCommand(new ResetLoadoutCommand());
+        manager.registerCommand(new LoadoutCommand());
+        manager.registerCommand(new DuelCommand());
+        manager.registerCommand(new SpectateCommand());
+        manager.registerCommand(new SetSpawnCommand());
+        manager.registerCommand(new StatsResetCommand());
+        manager.registerCommand(new LeaderboardCommand());
+        manager.registerCommand(new SetHologramCommand());
+    }
+
+    private void registerContexts(PaperCommandManager manager) {
         manager.getCommandContexts().registerContext(Arena.class, bukkitCommandExecutionContext -> {
             final String joinedString = String.join(" ", bukkitCommandExecutionContext.getArgs());
             final Arena arena = this.getArenaHandler().getAllArenas()
@@ -151,33 +192,6 @@ public final class CorePlugin extends JavaPlugin {
         manager.getCommandCompletions().registerAsyncCompletion("leaderboards", context ->
                 this.leaderboardHandler.getLeaderboards().stream().map(leaderboard -> leaderboard.getName().toLowerCase()).collect(Collectors.toList())
         );
-
-        manager.registerCommand(new BuildCommand());
-        manager.registerCommand(new ArenaCommand());
-        manager.registerCommand(new JoinGameCommand());
-        manager.registerCommand(new MLGRushCommand());
-        manager.registerCommand(new LeaveCommand());
-        manager.registerCommand(new ResetLoadoutCommand());
-        manager.registerCommand(new LoadoutCommand());
-        manager.registerCommand(new DuelCommand());
-        manager.registerCommand(new SpectateCommand());
-        manager.registerCommand(new SetSpawnCommand());
-        manager.registerCommand(new StatsResetCommand());
-        manager.registerCommand(new LeaderboardCommand());
-        manager.registerCommand(new SetHologramCommand());
-
-        manager.enableUnstableAPI("help");
-
-        new ScoreboardHandler(this, new ScoreboardAdapter(), 5L);
-
-        new StatusCache().runTaskTimerAsynchronously(this, 20L, TimeUnit.SECONDS.toMillis(1L));
-        new DuelExpireTask().runTaskTimerAsynchronously(this, 20L, TimeUnit.SECONDS.toMillis(1L));
-        new GameEndTask().runTaskTimerAsynchronously(this, 20L, TimeUnit.SECONDS.toMillis(1L));
-        new LeaderboardUpdateTask().runTaskTimerAsynchronously(this, 20L, TimeUnit.MINUTES.toMillis(5L));
-
-        this.getServer().getScheduler().runTaskTimerAsynchronously(this, () -> this.loadingString =
-                this.loadingString.equals(".") ? ".." :
-                this.loadingString.equals("..") ? "..." : ".", 10L, 10L);
     }
 
     private void setupTheming() {
