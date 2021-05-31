@@ -54,6 +54,7 @@ public final class CorePlugin extends JavaPlugin {
     private NPCHandler npcHandler;
     private ArenaHandler arenaHandler;
     private MongoHandler mongoHandler;
+    private BuilderHandler builderHandler;
     private PlayerHandler playerHandler;
     private HotbarHandler hotbarHandler;
     private ConfigHandler configHandler;
@@ -80,6 +81,7 @@ public final class CorePlugin extends JavaPlugin {
         this.mongoHandler = new MongoHandler();
         this.playerHandler = new PlayerHandler();
         this.hotbarHandler = new HotbarHandler();
+        this.builderHandler = new BuilderHandler();
 
         this.setupTheming();
         this.createDefaultWorld();
@@ -150,6 +152,7 @@ public final class CorePlugin extends JavaPlugin {
                 this.leaderboardHandler.getLeaderboards().stream().map(leaderboard -> leaderboard.getName().toLowerCase()).collect(Collectors.toList())
         );
 
+        manager.registerCommand(new BuildCommand());
         manager.registerCommand(new ArenaCommand());
         manager.registerCommand(new JoinGameCommand());
         manager.registerCommand(new MLGRushCommand());

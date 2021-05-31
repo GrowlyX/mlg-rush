@@ -211,7 +211,9 @@ public class PlayerListener implements Listener {
         final Arena arena = this.getArena(player);
 
         if (arena == null) {
-            event.setCancelled(true);
+            if (!this.isBuilding(player)) {
+                event.setCancelled(true);
+            }
             return;
         }
 
@@ -301,7 +303,7 @@ public class PlayerListener implements Listener {
                 event.setCancelled(true);
             }
         } else {
-            if (!player.isOp()) {
+            if (!this.isBuilding(player)) {
                 event.setCancelled(true);
             }
         }
@@ -315,6 +317,10 @@ public class PlayerListener implements Listener {
 
         if (this.isSpectating(player)) {
             this.plugin.getArenaHandler().stopSpectating(player, arena);
+        }
+
+        if (this.isBuilding(player)) {
+            this.plugin.getBuilderHandler().removeBuilder(player);
         }
 
         if (arena != null) {
@@ -399,6 +405,10 @@ public class PlayerListener implements Listener {
 
             event.setDamage(0.0D);
         }
+    }
+
+    private boolean isBuilding(Player player) {
+        return this.plugin.getBuilderHandler().isBuilding(player);
     }
 
     private boolean isInArena(Player player) {
