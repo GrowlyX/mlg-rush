@@ -23,7 +23,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class HologramUpdateTask extends BukkitRunnable {
 
-	private final static Comparator<Map.Entry<String, Integer>> ENTRY_COMPARATOR = new EntryComparator();
+	public final static Comparator<Map.Entry<String, Integer>> ENTRY_COMPARATOR = new EntryComparator();
 
 	private Leaderboard leaderboard;
 	private final int leaderboardsCount;
@@ -65,13 +65,11 @@ public class HologramUpdateTask extends BukkitRunnable {
 					this.leaderboard.getLeaderboard().entrySet().stream()
 							.filter(Objects::nonNull)
 							.sorted(HologramUpdateTask.ENTRY_COMPARATOR)
-							.forEachOrdered(stringIntegerEntry -> {
-								holo.appendTextLine(Locale.LEADERBOARD_FORMAT.format(
-										atomicInteger.getAndIncrement(),
-										stringIntegerEntry.getKey(),
-										stringIntegerEntry.getValue()
-								));
-							});
+							.forEachOrdered(stringIntegerEntry -> holo.appendTextLine(Locale.LEADERBOARD_FORMAT.format(
+									atomicInteger.getAndIncrement(),
+									stringIntegerEntry.getKey(),
+									stringIntegerEntry.getValue()
+							)));
 				} else {
 					holo.appendTextLine(line
 							.replace("{0}", "Top " + this.leaderboard.getAmount() + " " + this.leaderboard.getName())

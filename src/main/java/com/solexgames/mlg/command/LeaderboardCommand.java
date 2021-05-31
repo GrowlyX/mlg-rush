@@ -4,10 +4,13 @@ import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
 import com.solexgames.mlg.CorePlugin;
 import com.solexgames.mlg.leaderboard.Leaderboard;
+import com.solexgames.mlg.task.HologramUpdateTask;
 import com.solexgames.mlg.util.Locale;
 import org.bukkit.command.CommandSender;
 
 import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author puugz
@@ -32,11 +35,12 @@ public class LeaderboardCommand extends BaseCommand {
 	public void sendMessage(CommandSender sender, Leaderboard leaderboard) {
 		for (String line : Locale.LEADERBOARD_MESSAGE.formatLines(leaderboard.getAmount(), leaderboard.getName(), "{2}")) {
 			if (line.contains("{2}")) {
-				int i = 1;
-				for (Map.Entry<String, Integer> entry : leaderboard.getLeaderboard().entrySet()) {
-					sender.sendMessage(Locale.LEADERBOARD_FORMAT.format(i, entry.getKey(), entry.getValue()));
-					i++;
-				}
+				final AtomicInteger atomicInteger = new AtomicInteger(1);
+
+				leaderboard.getLeaderboard().entrySet().stream()
+						.filter(Objects::nonNull)
+						.sorted(HologramUpdateTask.ENTRY_COMPARATOR)
+						.forEachOrdered(stringIntegerEntry -> sender.sendMessage(Locale.LEADERBOARD_FORMAT.format(atomicInteger.getAndIncrement(), stringIntegerEntry.getKey(), stringIntegerEntry.getValue())));
 			} else {
 				sender.sendMessage(line);
 			}
