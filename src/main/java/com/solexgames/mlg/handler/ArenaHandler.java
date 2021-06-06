@@ -120,9 +120,9 @@ public class ArenaHandler {
      * @param arena  Arena to remove the player from
      */
     public void leaveGame(Player player, Arena arena) {
+        player.teleport(CorePlugin.getInstance().getLocationHandler().getSpawnLocation());
+
         if (arena == null) {
-            player.teleport(CorePlugin.getInstance().getLocationHandler().getSpawnLocation());
-            player.sendMessage(Locale.CURRENTLY_NOT_IN_ARENA.format());
             return;
         }
 
@@ -132,8 +132,6 @@ public class ArenaHandler {
             arena.broadcastMessage(Locale.PLAYER_LEAVE_ARENA.format(player.getDisplayName(), arena.getGamePlayerList().size(), arena.getMaxPlayers()));
             arena.getAllPlayerList().remove(player.getUniqueId());
             arena.getGamePlayerList().remove(arena.getByPlayer(player));
-
-            player.teleport(CorePlugin.getInstance().getLocationHandler().getSpawnLocation());
 
             CorePlugin.getInstance().getHotbarHandler().setupLobbyHotbar(player);
         } else {
