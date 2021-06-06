@@ -5,6 +5,7 @@ import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Default;
 import com.solexgames.mlg.CorePlugin;
+import com.solexgames.mlg.util.Locale;
 import org.bukkit.entity.Player;
 
 /**
@@ -26,7 +27,6 @@ public class BuildCommand extends BaseCommand {
             CorePlugin.getInstance().getBuilderHandler().removeBuilder(player);
         }
 
-        // TODO: 5/31/2021 Move to locale
-        player.sendMessage(isBuilding ? "Left build mode" : "Entered build mode");
+        player.sendMessage(isBuilding ? Locale.LEFT_BUILDMODE.format() : Locale.ENTERED_BUILDMODE.format());
     }
 }

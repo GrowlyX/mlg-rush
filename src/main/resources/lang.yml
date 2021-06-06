@@ -69,6 +69,8 @@ plugin:
   reloaded: "&6MLGRush &ehas been reloaded!"
   set-spawn: "&eYou''ve set the world spawn!"
   set-holo: "&eYou''ve set the holo spawn!"
+  entered-build: "&aYou've entered build mode."
+  left-build: "&cYou've left build mode."
 leaderboard:
   updated: "&aYou''ve updated all of the leaderboards."
   format: "&7({0}) &e{1}: &6{2}"

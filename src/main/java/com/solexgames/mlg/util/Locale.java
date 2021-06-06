@@ -93,7 +93,9 @@ public enum Locale {
 	//  MLG Rush
 	PLUGIN_RELOADED("plugin.reloaded", CC.PRIMARY + "MLGRush " + CC.SECONDARY + "has been reloaded!"),
 	SET_WORLD_SPAWN("plugin.set-spawn", CC.SECONDARY + "You''ve set the world spawn!"),
-	SET_HOLO_SPAWN("plugin.set-holo", CC.SECONDARY + "You''ve set the hologram spawn!");
+	SET_HOLO_SPAWN("plugin.set-holo", CC.SECONDARY + "You''ve set the hologram spawn!"),
+	ENTERED_BUILDMODE("plugin.entered-build", CC.GREEN + "You've entered build mode."),
+	LEFT_BUILDMODE("plugin.left-build", CC.RED + "You've left build mode.");
 
 	private final String path;
 	private final String[] defaultMessages;
