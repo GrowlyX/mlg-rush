@@ -17,7 +17,7 @@ game:
   player-point-scored: "&c{0}&e has scored a point! &7(&9{1}&7/&c{2}&7)"
   started-spectating: "&6{0}&e has started spectating the match."
   stopped-spectating: "&6{0}&e has stopped spectating the match."
-  countdown: "&eThe game will be starting in &6{0} &e."
+  countdown: "&eThe game will be starting in &6{0}&e."
   countdown-end: "&eThe game has started!"
   round-countdown: "&eThe round will be starting in &6{0} &e."
   round-countdown-end: "&eThe round has started!"
