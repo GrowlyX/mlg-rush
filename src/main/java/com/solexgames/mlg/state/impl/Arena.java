@@ -51,8 +51,8 @@ public class Arena implements StateBasedModel<ArenaState, ArenaPlayer> {
 
     private final List<Location> blockLocationList = new ArrayList<>();
     private final List<ArenaPlayer> gamePlayerList = new ArrayList<>();
-    private final List<Player> allPlayerList = new ArrayList<>();
-    private final List<Player> spectatorList = new ArrayList<>();
+    private final List<UUID> allPlayerList = new ArrayList<>();
+    private final List<UUID> spectatorList = new ArrayList<>();
 
     @SerializedName("_id")
     private final UUID uuid;
@@ -245,6 +245,12 @@ public class Arena implements StateBasedModel<ArenaState, ArenaPlayer> {
         this.arenaState = ArenaState.IN_GAME;
         this.start = System.currentTimeMillis();
 
+        this.allPlayerList.forEach(uuid1 -> {
+            final GamePlayer gamePlayer = CorePlugin.getInstance().getPlayerHandler().getByUuid(uuid1);
+
+            gamePlayer.setGamesPlayed(gamePlayer.getGamesPlayed() + 1);
+        });
+
         this.resetAndSetupGameSystem();
     }
 
@@ -268,7 +274,11 @@ public class Arena implements StateBasedModel<ArenaState, ArenaPlayer> {
         this.getGamePlayerList().forEach(arenaPlayer -> {
             arenaPlayer.getPlayer().setGameMode(GameMode.SPECTATOR);
 
-            this.getSpectatorList().forEach(spectator -> arenaPlayer.getPlayer().showPlayer(spectator));
+            this.getSpectatorList().forEach(uuid -> {
+                final Player spectator = Bukkit.getPlayer(uuid);
+
+                arenaPlayer.getPlayer().showPlayer(spectator);
+            });
 
             Bukkit.getScheduler().runTaskLater(CorePlugin.getInstance(), () -> {
                 arenaPlayer.getPlayer().teleport(CorePlugin.getInstance().getLocationHandler().getSpawnLocation());
@@ -293,7 +303,9 @@ public class Arena implements StateBasedModel<ArenaState, ArenaPlayer> {
             CorePlugin.getInstance().getArenaHandler().getArenaWeakHashMap().remove(arenaPlayer.getPlayer());
         });
 
-        this.getSpectatorList().forEach(player -> {
+        this.getSpectatorList().forEach(uuid -> {
+            final Player player = Bukkit.getPlayer(uuid);
+
             if (this.teamSize == 1) {
                 player.sendMessage(Locale.PLAYER_WON.format(profile.getPlayer().getName()));
             } else {
@@ -306,7 +318,11 @@ public class Arena implements StateBasedModel<ArenaState, ArenaPlayer> {
 
                 player.teleport(CorePlugin.getInstance().getLocationHandler().getSpawnLocation());
 
-                this.allPlayerList.forEach(player1 -> player1.showPlayer(player));
+                this.allPlayerList.forEach(uuid1 -> {
+                    final Player player1 = Bukkit.getPlayer(uuid1);
+
+                    player1.showPlayer(player);
+                });
 
                 PlayerUtil.resetPlayer(player);
                 CorePlugin.getInstance().getHotbarHandler().setupLobbyHotbar(player);

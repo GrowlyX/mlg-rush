@@ -9,9 +9,9 @@ import com.solexgames.mlg.util.Locale;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-public class LoadoutCommand extends BaseCommand {
+public class LayoutCommand extends BaseCommand {
 
-    @CommandAlias("layout")
+    @CommandAlias("layout|loadout")
     public void execute(Player player) {
         final Arena arena = CorePlugin.getInstance().getArenaHandler().getByPlayer(player);
 

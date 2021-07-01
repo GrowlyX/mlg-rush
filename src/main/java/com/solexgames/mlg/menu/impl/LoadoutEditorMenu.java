@@ -11,6 +11,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -73,7 +74,7 @@ public class LoadoutEditorMenu extends AbstractMenu {
 
     @Override
     public void onClose(Player player) {
-        final GamePlayer gamePlayer = CorePlugin.getInstance().getPlayerHandler().getByName(player.getName());
+        final GamePlayer gamePlayer = CorePlugin.getInstance().getPlayerHandler().getByUuid(player.getUniqueId());
 
         for (int i = 0; i <= 8; i++) {
             gamePlayer.getLayout().getItemStacks()[i] = this.getInventory().getItem(i);
@@ -81,6 +82,11 @@ public class LoadoutEditorMenu extends AbstractMenu {
 
         player.sendMessage(Locale.LAYOUT_MODIFIED.formatLinesArray());
 
-        CorePlugin.getInstance().getHotbarHandler().setupLobbyHotbar(player);
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                CorePlugin.getInstance().getHotbarHandler().setupLobbyHotbar(player);
+            }
+        }.runTaskLater(plugin, 5L);
     }
 }

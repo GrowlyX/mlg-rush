@@ -22,6 +22,7 @@ public class LeaderboardHandler {
         this.leaderboards.add(new Leaderboard("Deaths", "deaths", 10));
         this.leaderboards.add(new Leaderboard("Wins", "totalWins", 10));
         this.leaderboards.add(new Leaderboard("Losses", "totalLosses", 10));
+        this.leaderboards.add(new Leaderboard("Games Played", "totalGamesPlayed", 10));
     }
 
     public void updateLeaderboards() {

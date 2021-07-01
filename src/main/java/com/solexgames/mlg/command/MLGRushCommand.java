@@ -32,6 +32,7 @@ public class MLGRushCommand extends BaseCommand {
     @CommandPermission("mlgrush.admin")
     public void reload(CommandSender sender) {
         CorePlugin.getInstance().getConfigHandler().reload();
+        CorePlugin.getInstance().getHotbarHandler().loadLobbyHotbar(true);
 
         sender.sendMessage(Locale.PLUGIN_RELOADED.format());
     }

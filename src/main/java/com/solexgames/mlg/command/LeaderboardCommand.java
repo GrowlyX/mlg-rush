@@ -21,7 +21,7 @@ public class LeaderboardCommand extends BaseCommand {
 
 	@Default
 	@CommandCompletion("@leaderboards")
-	public void onDefault(CommandSender sender, @Optional Leaderboard leaderboard) {
+	public void onDefault(CommandSender sender, @Name("type") @Optional Leaderboard leaderboard) {
 		this.sendMessage(sender, leaderboard == null ? CorePlugin.getInstance().getLeaderboardHandler().getLeaderboards().get(0) : leaderboard);
 	}
 

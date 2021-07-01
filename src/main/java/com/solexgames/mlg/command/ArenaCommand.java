@@ -42,7 +42,7 @@ public class ArenaCommand extends BaseCommand {
 
     @Subcommand("delete")
     @CommandPermission("mlgrush.command.arena.subcommand.delete")
-    public void arenaDelete(Player player, Arena arena) {
+    public void arenaDelete(Player player, @Name("arena") Arena arena) {
         final Config config = CorePlugin.getInstance().getConfigHandler().getArenasConfig();
 
         config.getConfig().set("arenas." + arena.getConfigPath(), null);

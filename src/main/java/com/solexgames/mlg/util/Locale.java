@@ -50,11 +50,12 @@ public enum Locale {
 	PLAYER_NOT_IN_MATCH("player.not-in-match", CC.RED + "Error: That player is not in a match."),
 	MATCH_ERROR("player.match-error", CC.RED + "Error: That match has not started yet or the arena bound to it is regenerating."),
 	STATS_RESET("player.stats-reset", CC.SECONDARY + "Statistics have been reset for: {0}"),
+	STATS("player.stats", CC.GRAY + CC.S + "-------------------------", CC.B_PRIMARY + "{0}'s stats:", CC.SECONDARY + "Kills: " + CC.PRIMARY + "{1}", CC.SECONDARY + "Deaths: " + CC.PRIMARY + "{2}", CC.SECONDARY + "Wins: " + CC.PRIMARY + "{3}", CC.SECONDARY + "Losses: " + CC.PRIMARY + "{4}", CC.SECONDARY + "Games Played: " + CC.PRIMARY + "{5}", CC.GRAY + CC.S + "-------------------------"),
 
 	//  Duel
 	UUID_INVALID("duel.uuid-invalid", CC.RED + "The UUID " + CC.SECONDARY + "{0}" + CC.RED + " is not valid."),
 	CANT_ACCEPT_REQUEST("duel.cant-accept-request", CC.RED + "You''re currently in-game so you cannot accept this duel request."),
-	REQUEST_DOESNT_EXIST("duel.request-doesnt-exist", CC.RED + "The duel request with the uuid " + CC.SECONDARY + "{0}" + CC.RED + " does not exist."),
+	REQUEST_DOESNT_EXIST("duel.request-doesnt-exist", CC.RED + "You don''t have a duel request from {0}."),
 	ARENA_CURRENTLY_BUSY("duel.arena-busy", CC.RED + "The arena with the name " + CC.SECONDARY + "{0}" + CC.RED + " is currently busy."),
 	REQUEST_PLAYER_OFFLINE("duel.request-player-offline", CC.RED + "The player who sent you that duel request is currently offline."),
 	REQUEST_PLAYER_INGAME("duel.request-player-ingame", CC.RED + "The player who sent you that duel request is currently in-game."),

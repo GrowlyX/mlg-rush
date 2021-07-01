@@ -12,7 +12,7 @@ public class ResetLoadoutCommand extends BaseCommand {
 
     @CommandAlias("resetloadout")
     public void execute(Player player) {
-        final GamePlayer gamePlayer = CorePlugin.getInstance().getPlayerHandler().getByName(player.getName());
+        final GamePlayer gamePlayer = CorePlugin.getInstance().getPlayerHandler().getByUuid(player.getUniqueId());
         gamePlayer.getLayout().resetLayout();
 
         player.sendMessage(Locale.LAYOUT_RESET.format());

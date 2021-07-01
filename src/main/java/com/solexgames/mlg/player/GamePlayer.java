@@ -9,6 +9,8 @@ import com.solexgames.mlg.model.Layout;
 import lombok.Getter;
 import lombok.Setter;
 import org.bson.Document;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -34,6 +36,7 @@ public class GamePlayer {
 
     private int wins;
     private int losses;
+    private int gamesPlayed;
 
     private Layout layout;
 
@@ -63,6 +66,7 @@ public class GamePlayer {
 
         document.put("totalWins", this.wins);
         document.put("totalLosses", this.losses);
+        document.put("totalGamesPlayed", this.gamesPlayed);
 
         document.put("layout", GsonFactory.getPrettyGson().toJson(this.layout));
 
@@ -90,6 +94,9 @@ public class GamePlayer {
                         if (document.getInteger("totalLosses") != null) {
                             this.losses = document.getInteger("totalLosses");
                         }
+                        if (document.getInteger("totalGamesPlayed") != null) {
+                            this.gamesPlayed = document.getInteger("totalGamesPlayed");
+                        }
                         if (document.getString("layout") != null) {
                             this.layout = GsonFactory.getPrettyGson().fromJson(document.getString("layout"), Layout.class);
                         } else {
@@ -99,5 +106,9 @@ public class GamePlayer {
                         this.layout.setupDefaultInventory();
                     }
                 });
+    }
+
+    public Player getPlayer() {
+        return Bukkit.getPlayer(this.uuid);
     }
 }

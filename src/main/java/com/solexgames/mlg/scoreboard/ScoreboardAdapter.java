@@ -36,7 +36,7 @@ public class ScoreboardAdapter implements ScoreboardElementHandler {
     @Override
     public ScoreboardElement getElement(Player player) {
         final ScoreboardElement element = new ScoreboardElement();
-        final GamePlayer gamePlayer = this.plugin.getPlayerHandler().getByName(player.getName());
+        final GamePlayer gamePlayer = this.plugin.getPlayerHandler().getByUuid(player.getUniqueId());
 
         element.setTitle(CoreConstants.DEFAULT_SCOREBOARD_TITLE);
 
@@ -78,7 +78,7 @@ public class ScoreboardAdapter implements ScoreboardElementHandler {
         final Arena arena = this.plugin.getArenaHandler().getByPlayer(player);
         final Arena spectatingArena = this.plugin.getArenaHandler().getSpectating(player);
 
-        final GamePlayer gamePlayer = CorePlugin.getInstance().getPlayerHandler().getByName(player.getName());
+        final GamePlayer gamePlayer = CorePlugin.getInstance().getPlayerHandler().getByUuid(player.getUniqueId());
         final ArenaPlayer arenaPlayer = arena != null ? arena.getByPlayer(player) : null;
 
         return input.replace("%player%", player.getName())

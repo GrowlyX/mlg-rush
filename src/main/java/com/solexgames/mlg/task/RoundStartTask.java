@@ -6,7 +6,9 @@ import com.solexgames.mlg.util.Color;
 import com.solexgames.mlg.util.Locale;
 import com.solexgames.mlg.util.TimeUtil;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -27,7 +29,7 @@ public class RoundStartTask extends BukkitRunnable {
         this.seconds = seconds;
 
         this.arena = arena;
-        this.arena.getAllPlayerList().forEach(player -> player.setMetadata("frozen", new FixedMetadataValue(CorePlugin.getInstance(), true)));
+        this.arena.getAllPlayerList().forEach(uuid -> Bukkit.getPlayer(uuid).setMetadata("frozen", new FixedMetadataValue(CorePlugin.getInstance(), true)));
 
         this.runTaskTimerAsynchronously(CorePlugin.getInstance(), 20L, 20L);
     }
@@ -42,7 +44,9 @@ public class RoundStartTask extends BukkitRunnable {
                 this.arena.broadcastMessage(Locale.ROUND_COUNTDOWN_END.format(TimeUtil.secondsToRoundedTime(finalSeconds)));
                 break;
             case 0:
-                this.arena.getAllPlayerList().forEach(player -> {
+                this.arena.getAllPlayerList().forEach(uuid -> {
+                    final Player player = Bukkit.getPlayer(uuid);
+
                     player.removeMetadata("frozen", CorePlugin.getInstance());
                     CorePlugin.getInstance().getHotbarHandler().setupArenaInGameHotbar(player);
                 });
@@ -54,6 +58,6 @@ public class RoundStartTask extends BukkitRunnable {
                 break;
         }
 
-        ticks++;
+        this.ticks++;
     }
 }

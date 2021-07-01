@@ -3,6 +3,7 @@ package com.solexgames.mlg.listener;
 import com.solexgames.mlg.CorePlugin;
 import com.solexgames.mlg.enums.ArenaTeam;
 import com.solexgames.mlg.handler.ArenaHandler;
+import com.solexgames.mlg.handler.HotbarHandler;
 import com.solexgames.mlg.menu.impl.LoadoutEditorMenu;
 import com.solexgames.mlg.menu.impl.MatchSpectateMenu;
 import com.solexgames.mlg.menu.impl.SelectGameMenu;
@@ -30,6 +31,7 @@ import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author GrowlyX
@@ -46,22 +48,13 @@ public class PlayerListener implements Listener {
         final Player player = event.getPlayer();
         final ItemStack itemStack = event.getItem();
 
-        if (event.getClickedBlock() != null && event.getClickedBlock().getType() != null && event.getClickedBlock().getType().equals(Material.BED_BLOCK) && event.getAction().name().contains("RIGHT") && !event.hasBlock()) {
+        if (event.getClickedBlock() != null && event.getClickedBlock().getType() != null && event.getClickedBlock().getType().equals(Material.BED_BLOCK) && event.getAction().name().contains("RIGHT")) {
             event.setCancelled(true);
             return;
         }
 
         if (event.getAction().name().contains("RIGHT") && itemStack != null) {
             switch (itemStack.getType()) {
-                case COMPASS:
-                    new SelectGameMenu().openMenu(player);
-                    break;
-                case BOOK:
-                    new LoadoutEditorMenu().openMenu(player);
-                    break;
-                case ENDER_CHEST:
-                    new MatchSpectateMenu().openMenu(player);
-                    break;
                 case BED:
                     if (this.isSpectating(player)) {
                         this.plugin.getArenaHandler().stopSpectating(player, this.getArena(player));
@@ -71,6 +64,12 @@ public class PlayerListener implements Listener {
                     }
                     break;
                 default:
+                    final List<HotbarHandler.HotbarItemCommand> commands = this.plugin.getHotbarHandler().getHotbarCommandMap().get(player.getInventory().getHeldItemSlot());
+
+                    if (commands != null) {
+                        commands.forEach(command -> command.execute(player));
+                    }
+
                     break;
             }
         }
@@ -171,7 +170,7 @@ public class PlayerListener implements Listener {
                 return;
             }
 
-            final GamePlayer gamePlayer = this.plugin.getPlayerHandler().getByName(player.getName());
+            final GamePlayer gamePlayer = this.plugin.getPlayerHandler().getByUuid(player.getUniqueId());
 
             if (gamePlayer != null) {
                 final ArenaPlayer arenaPlayer = arena.getByPlayer(player);

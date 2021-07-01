@@ -1,13 +1,10 @@
 package com.solexgames.mlg.leaderboard;
 
-import com.mongodb.client.model.Sorts;
 import com.solexgames.mlg.CorePlugin;
 import lombok.Getter;
-import lombok.Setter;
 import org.bson.Document;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 

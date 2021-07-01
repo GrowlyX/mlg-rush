@@ -30,8 +30,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -128,6 +126,10 @@ public final class CorePlugin extends JavaPlugin {
         new GameEndTask().runTaskTimerAsynchronously(this, 20L, TimeUnit.SECONDS.toMillis(1L));
         new LeaderboardUpdateTask().runTaskTimerAsynchronously(this, 20L, TimeUnit.MINUTES.toMillis(5L));
 
+        this.getServer().getScheduler().runTaskTimerAsynchronously(this, () -> this.playerHandler.getPlayerList().values()
+                .stream().filter(player -> player.getPlayer() == null)
+                .forEach(gamePlayer -> gamePlayer.savePlayerData(true)), 20L * 60L, 20L * 60L);
+
         this.getServer().getScheduler().runTaskTimerAsynchronously(this, () -> this.loadingString =
                 this.loadingString.equals(".") ? ".." :
                         this.loadingString.equals("..") ? "..." : ".", 10L, 10L);
@@ -144,46 +146,47 @@ public final class CorePlugin extends JavaPlugin {
         manager.registerCommand(new MLGRushCommand());
         manager.registerCommand(new LeaveCommand());
         manager.registerCommand(new ResetLoadoutCommand());
-        manager.registerCommand(new LoadoutCommand());
+        manager.registerCommand(new LayoutCommand());
         manager.registerCommand(new DuelCommand());
         manager.registerCommand(new SpectateCommand());
         manager.registerCommand(new SetSpawnCommand());
         manager.registerCommand(new StatsResetCommand());
         manager.registerCommand(new LeaderboardCommand());
         manager.registerCommand(new SetHologramCommand());
+        manager.registerCommand(new StatsCommand());
     }
 
     private void registerContexts(PaperCommandManager manager) {
-        manager.getCommandContexts().registerContext(Arena.class, bukkitCommandExecutionContext -> {
-            final String joinedString = String.join(" ", bukkitCommandExecutionContext.getArgs());
+        manager.getCommandContexts().registerContext(Arena.class, context -> {
+            final String joinedString = String.join(" ", context.getArgs());
             final Arena arena = this.getArenaHandler().getAllArenas()
                     .stream().filter(arena1 -> arena1.getName().equals(joinedString))
                     .findFirst().orElse(null);
 
             if (arena == null) {
-                throw new InvalidCommandArgument(CC.RED + "No arena matching " + ChatColor.YELLOW + joinedString + CC.RED + " was found.", false);
+                throw new InvalidCommandArgument("No arena matching " + CC.YELLOW + joinedString + CC.RED + " was found.", false);
             }
 
             return arena;
         });
 
-        manager.getCommandContexts().registerContext(GamePlayer.class, bukkitCommandExecutionContext -> {
-            final String joinedString = String.join(" ", bukkitCommandExecutionContext.getArgs());
+        manager.getCommandContexts().registerContext(GamePlayer.class, context -> {
+            final String joinedString = String.join(" ", context.getArgs());
             final GamePlayer gamePlayer = this.playerHandler.getByName(joinedString);
 
             if (gamePlayer == null) {
-                throw new InvalidCommandArgument(CC.RED + "No player matching " + ChatColor.YELLOW + joinedString + CC.RED + " was found.", false);
+                throw new InvalidCommandArgument("No player matching " + CC.YELLOW + joinedString + CC.RED + " was found.", false);
             }
 
             return gamePlayer;
         });
 
-        manager.getCommandContexts().registerContext(Leaderboard.class, bukkitCommandExecutionContext -> {
-            final String joinedString = String.join(" ", bukkitCommandExecutionContext.getArgs());
+        manager.getCommandContexts().registerContext(Leaderboard.class, context -> {
+            final String joinedString = String.join(" ", context.getArgs());
             final Leaderboard gamePlayer = this.leaderboardHandler.getByName(joinedString);
 
             if (gamePlayer == null) {
-                throw new InvalidCommandArgument(CC.RED + "No leaderboard matching " + ChatColor.YELLOW + joinedString + CC.RED + " was found.", false);
+                throw new InvalidCommandArgument("No leaderboard matching " + CC.YELLOW + joinedString + CC.RED + " was found.", false);
             }
 
             return gamePlayer;

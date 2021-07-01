@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 
 public class JoinGameCommand extends BaseCommand {
 
-    @CommandAlias("joingame|join")
+    @CommandAlias("joingame|join|play")
     public void execute(Player player) {
         new SelectGameMenu().openMenu(player);
     }

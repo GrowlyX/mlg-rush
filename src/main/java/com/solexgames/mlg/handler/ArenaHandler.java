@@ -14,12 +14,9 @@ import com.solexgames.mlg.util.cuboid.Cuboid;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import net.md_5.bungee.api.chat.ClickEvent;
-import net.minecraft.server.v1_8_R3.IChatBaseComponent;
-import net.minecraft.server.v1_8_R3.Packet;
-import net.minecraft.server.v1_8_R3.PacketPlayOutTitle;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -33,8 +30,8 @@ import java.util.*;
 @NoArgsConstructor
 public class ArenaHandler {
 
-    private final WeakHashMap<Player, Arena> arenaWeakHashMap = new WeakHashMap<>();
-    private final WeakHashMap<Player, Arena> spectatorWeakHashMap = new WeakHashMap<>();
+    private final WeakHashMap<UUID, Arena> arenaWeakHashMap = new WeakHashMap<>();
+    private final WeakHashMap<UUID, Arena> spectatorWeakHashMap = new WeakHashMap<>();
 
     private final List<Arena> allArenas = new ArrayList<>();
     private final List<DuelRequest> duelRequests = new ArrayList<>();
@@ -84,7 +81,7 @@ public class ArenaHandler {
             return;
         }
 
-        if (arena.getAllPlayerList().contains(player)) {
+        if (arena.getAllPlayerList().contains(player.getUniqueId())) {
             player.sendMessage(Locale.ALREADY_IN_ARENA.format());
             return;
         }
@@ -95,9 +92,9 @@ public class ArenaHandler {
                 return;
             }
 
-            this.arenaWeakHashMap.put(player, arena);
+            this.arenaWeakHashMap.put(player.getUniqueId(), arena);
 
-            arena.getAllPlayerList().add(player);
+            arena.getAllPlayerList().add(player.getUniqueId());
             arena.getGamePlayerList().add(new ArenaPlayer(arena, (arena.getGamePlayerList().size() == 0 ? ArenaTeam.BLUE : (arena.getGamePlayerList().get(0).getArenaTeam() == ArenaTeam.BLUE ? ArenaTeam.RED : ArenaTeam.BLUE)), player));
             arena.broadcastMessage(Locale.PLAYER_JOIN_ARENA.format(player.getDisplayName(), arena.getGamePlayerList().size(), arena.getMaxPlayers()));
 
@@ -130,10 +127,10 @@ public class ArenaHandler {
         }
 
         if (arena.getState().equals(ArenaState.AVAILABLE)) {
-            this.arenaWeakHashMap.remove(player);
+            this.arenaWeakHashMap.remove(player.getUniqueId());
 
             arena.broadcastMessage(Locale.PLAYER_LEAVE_ARENA.format(player.getDisplayName(), arena.getGamePlayerList().size(), arena.getMaxPlayers()));
-            arena.getAllPlayerList().remove(player);
+            arena.getAllPlayerList().remove(player.getUniqueId());
             arena.getGamePlayerList().remove(arena.getByPlayer(player));
 
             player.teleport(CorePlugin.getInstance().getLocationHandler().getSpawnLocation());
@@ -148,9 +145,9 @@ public class ArenaHandler {
         arena.broadcastMessage(Locale.STARTED_SPECTATING.format(player.getDisplayName()));
         player.sendMessage(Locale.STARTED_SPECTATING.format(player.getDisplayName()));
 
-        arena.getSpectatorList().add(player);
+        arena.getSpectatorList().add(player.getUniqueId());
 
-        this.spectatorWeakHashMap.put(player, arena);
+        this.spectatorWeakHashMap.put(player.getUniqueId(), arena);
 
         PlayerUtil.resetPlayer(player);
         CorePlugin.getInstance().getHotbarHandler().setupSpectatorHotbar(player);
@@ -158,9 +155,13 @@ public class ArenaHandler {
         player.setAllowFlight(true);
         player.setFlying(true);
 
-        arena.getAllPlayerList().forEach(player1 -> player1.hidePlayer(player));
+        arena.getAllPlayerList().forEach(uuid1 -> {
+            final Player player1 = Bukkit.getPlayer(uuid1);
 
-        player.teleport(arena.getAllPlayerList().get(0).getLocation().add(0.0D, 2.0D, 0.0D));
+            player1.hidePlayer(player);
+        });
+
+        player.teleport(Bukkit.getPlayer(arena.getAllPlayerList().get(0)).getLocation().add(0.0D, 2.0D, 0.0D));
     }
 
     public void stopSpectating(Player player, Arena arena) {
@@ -168,33 +169,35 @@ public class ArenaHandler {
         player.sendMessage(Locale.STOPPED_SPECTATING.format(player.getDisplayName()));
 
 
-        arena.getSpectatorList().remove(player);
+        arena.getSpectatorList().remove(player.getUniqueId());
 
         player.teleport(CorePlugin.getInstance().getLocationHandler().getSpawnLocation());
 
-        this.spectatorWeakHashMap.remove(player);
+        this.spectatorWeakHashMap.remove(player.getUniqueId());
 
         PlayerUtil.resetPlayer(player);
 
-        arena.getAllPlayerList().forEach(player1 -> player1.showPlayer(player));
+        arena.getAllPlayerList().forEach(uuid1 -> {
+            final Player player1 = Bukkit.getPlayer(uuid1);
+
+            player1.showPlayer(player);
+        });
 
         CorePlugin.getInstance().getHotbarHandler().setupLobbyHotbar(player);
     }
 
     public void sendDuelRequest(Player issuer, Player target, Arena selectedArena) {
-        final DuelRequest duelRequest = new DuelRequest(UUID.randomUUID(),
+        final DuelRequest duelRequest = new DuelRequest(
                 issuer.getUniqueId(), target.getUniqueId(),
                 System.currentTimeMillis(), issuer.getDisplayName(),
                 target.getDisplayName(), selectedArena);
-
-        // todo: put messages in Locale.java
 
         issuer.sendMessage(Locale.REQUEST_SENT.format(target.getDisplayName(), selectedArena.getName()));
 
         final Clickable clickable = new Clickable("");
 
         clickable.add(CC.SECONDARY + "You've received a duel request from " + issuer.getDisplayName() + CC.SECONDARY + "! ");
-        clickable.add(ChatColor.GREEN + ChatColor.BOLD.toString() + "[Click to Accept]", ChatColor.GREEN + "Click to accept " + issuer.getDisplayName() + ChatColor.GREEN + "'s duel request.", "/duel accept " + duelRequest.getId().toString(), ClickEvent.Action.RUN_COMMAND);
+        clickable.add(ChatColor.GREEN + ChatColor.BOLD.toString() + "[Click to Accept]", ChatColor.GREEN + "Click to accept " + issuer.getDisplayName() + ChatColor.GREEN + "'s duel request.", "/duel accept " + issuer.getName(), ClickEvent.Action.RUN_COMMAND);
 
         target.spigot().sendMessage(clickable.asComponents());
 
@@ -249,7 +252,7 @@ public class ArenaHandler {
      * @return An arena a player is in, or null
      */
     public Arena getSpectating(Player player) {
-        return this.spectatorWeakHashMap.getOrDefault(player, null);
+        return this.spectatorWeakHashMap.getOrDefault(player.getUniqueId(), null);
     }
 
     /**
@@ -261,7 +264,7 @@ public class ArenaHandler {
      * @return An arena a player is in, or null
      */
     public Arena getByPlayer(Player player) {
-        return this.arenaWeakHashMap.getOrDefault(player, null);
+        return this.arenaWeakHashMap.getOrDefault(player.getUniqueId(), null);
     }
 
     /**
@@ -274,7 +277,7 @@ public class ArenaHandler {
      */
     public DuelRequest getIncomingDuelRequest(UUID uuid) {
         return this.duelRequests.stream()
-                .filter(duelRequest -> duelRequest.getId().equals(uuid))
+                .filter(duelRequest -> duelRequest.getIssuer().equals(uuid))
                 .findFirst().orElse(null);
     }
 }

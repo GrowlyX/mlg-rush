@@ -4,6 +4,7 @@ import com.solexgames.mlg.player.GamePlayer;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -35,11 +36,16 @@ public class PlayerHandler {
     public GamePlayer getByName(String name) {
         final Player player = Bukkit.getPlayer(name);
 
-        if (player == null) {
-            return null;
+        if (player != null) {
+            return this.playerList.getOrDefault(player.getUniqueId(), this.setupPlayer(player.getUniqueId(), player.getName()));
         }
 
-        return this.playerList.getOrDefault(player.getUniqueId(), null);
+        final OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(name);
+
+        if (offlinePlayer.hasPlayedBefore()) {
+            return this.setupPlayer(offlinePlayer.getUniqueId(), offlinePlayer.getName());
+        }
+        return null;
     }
 
     /**
@@ -49,6 +55,11 @@ public class PlayerHandler {
      * @return A profile with the name {@param uuid}
      */
     public GamePlayer getByUuid(UUID uuid) {
-        return this.playerList.getOrDefault(uuid, null);
+        if (this.playerList.containsKey(uuid)) {
+            return this.playerList.get(uuid);
+        }
+        final OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
+
+        return offlinePlayer.hasPlayedBefore() ? this.setupPlayer(uuid, offlinePlayer.getName()) : this.setupPlayer(uuid, null);
     }
 }

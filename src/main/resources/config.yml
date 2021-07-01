@@ -21,3 +21,31 @@ language:
   secondary-color: "YELLOW"
 locations:
   spawn: ""
+hotbar:
+  join-arena:
+    slot: 1
+    material: COMPASS
+    display-name: "&6Join an Arena &7(Right Click)"
+#    lore: # (example to add lore to an item)
+#      - "&7Right Click to select an arena and play!"
+    commands:
+      enabled: true
+      commands:
+        - "[PLAYER] play"
+#        - "[CONSOLE] gamemode 1 player" # (example of console commands)
+  spectate:
+    slot: 2
+    material: ENDER_CHEST
+    display-name: "&6Spectate a Match &7(Right Click)"
+    commands:
+      enabled: true
+      commands:
+        - "[PLAYER] spectate"
+  layout:
+    slot: 9
+    material: BOOK
+    display-name: "&6Edit layout &7(Right Click)"
+    commands:
+      enabled: true
+      commands:
+        - "[PLAYER] layout"
