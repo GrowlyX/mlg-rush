@@ -30,176 +30,165 @@ import java.util.Map;
 @SuppressWarnings("all")
 public class HotbarHandler {
 
-    private final ItemStack[] defaultInventory;
+	private final ItemStack[] defaultInventory;
 
-    private ItemStack[] lobbyHotbar;
-    private final Map<Integer, List<HotbarItemCommand>> hotbarCommandMap;
+	private ItemStack[] lobbyHotbar;
+	private final Map<Integer, List<HotbarItemCommand>> hotbarCommandMap;
 
-//    private final ItemStack joinGameItem;
-//    private final ItemStack layoutEditorItem;
-//    private final ItemStack startSpectateItem;
-    private final ItemStack stopSpectateItem;
-    private final ItemStack leaveGameItem;
+	private final ItemStack stopSpectateItem;
+	private final ItemStack leaveGameItem;
 
-    private final ItemStack knockbackStick;
-    private final ItemStack sandStoneStack;
-    private final ItemStack pickaxe;
+	private final ItemStack knockbackStick;
+	private final ItemStack sandStoneStack;
+	private final ItemStack pickaxe;
 
-    private final ItemStack placeholder;
+	private final ItemStack placeholder;
 
-    public HotbarHandler() {
-//        this.joinGameItem = new ItemBuilder(Material.COMPASS)
-//                .setDisplayName(CC.PRIMARY + "Join an Arena")
-//                .create();
-//        this.layoutEditorItem = new ItemBuilder(Material.BOOK)
-//                .setDisplayName(CC.PRIMARY + "Edit layout")
-//                .create();
-//        this.startSpectateItem = new ItemBuilder(Material.ENDER_CHEST)
-//                .setDisplayName(CC.PRIMARY + "Spectate a match")
-//                .create();
-        this.leaveGameItem = new ItemBuilder(Material.BED)
-                .setDisplayName(CC.RED + ChatColor.BOLD.toString() + "Leave Arena")
-                .create();
-        this.stopSpectateItem = new ItemBuilder(Material.BED)
-                .setDisplayName(CC.RED + ChatColor.BOLD.toString() + "Stop Spectating")
-                .create();
-        this.sandStoneStack = new ItemBuilder(Material.SANDSTONE)
-                .setAmount(64)
-                .create();
-        this.knockbackStick = new ItemBuilder(Material.STICK)
-                .setEnchant(Enchantment.KNOCKBACK, 1)
-                .setUnbreakable(true)
-                .create();
-        this.pickaxe = new ItemBuilder(Material.GOLD_PICKAXE)
-                .setUnbreakable(true)
-                .create();
-        this.placeholder = new ItemStack(Material.AIR);
+	public HotbarHandler() {
+		this.leaveGameItem = new ItemBuilder(Material.BED)
+				.setDisplayName(CC.RED + ChatColor.BOLD.toString() + "Leave Arena")
+				.create();
+		this.stopSpectateItem = new ItemBuilder(Material.BED)
+				.setDisplayName(CC.RED + ChatColor.BOLD.toString() + "Stop Spectating")
+				.create();
+		this.sandStoneStack = new ItemBuilder(Material.SANDSTONE)
+				.setAmount(64)
+				.create();
+		this.knockbackStick = new ItemBuilder(Material.STICK)
+				.setEnchant(Enchantment.KNOCKBACK, 1)
+				.setUnbreakable(true)
+				.create();
+		this.pickaxe = new ItemBuilder(Material.GOLD_PICKAXE)
+				.setUnbreakable(true)
+				.create();
+		this.placeholder = new ItemStack(Material.AIR);
 
-        this.defaultInventory = new ItemStack[] {
-                this.knockbackStick,
-                this.placeholder,
-                this.placeholder,
-                this.placeholder,
-                this.sandStoneStack,
-                this.placeholder,
-                this.placeholder,
-                this.placeholder,
-                this.pickaxe,
-        };
+		this.defaultInventory = new ItemStack[]{
+				this.knockbackStick,
+				this.placeholder,
+				this.placeholder,
+				this.placeholder,
+				this.sandStoneStack,
+				this.placeholder,
+				this.placeholder,
+				this.placeholder,
+				this.pickaxe,
+		};
 
-        this.hotbarCommandMap = new HashMap<>();
+		this.hotbarCommandMap = new HashMap<>();
 
-        this.loadLobbyHotbar(false);
-    }
+		this.loadLobbyHotbar(false);
+	}
 
-    public void loadLobbyHotbar(boolean reload) {
-        this.lobbyHotbar = new ItemStack[36];
-        this.hotbarCommandMap.clear();
+	public void loadLobbyHotbar(boolean reload) {
+		this.lobbyHotbar = new ItemStack[36];
+		this.hotbarCommandMap.clear();
 
-        final FileConfiguration config = CorePlugin.getInstance().getConfigHandler().getConfig().getConfig();
+		final FileConfiguration config = CorePlugin.getInstance().getConfigHandler().getConfig().getConfig();
 
-        for (String key : config.getConfigurationSection("hotbar").getKeys(false)) {
-            try {
-                final ConfigurationSection section = config.getConfigurationSection("hotbar." + key);
-                final ItemBuilder builder = new ItemBuilder(Material.valueOf(section.getString("material")));
+		for (String key : config.getConfigurationSection("hotbar").getKeys(false)) {
+			try {
+				final ConfigurationSection section = config.getConfigurationSection("hotbar." + key);
+				final ItemBuilder builder = new ItemBuilder(Material.valueOf(section.getString("material")));
 
-                final int slot = section.getInt("slot") - 1;
-                final List<HotbarItemCommand> commands = new ArrayList<>();
+				final int slot = section.getInt("slot") - 1;
+				final List<HotbarItemCommand> commands = new ArrayList<>();
 
-                if (section.get("display-name") != null) {
-                    builder.setDisplayName(section.getString("display-name"));
-                }
-                if (section.get("data") != null) {
-                    builder.setDurability(section.getInt("data"));
-                }
-                if (section.get("lore") != null) {
-                    builder.addLore(section.getStringList("lore"));
-                }
-                if (section.get("commands") != null && section.getBoolean("commands.enabled")) {
-                    section.getStringList("commands.commands").forEach(s -> {
-                        commands.add(new HotbarItemCommand(s.startsWith("[CONSOLE] "), s.replace("[CONSOLE] ", "").replace("[PLAYER] ", "")));
-                    });
-                }
+				if (section.get("display-name") != null) {
+					builder.setDisplayName(section.getString("display-name"));
+				}
+				if (section.get("data") != null) {
+					builder.setDurability(section.getInt("data"));
+				}
+				if (section.get("lore") != null) {
+					builder.addLore(section.getStringList("lore"));
+				}
+				if (section.get("commands") != null && section.getBoolean("commands.enabled")) {
+					section.getStringList("commands.commands").forEach(s -> {
+						commands.add(new HotbarItemCommand(s.startsWith("[CONSOLE] "), s.replace("[CONSOLE] ", "").replace("[PLAYER] ", "")));
+					});
+				}
 
-                if (!commands.isEmpty()) {
-                    this.hotbarCommandMap.put(slot, commands);
-                }
-                this.lobbyHotbar[slot] = builder.create();
+				if (!commands.isEmpty()) {
+					this.hotbarCommandMap.put(slot, commands);
+				}
+				this.lobbyHotbar[slot] = builder.create();
 
-                System.out.println("[MLGRush] Loaded hotbar item with '" + key + "' key, " + commands.size() + " commands.");
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                System.out.println("[MLGRush] Failed to load hotbar item with '" + key + "' key.");
-            }
-        }
+				System.out.println("[MLGRush] [Hotbar] Loaded hotbar item with '" + key + "' key and " + commands.size() + " commands.");
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				System.out.println("[MLGRush] [Hotbar] Failed to load hotbar item with '" + key + "' key.");
+			}
+		}
 
-        if (reload) {
-            final ArenaHandler arenaHandler = CorePlugin.getInstance().getArenaHandler();
+		if (reload) {
+			final ArenaHandler arenaHandler = CorePlugin.getInstance().getArenaHandler();
 
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                if (arenaHandler.isInArena(player) || arenaHandler.isSpectating(player)) continue;
+			for (Player player : Bukkit.getOnlinePlayers()) {
+				if (arenaHandler.isInArena(player) || arenaHandler.isSpectating(player)) continue;
 
-                this.setupLobbyHotbar(player);
-            }
-        }
-    }
+				this.setupLobbyHotbar(player);
+			}
+		}
+	}
 
-    public void setupLobbyHotbar(Player player) {
-        player.getInventory().clear();
-        player.getInventory().setContents(this.lobbyHotbar);
+	public void setupLobbyHotbar(Player player) {
+		player.getInventory().clear();
+		player.getInventory().setContents(this.lobbyHotbar);
 
-        player.updateInventory();
-    }
+		player.updateInventory();
+	}
 
-    public void setupArenaWaitingHotbar(Player player) {
-        player.getInventory().clear();
-        player.getInventory().setItem(8, this.leaveGameItem);
+	public void setupArenaWaitingHotbar(Player player) {
+		player.getInventory().clear();
+		player.getInventory().setItem(8, this.leaveGameItem);
 
-        player.updateInventory();
-    }
+		player.updateInventory();
+	}
 
-    public void setupArenaInGameHotbar(Player player) {
-        final GamePlayer gamePlayer = CorePlugin.getInstance().getPlayerHandler().getByUuid(player.getUniqueId());
+	public void setupArenaInGameHotbar(Player player) {
+		final GamePlayer gamePlayer = CorePlugin.getInstance().getPlayerHandler().getByUuid(player.getUniqueId());
 
-        try {
-            gamePlayer.getLayout().applyInventory(player);
-        } catch (Exception ignored) {
-            player.getInventory().clear();
+		try {
+			gamePlayer.getLayout().applyInventory(player);
+		} catch (Exception ignored) {
+			player.getInventory().clear();
 
-            for (int i = 0; i <= 8; i++) {
-                final ItemStack itemStack = CorePlugin.getInstance().getHotbarHandler().getDefaultInventory().clone()[i];
+			for (int i = 0; i <= 8; i++) {
+				final ItemStack itemStack = CorePlugin.getInstance().getHotbarHandler().getDefaultInventory().clone()[i];
 
-                if (itemStack == null) {
-                    player.getInventory().setItem(i, this.placeholder);
-                } else {
-                    player.getInventory().setItem(i, CorePlugin.getInstance().getHotbarHandler().getDefaultInventory().clone()[i]);
-                }
-            }
+				if (itemStack == null) {
+					player.getInventory().setItem(i, this.placeholder);
+				} else {
+					player.getInventory().setItem(i, CorePlugin.getInstance().getHotbarHandler().getDefaultInventory().clone()[i]);
+				}
+			}
 
-            player.updateInventory();
-        }
-    }
+			player.updateInventory();
+		}
+	}
 
-    public void setupSpectatorHotbar(Player player) {
-        player.getInventory().clear();
-        player.getInventory().setItem(8, this.stopSpectateItem);
+	public void setupSpectatorHotbar(Player player) {
+		player.getInventory().clear();
+		player.getInventory().setItem(8, this.stopSpectateItem);
 
-        player.updateInventory();
-    }
+		player.updateInventory();
+	}
 
-    @Getter
-    @RequiredArgsConstructor
-    public static class HotbarItemCommand {
+	@Getter
+	@RequiredArgsConstructor
+	public static class HotbarItemCommand {
 
-        private final boolean consoleCommand;
-        private final String commandLine;
+		private final boolean consoleCommand;
+		private final String commandLine;
 
-        public void execute(Player player) {
-            if (this.consoleCommand) {
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), commandLine);
-            } else {
-                player.performCommand(commandLine);
-            }
-        }
-    }
+		public void execute(Player player) {
+			if (this.consoleCommand) {
+				Bukkit.dispatchCommand(Bukkit.getConsoleSender(), commandLine.replace("%player%", player.getName())
+						.replace("%uuid%", player.getUniqueId().toString()));
+			} else {
+				player.performCommand(commandLine);
+			}
+		}
+	}
 }

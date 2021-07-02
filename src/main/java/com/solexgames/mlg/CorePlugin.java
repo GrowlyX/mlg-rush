@@ -49,7 +49,7 @@ public final class CorePlugin extends JavaPlugin {
     @Getter
     private static CorePlugin instance;
 
-    private NPCHandler npcHandler;
+//    private NPCHandler npcHandler;
     private ArenaHandler arenaHandler;
     private MongoHandler mongoHandler;
     private BuilderHandler builderHandler;
@@ -107,7 +107,7 @@ public final class CorePlugin extends JavaPlugin {
 
         this.getServer().getPluginManager().registerEvents(new PlayerListener(), this);
         this.getServer().getPluginManager().registerEvents(new MenuListener(), this);
-        this.getServer().getPluginManager().registerEvents(new NPCListener(), this);
+//        this.getServer().getPluginManager().registerEvents(new NPCListener(), this);
 
         final PaperCommandManager manager = new PaperCommandManager(this);
 

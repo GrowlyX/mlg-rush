@@ -17,7 +17,7 @@ import org.bukkit.entity.Player;
  * @since 5/29/2021
  */
 
-@CommandAlias("statsreset")
+@CommandAlias("statsreset|resetstats")
 @CommandPermission("mlgrush.command.statsreset")
 public class StatsResetCommand extends BaseCommand {
 
