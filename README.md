@@ -1,5 +1,7 @@
 # MLG Rush
-SolexGames MLG Rush core, originally designed for bridger.land.
+An old MLG rush plugin a friend & I wrote for bridger.land.
+ - This was never used due to issues with the owner of the server.
+ - This has not been tested in a production environment, and has quite a few bugs.
 
 ## Setup
 - Enter your mongodb uri in the `config.yml` file.
@@ -11,4 +13,3 @@ SolexGames MLG Rush core, originally designed for bridger.land.
 
 ## Dependencies
 - MongoDB server
-- Minimum 3gb ram
